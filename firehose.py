@@ -104,6 +104,34 @@ class Report(XmlWrapper):
                            kind='note',
                            msg=notes.text if notes else '')
 
+class Message(XmlWrapper):
+    @property
+    def text(self):
+        return self._node.text
+
+class Notes(XmlWrapper):
+    @property
+    def text(self):
+        return self._node.text
+
+class Trace(XmlWrapper):
+    def __iter__(self):
+        for state_node in self._node.findall('state'):
+            yield State(state_node)
+
+class State(XmlWrapper):
+    @property
+    def location(self):
+        return Location(self._node.find('location'))
+
+    @property
+    def notes(self):
+        notes_node = self._node.find('notes')
+        if notes_node is not None:
+            return Notes(notes_node)
+        else:
+            return None
+
 class Location(XmlWrapper):
     @property
     def file(self):
@@ -123,25 +151,6 @@ class Location(XmlWrapper):
         p = Point(self._node.find('point'))
         return p.column
 
-class Point(XmlWrapper):
-    @property
-    def line(self):
-        return int(self._node.get('line'))
-
-    @property
-    def column(self):
-        return int(self._node.get('column'))
-
-class Message(XmlWrapper):
-    @property
-    def text(self):
-        return self._node.text
-
-class Notes(XmlWrapper):
-    @property
-    def text(self):
-        return self._node.text
-
 class File(XmlWrapper):
     @property
     def name(self):
@@ -152,23 +161,14 @@ class Function(XmlWrapper):
     def name(self):
         return self._node.get('name')
 
-class Trace(XmlWrapper):
-    def __iter__(self):
-        for state_node in self._node.findall('state'):
-            yield State(state_node)
-
-class State(XmlWrapper):
+class Point(XmlWrapper):
     @property
-    def location(self):
-        return Location(self._node.find('location'))
+    def line(self):
+        return int(self._node.get('line'))
 
     @property
-    def notes(self):
-        notes_node = self._node.find('notes')
-        if notes_node is not None:
-            return Notes(notes_node)
-        else:
-            return None
+    def column(self):
+        return int(self._node.get('column'))
 
 def main():
     for filename in sorted(glob.glob('examples/*.xml')):
