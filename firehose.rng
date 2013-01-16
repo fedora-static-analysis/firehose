@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0">
+  <start>
+    <!-- A report about a possible problem -->
+    <element name="report">
+      <optional>
+        <!-- The Common Weakness Enumeration ID
+             (see http://cwe.mitre.org/index.html )
+             e.g. "CWE-401"
+        -->
+        <attribute name="cwe"/>
+      </optional>
+      <element name="metadata">
+        <element name="generator">
+          <attribute name="name"/>
+          <attribute name="version"/>
+        </element>
+        <!-- "sut" = "Software Under Test" -->
+        <element name="sut">
+          <choice>
+            <text/>
+            <element name="rpm">
+              <attribute name="name"/>
+              <attribute name="version"/>
+              <attribute name="release"/>
+              <attribute name="arch"/>
+            </element>
+          </choice>
+        </element>
+      </element>
+
+      <!-- A message summarizing the problem -->
+      <element name="message"><text/></element>
+
+      <!-- Additional descriptive details
+           This might support some simple markup at some point
+           (as might <message>) -->
+      <optional>
+        <element name="notes"><text/></element>
+      </optional>
+
+      <!-- Where is the problem? -->
+      <ref name="location-element"/>
+
+      <optional>
+        <!-- How can the problem occur? -->
+        <element name="trace">
+          <oneOrMore>
+            <element name="state">
+              <ref name="location-element"/>
+              <optional>
+                <element name="notes"><text/></element>
+              </optional>
+              <!-- optionally we can supply key-value pairs -->
+              <zeroOrMore>
+                <element name="annotation">
+                  <element name="key"><text/></element>
+                  <element name="value"><text/></element>
+                </element>
+              </zeroOrMore>
+              </element>
+          </oneOrMore>
+        </element>
+      </optional>
+    </element>
+  </start>
+
+  <define name="location-element">
+    <!-- A particular source code location -->
+    <element name="location">
+      <element name="file">
+        <attribute name="name"/>
+        <element name="hash">
+          <attribute name="alg"/>
+          <text/>
+        </element>
+      </element>
+      <element name="function">
+        <attribute name="name"/>
+      </element>
+      <!-- We can refer to either a location, or a range of locations
+           within the file: -->
+      <choice>
+        <ref name="point-element"/>
+        <element name="range">
+          <!-- start of range: -->
+          <ref name="point-element"/>
+          <!-- end of range: -->
+          <ref name="point-element"/>
+        </element>
+      </choice>
+    </element>
+  </define>
+
+  <define name="point-element">
+    <element name="point">
+      <attribute name="line"/>
+      <attribute name="column"/>
+    </element>
+  </define>
+
+</grammar>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<report cwe="CWE-401">
+
+  <!-- Example of a report with a trace -->
+
+  <metadata>
+    <generator name="" version=""/>
+    <sut></sut>
+  </metadata>
+
+  <message>ob_refcnt of '*item' is 1 too high</message>
+  <notes>was expecting final item->ob_refcnt to be N + 1 (for some unknown N)
+due to object being referenced by: PyListObject.ob_item[0]"
+but final item->ob_refcnt is N + 2</notes>
+
+  <location>
+    <file name="examples/python-src-example.c">
+      <hash alg="sha-1">6ba29daa94d64b48071e299a79f2a00dcd99eeb1</hash>
+    </file>
+    <function name="make_a_list_of_random_ints_badly"/>
+    <point line="21" column="4"/>
+  </location>
+
+  <trace>
+    <state>
+      <location>
+        <file name="examples/python-src-example.c">
+          <hash alg="sha-1">6ba29daa94d64b48071e299a79f2a00dcd99eeb1</hash>
+        </file>
+        <function name="make_a_list_of_random_ints_badly"/>
+        <point line="17" column="14"/>
+      </location>
+      <notes>PyLongObject allocated at:         item = PyLong_FromLong(random());</notes>
+    </state>
+
+    <state>
+      <location>
+        <file name="examples/python-src-example.c">
+          <hash alg="sha-1">6ba29daa94d64b48071e299a79f2a00dcd99eeb1</hash>
+        </file>
+        <function name="make_a_list_of_random_ints_badly"/>
+        <point line="18" column="8"/>
+      </location>
+      <notes>when PyList_Append() succeeds</notes>
+    </state>
+
+    <state>
+      <location>
+        <file name="examples/python-src-example.c">
+          <hash alg="sha-1">6ba29daa94d64b48071e299a79f2a00dcd99eeb1</hash>
+        </file>
+        <function name="make_a_list_of_random_ints_badly"/>
+        <point line="21" column="4"/>
+      </location>
+    </state>
+  </trace>
+
+</report>
