@@ -4,4 +4,4 @@ validate:
 	xmllint --relaxng firehose.rng --noout examples/example-*.xml
 
 dump:
-	python firehose.py
+	python firehose/firehose.py
