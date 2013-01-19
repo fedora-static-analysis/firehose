@@ -1,7 +1,24 @@
 #!/usr/bin/env python
 
-import re
+#   Copyright 2013 Red Hat, Inc.
+#
+#   This is free software: you can redistribute it and/or modify it
+#   under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful, but
+#   WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#   General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see
+#   <http://www.gnu.org/licenses/>.
+
 from cStringIO import StringIO
+import re
+import sys
 
 import firehose
 
@@ -19,18 +36,24 @@ def parse_file(data_file):
 
     :param data_file:   file object containing build log
     :type  data_file:   file
+
+    :return:    generator of firehose.Report instances
+    :rtype:     generator
     """
     # has a value only when in a block of lines where the first line identifies
     # a function and is followed by 0 or more warning lines
     current_func_name = None
     for line in data_file.readlines():
         match_func = FUNCTION_PATTERN.match(line)
+        # if we found a line that describes a function name
         if match_func:
             current_func_name = match_func.group('func')
+
+        # if we think the next line might describe a warning
         elif current_func_name is not None:
             report = parse_warning(line, current_func_name)
             if report:
-                print_report_xml(report)
+                yield report
             else:
                 # reset this when we run out of warnings associated with it
                 current_func_name = None
@@ -49,37 +72,24 @@ def parse_warning(line, func_name):
     if match:
         message = firehose.Message(match.group('message'))
         func = firehose.Function(func_name)
-        point = firehose.Point(int(match.group('line')), int(match.group('column')))
+        try:
+            column = int(match.group('column'))
+        except TypeError:
+            column = None
+
+        point = firehose.Point(int(match.group('line')), column)
         path = firehose.File(match.group('path'))
         location = firehose.Location(path, func, point)
+        # dropping switch, which should eventually be worked into the schema
 
         return firehose.Report(None, location, message, None, None)
 
 
-################## begin debug crap ##################
-
-
-def print_report_gcc(report):
-    buf= StringIO()
-    report.write_as_gcc_output(buf)
-    print buf.getvalue()
-
-
-def print_match(match):
-    print '################'
-    print match.group('path')
-    print match.group('line')
-    print match.group('column')
-    print match.group('type')
-    print match.group('message')
-
-
-def print_report_xml(report):
-    buf= StringIO()
-    report.to_xml().write(buf)
-    print buf.getvalue()
-
-
 if __name__ == '__main__':
-    with open('build.log') as data_file:
-        parse_file(data_file)
+    if len(sys.argv) != 2:
+        print "provide a build log file path as the only argument"
+    else:
+        with open(sys.argv[1]) as data_file:
+            for report in parse_file(data_file):
+                report.to_xml().write(sys.stdout)
+                print
