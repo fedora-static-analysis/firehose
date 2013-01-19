@@ -23,13 +23,7 @@ from subprocess import Popen, PIPE
 import sys
 import xml.etree.ElementTree as ET
 
-class XmlWrapper:
-    """
-    Wrapper around an XML node
-    """
-    pass
-
-class Report(XmlWrapper):
+class Report:
     __slots__ = ('cwe',
                  'location',
                  'message',
@@ -124,7 +118,7 @@ class Report(XmlWrapper):
                            kind='note',
                            msg=notes.text if notes else '')
 
-class Message(XmlWrapper):
+class Message:
     __slots__ = ('text', )
 
     def __init__(self, text):
@@ -141,7 +135,7 @@ class Message(XmlWrapper):
         node.text = self.text
         return node
 
-class Notes(XmlWrapper):
+class Notes:
     __slots__ = ('text', )
 
     def __init__(self, text):
@@ -159,7 +153,7 @@ class Notes(XmlWrapper):
         node.text = self.text
         return node
 
-class Trace(XmlWrapper):
+class Trace:
     __slots__ = ('states', )
 
     def __init__(self, states):
@@ -180,7 +174,7 @@ class Trace(XmlWrapper):
             node.append(state.to_xml())
         return node
 
-class State(XmlWrapper):
+class State:
     __slots__ = ('location', 'notes', )
 
     def __init__(self, location, notes):
@@ -207,7 +201,7 @@ class State(XmlWrapper):
             node.append(self.notes.to_xml())
         return node
 
-class Location(XmlWrapper):
+class Location:
     __slots__ = ('file', 'function', 'point', )
 
     def __init__(self, file, function, point):
@@ -240,7 +234,7 @@ class Location(XmlWrapper):
     def column(self):
         return self.point.column
 
-class File(XmlWrapper):
+class File:
     __slots__ = ('name', )
 
     def __init__(self, name):
@@ -257,7 +251,7 @@ class File(XmlWrapper):
         node.set('name', self.name)
         return node
 
-class Function(XmlWrapper):
+class Function:
     __slots__ = ('name', )
 
     def __init__(self, name):
@@ -274,7 +268,7 @@ class Function(XmlWrapper):
         node.set('name', self.name)
         return node
 
-class Point(XmlWrapper):
+class Point:
     __slots__ = ('line', 'column', )
 
     def __init__(self, line, column):
