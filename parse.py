@@ -16,7 +16,6 @@
 #   along with this program.  If not, see
 #   <http://www.gnu.org/licenses/>.
 
-from cStringIO import StringIO
 import re
 import sys
 
