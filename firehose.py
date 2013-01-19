@@ -19,6 +19,7 @@
 # a command-line tool
 
 import glob
+from subprocess import Popen, PIPE
 import sys
 import xml.etree.ElementTree as ET
 
@@ -26,48 +27,67 @@ class XmlWrapper:
     """
     Wrapper around an XML node
     """
-    def __init__(self, _node):
-        assert _node is not None
-        self._node = _node
-
-    def __eq__(self, other):
-        if not isinstance(other, XmlWrapper):
-            return False
-        return self._node == other._node
+    pass
 
 class Report(XmlWrapper):
+    __slots__ = ('cwe',
+                 'location',
+                 'message',
+                 'notes',
+                 'trace')
+    def __init__(self,
+                 cwe,
+                 location,
+                 message,
+                 notes,
+                 trace):
+        if cwe is not None:
+            assert isinstance(cwe, str)
+        assert isinstance(location, Location)
+        assert isinstance(message, Message)
+        if notes:
+            assert isinstance(notes, Notes)
+        if trace:
+            assert isinstance(trace, Trace)
+        self.cwe = cwe
+        self.location = location
+        self.message = message
+        self.notes = notes
+        self.trace = trace
+
     @classmethod
     def from_xml(cls, fileobj):
         tree = ET.parse(fileobj)
-        return Report(tree.getroot())
+        root = tree.getroot()
 
-    @property
-    def cwe(self):
-        return self._node.get('cwe')
-
-    @property
-    def location(self):
-        return Location(self._node.find('location'))
-
-    @property
-    def message(self):
-        return Message(self._node.find('message'))
-
-    @property
-    def notes(self):
-        notes_node = self._node.find('notes')
+        cwe = root.get('cwe')
+        location = Location.from_xml(root.find('location'))
+        message = Message.from_xml(root.find('message'))
+        notes_node = root.find('notes')
         if notes_node is not None:
-            return Notes(notes_node)
+            notes = Notes.from_xml(notes_node)
         else:
-            return None
-
-    @property
-    def trace(self):
-        trace_node = self._node.find('trace')
+            notes = None
+        trace_node = root.find('trace')
         if trace_node is not None:
-            return Trace(trace_node)
+            trace = Trace.from_xml(trace_node)
         else:
-            return None
+            trace = None
+        return Report(cwe, location, message, notes, trace)
+
+    def to_xml(self):
+        tree = ET.ElementTree()
+        node = ET.Element('report')
+        tree._setroot(node)
+        if self.cwe is not None:
+            node.set('cwe', self.cwe)
+        node.append(self.location.to_xml())
+        node.append(self.message.to_xml())
+        if self.notes:
+            node.append(self.notes.to_xml())
+        if self.trace:
+            node.append(self.trace.to_xml())
+        return tree
 
     def write_as_gcc_output(self, out):
         """
@@ -96,7 +116,7 @@ class Report(XmlWrapper):
         if self.notes:
             writeln(self.notes.text.rstrip())
         if self.trace:
-            for state in self.trace:
+            for state in self.trace.states:
                 notes = state.notes
                 diagnostic(filename=state.location.file.name,
                            line=state.location.line,
@@ -105,77 +125,220 @@ class Report(XmlWrapper):
                            msg=notes.text if notes else '')
 
 class Message(XmlWrapper):
-    @property
-    def text(self):
-        return self._node.text
+    __slots__ = ('text', )
+
+    def __init__(self, text):
+        assert isinstance(text, str)
+        self.text = text
+
+    @classmethod
+    def from_xml(cls, node):
+        result = Message(node.text)
+        return result
+
+    def to_xml(self):
+        node = ET.Element('message')
+        node.text = self.text
+        return node
 
 class Notes(XmlWrapper):
-    @property
-    def text(self):
-        return self._node.text
+    __slots__ = ('text', )
+
+    def __init__(self, text):
+        assert isinstance(text, str)
+        self.text = text
+
+    @classmethod
+    def from_xml(cls, node):
+        text = node.text
+        result = Notes(text)
+        return result
+
+    def to_xml(self):
+        node = ET.Element('notes')
+        node.text = self.text
+        return node
 
 class Trace(XmlWrapper):
-    def __iter__(self):
-        for state_node in self._node.findall('state'):
-            yield State(state_node)
+    __slots__ = ('states', )
+
+    def __init__(self, states):
+        assert isinstance(states, list)
+        self.states = states
+
+    @classmethod
+    def from_xml(cls, node):
+        states = []
+        for state_node in node.findall('state'):
+            states.append(State.from_xml(state_node))
+        result = Trace(states)
+        return result
+
+    def to_xml(self):
+        node = ET.Element('trace')
+        for state in self.states:
+            node.append(state.to_xml())
+        return node
 
 class State(XmlWrapper):
-    @property
-    def location(self):
-        return Location(self._node.find('location'))
+    __slots__ = ('location', 'notes', )
 
-    @property
-    def notes(self):
-        notes_node = self._node.find('notes')
+    def __init__(self, location, notes):
+        assert isinstance(location, Location)
+        if notes is not None:
+            assert isinstance(notes, Notes)
+        self.location = location
+        self.notes = notes
+
+    @classmethod
+    def from_xml(cls, node):
+        location = Location.from_xml(node.find('location'))
+        notes_node = node.find('notes')
         if notes_node is not None:
-            return Notes(notes_node)
+            notes = Notes.from_xml(notes_node)
         else:
-            return None
+            notes = None
+        return State(location, notes)
+
+    def to_xml(self):
+        node = ET.Element('state')
+        node.append(self.location.to_xml())
+        if self.notes:
+            node.append(self.notes.to_xml())
+        return node
 
 class Location(XmlWrapper):
-    @property
-    def file(self):
-        return File(self._node.find('file'))
+    __slots__ = ('file', 'function', 'point', )
 
-    @property
-    def function(self):
-        return Function(self._node.find('function'))
+    def __init__(self, file, function, point):
+        assert isinstance(file, File)
+        assert isinstance(function, Function)
+        assert isinstance(point, Point)
+        self.file = file
+        self.function = function
+        self.point = point
+
+    @classmethod
+    def from_xml(cls, node):
+        file = File.from_xml(node.find('file'))
+        function = Function.from_xml(node.find('function'))
+        point = Point.from_xml(node.find('point'))
+        return Location(file, function, point)
+
+    def to_xml(self):
+        node = ET.Element('location')
+        node.append(self.file.to_xml())
+        node.append(self.function.to_xml())
+        node.append(self.point.to_xml())
+        return node
 
     @property
     def line(self):
-        p = Point(self._node.find('point'))
-        return p.line
+        return self.point.line
 
     @property
     def column(self):
-        p = Point(self._node.find('point'))
-        return p.column
+        return self.point.column
 
 class File(XmlWrapper):
-    @property
-    def name(self):
-        return self._node.get('name')
+    __slots__ = ('name', )
+
+    def __init__(self, name):
+        self.name = name
+
+    @classmethod
+    def from_xml(cls, node):
+        name = node.get('name')
+        result = File(name)
+        return result
+
+    def to_xml(self):
+        node = ET.Element('file')
+        node.set('name', self.name)
+        return node
 
 class Function(XmlWrapper):
-    @property
-    def name(self):
-        return self._node.get('name')
+    __slots__ = ('name', )
+
+    def __init__(self, name):
+        self.name = name
+
+    @classmethod
+    def from_xml(cls, node):
+        name = node.get('name')
+        result = Function(name)
+        return result
+
+    def to_xml(self):
+        node = ET.Element('function')
+        node.set('name', self.name)
+        return node
 
 class Point(XmlWrapper):
-    @property
-    def line(self):
-        return int(self._node.get('line'))
+    __slots__ = ('line', 'column', )
 
-    @property
-    def column(self):
-        return int(self._node.get('column'))
+    def __init__(self, line, column):
+        assert isinstance(line, int)
+        assert isinstance(column, int)
+        self.line = line
+        self.column = column
+
+    @classmethod
+    def from_xml(cls, node):
+        line = int(node.get('line'))
+        column = int(node.get('column'))
+        result = Point(line, column)
+        return result
+
+    def to_xml(self):
+        node = ET.Element('point')
+        node.set('line', str(self.line))
+        node.set('column', str(self.column))
+        return node
+
+def test_creation():
+    r = Report(cwe='CWE-681',
+               location=Location(file=File('foo.c'),
+                                 function=Function('bar'),
+                                 point=Point(10, 15)),
+               message=Message(text='something bad involving pointers'),
+               notes=Notes('foo'),
+               trace=Trace([State(location=Location(file=File('foo.c'),
+                                                    function=Function('bar'),
+                                                    point=Point(10, 15)),
+                                  notes=Notes('something')),
+                            State(location=Location(file=File('foo.c'),
+                                                    function=Function('bar'),
+                                                    point=Point(10, 15)),
+                                  notes=Notes('something')),
+                            State(location=Location(file=File('foo.c'),
+                                                    function=Function('bar'),
+                                                    point=Point(10, 15)),
+                                  notes=Notes('something'))
+                            ])
+               )
+    r.write_as_gcc_output(sys.stderr)
+    r.to_xml().write(sys.stdout)
+
+    # TODO: Does it roundtrip?
+    with open('test.xml', 'w') as f:
+        r.to_xml().write(f)
+    with open('test.xml', 'r') as f:
+        r2 = Report.from_xml(f)
+
+    # TODO: Does it validate?
+    #r.write_xml('foo.xml')
+    #p = Popen(['xmllint', '--relaxng', 'firehose.rng', 'foo.xml'])
+    #p.communicate()
 
 def main():
-    for filename in sorted(glob.glob('examples/*.xml')):
+    for filename in sorted(glob.glob('examples/example-*.xml')):
         print('%s as gcc output:' % filename)
         with open(filename) as f:
             r = Report.from_xml(f)
             r.write_as_gcc_output(sys.stderr)
+
+    test_creation()
 
 if __name__ == '__main__':
     main()
