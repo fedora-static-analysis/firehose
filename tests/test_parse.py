@@ -18,8 +18,7 @@ import unittest
 
 import mock
 
-import firehose
-import parse
+from firehose import firehose, parse
 
 
 FUNC_NAME = 'I am a func name'
