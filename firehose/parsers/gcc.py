@@ -102,9 +102,6 @@ def parse_warning(line, func_name, gccversion, sut):
     """
     match = GCC_PATTERN.match(line)
     if match:
-        generator = Generator(name='gcc',
-                              version=gccversion)
-        metadata = Metadata(generator, sut)
         message = Message(match.group('message'))
         func = Function(func_name)
         try:
@@ -116,6 +113,10 @@ def parse_warning(line, func_name, gccversion, sut):
             switch = switch_match.group('name')
         else:
             switch = None
+        generator = Generator(name='gcc',
+                              version=gccversion,
+                              internalid=switch)
+        metadata = Metadata(generator, sut)
 
         point = Point(int(match.group('line')), column)
         path = File(match.group('path'))
