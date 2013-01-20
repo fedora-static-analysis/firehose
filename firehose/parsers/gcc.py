@@ -28,6 +28,9 @@ from firehose.report import Message, Function, Point, \
 #   gcc/diagnostic.c
 #   gcc/langhooks.c: lhd_print_error_function
 # (as of gcc-4.7.2)
+# See e.g.:
+#   http://gcc.gnu.org/viewcvs/trunk/gcc/diagnostic.c?revision=195098&view=markup
+#   http://gcc.gnu.org/viewcvs/trunk/gcc/langhooks.c?revision=195098&view=markup
 
 # column is optional
 GCC_PATTERN = re.compile("^(?P<path>.+?):(?P<line>\d+):(?P<column>\d*):? (?P<type>warning|note): (?P<message>.*) \[(?P<switch>\-\S+)\]$")
