@@ -18,39 +18,39 @@ import unittest
 
 import mock
 
-from firehose import firehose, parse
-
+from firehose.parsers import gcc # import parse_warning, parse_file
+from firehose.report import Report, Location, File, Point, Function, Message
 
 FUNC_NAME = 'I am a func name'
 
 class TestParseWarning(unittest.TestCase):
     def test_empty(self):
-        ret = parse.parse_warning('', FUNC_NAME)
+        ret = gcc.parse_warning('', FUNC_NAME)
         self.assertTrue(ret is None)
 
     def test_new_line(self):
-        ret = parse.parse_warning('\n', FUNC_NAME)
+        ret = gcc.parse_warning('\n', FUNC_NAME)
         self.assertTrue(ret is None)
 
     def test_parse_c(self):
         line = "unix/arlib.c:299:9: warning: ignoring return value of 'fread', declared with attribute warn_unused_result [-Wunused-result]"
-        ret = parse.parse_warning(line, FUNC_NAME)
-        self.assertIsInstance(ret, firehose.Report)
+        ret = gcc.parse_warning(line, FUNC_NAME)
+        self.assertIsInstance(ret, Report)
 
     def test_parse_cpp(self):
         line = "num_get_float.cpp:535:29: warning: dereferencing type-punned pointer will break strict-aliasing rules [-Wstrict-aliasing]"
-        ret = parse.parse_warning(line, FUNC_NAME)
-        self.assertIsInstance(ret, firehose.Report)
+        ret = gcc.parse_warning(line, FUNC_NAME)
+        self.assertIsInstance(ret, Report)
 
     def test_values_c(self):
         line = "unix/arlib.c:299:9: warning: ignoring return value of 'fread', declared with attribute warn_unused_result [-Wunused-result]"
-        ret = parse.parse_warning(line, FUNC_NAME)
+        ret = gcc.parse_warning(line, FUNC_NAME)
 
-        self.assertIsInstance(ret.location, firehose.Location)
-        self.assertIsInstance(ret.location.file, firehose.File)
-        self.assertIsInstance(ret.location.point, firehose.Point)
-        self.assertIsInstance(ret.location.function, firehose.Function)
-        self.assertIsInstance(ret.message, firehose.Message)
+        self.assertIsInstance(ret.location, Location)
+        self.assertIsInstance(ret.location.file, File)
+        self.assertIsInstance(ret.location.point, Point)
+        self.assertIsInstance(ret.location.function, Function)
+        self.assertIsInstance(ret.message, Message)
         self.assertEqual(ret.message.text,
             "ignoring return value of 'fread', declared with attribute warn_unused_result")
         self.assertEqual(ret.location.file.name, "unix/arlib.c")
@@ -60,13 +60,13 @@ class TestParseWarning(unittest.TestCase):
 
     def test_values_cpp(self):
         line = "num_get_float.cpp:535:29: warning: dereferencing type-punned pointer will break strict-aliasing rules [-Wstrict-aliasing]"
-        ret = parse.parse_warning(line, FUNC_NAME)
+        ret = gcc.parse_warning(line, FUNC_NAME)
 
-        self.assertIsInstance(ret.location, firehose.Location)
-        self.assertIsInstance(ret.location.file, firehose.File)
-        self.assertIsInstance(ret.location.point, firehose.Point)
-        self.assertIsInstance(ret.location.function, firehose.Function)
-        self.assertIsInstance(ret.message, firehose.Message)
+        self.assertIsInstance(ret.location, Location)
+        self.assertIsInstance(ret.location.file, File)
+        self.assertIsInstance(ret.location.point, Point)
+        self.assertIsInstance(ret.location.function, Function)
+        self.assertIsInstance(ret.message, Message)
         self.assertEqual(ret.message.text,
             "dereferencing type-punned pointer will break strict-aliasing rules")
         self.assertEqual(ret.location.file.name, "num_get_float.cpp")
@@ -76,19 +76,19 @@ class TestParseWarning(unittest.TestCase):
 
     def test_full_path(self):
         line = "/builddir/build/BUILD/libreoffice-3.5.7.2/icc/unxlngi6.pro/misc/build/SampleICC-1.3.2/IccProfLib/IccMpeACS.cpp:203:40: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]"
-        ret = parse.parse_warning(line, FUNC_NAME)
+        ret = gcc.parse_warning(line, FUNC_NAME)
 
         self.assertEqual(ret.location.file.name,
             "/builddir/build/BUILD/libreoffice-3.5.7.2/icc/unxlngi6.pro/misc/build/SampleICC-1.3.2/IccProfLib/IccMpeACS.cpp")
 
     def test_ignore_zip_warning(self):
         line = "        zip warning: ../../unxlngi6.pro/bin/autotextuser.zip not found or empty"
-        ret = parse.parse_warning(line, FUNC_NAME)
+        ret = gcc.parse_warning(line, FUNC_NAME)
         self.assertTrue(ret is None)
 
     def test_ignore_java_warning(self):
         line = "    [javac] /builddir/build/BUILD/libreoffice-3.5.7.2/hsqldb/unxlngi6.pro/misc/build/hsqldb/build/build.xml:139: warning: 'includeantruntime' was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds"
-        ret = parse.parse_warning(line, FUNC_NAME)
+        ret = gcc.parse_warning(line, FUNC_NAME)
         self.assertTrue(ret is None)
 
 
@@ -99,31 +99,31 @@ class TestParseFile(unittest.TestCase):
         mock_file.readlines.return_value = lines
         return mock_file
 
-    @mock.patch.object(parse, 'parse_warning')
+    @mock.patch.object(gcc, 'parse_warning')
     def test_identify_c(self, mock_parse_warning):
         lines = self.create_mock_file(["unix/arlib.c: In function 'ar_scan':", "ignored by mock"])
-        ret = list(parse.parse_file(lines))
+        ret = list(gcc.parse_file(lines))
         self.assertEqual(len(ret), 1)
         self.assertEqual(ret[0], mock_parse_warning.return_value)
         self.assertEqual(mock_parse_warning.call_args[0][1], "ar_scan")
 
-    @mock.patch.object(parse, 'parse_warning')
+    @mock.patch.object(gcc, 'parse_warning')
     def test_identify_cpp(self, mock_parse_warning):
         lines = self.create_mock_file(
             ["/builddir/build/BUILD/libreoffice-3.5.7.2/icc/unxlngi6.pro/misc/build/SampleICC-1.3.2/IccProfLib/IccMpeACS.cpp: In member function 'virtual bool CIccMpeAcs::Read(icUInt32Number, CIccIO*)':",
             "ignored by mock"])
-        ret = list(parse.parse_file(lines))
+        ret = list(gcc.parse_file(lines))
         self.assertEqual(len(ret), 1)
         self.assertEqual(ret[0], mock_parse_warning.return_value)
         self.assertEqual(mock_parse_warning.call_args[0][1], "virtual bool CIccMpeAcs::Read(icUInt32Number, CIccIO*)")
 
-    @mock.patch.object(parse, 'parse_warning')
+    @mock.patch.object(gcc, 'parse_warning')
     def test_multiple_warnings_per_func(self, mock_parse_warning):
         # we expect that upon reaching "None", it will stop looking for
         # warnings, and thus the last MagicMock won't be counted
         mock_parse_warning.side_effect = [mock.MagicMock(), mock.MagicMock(), None, mock.MagicMock()]
         lines = self.create_mock_file(["unix/arlib.c: In function 'ar_scan':", "", "", "", ""])
-        ret = list(parse.parse_file(lines))
+        ret = list(gcc.parse_file(lines))
         self.assertEqual(len(ret), 2)
     
 

@@ -19,7 +19,8 @@
 import re
 import sys
 
-import firehose
+from firehose.report import Message, Function, Point, \
+    File, Location, Report
 
 # Parser for warnings emitted by GCC
 # The code that generates these warnings can be seen within gcc's own
@@ -42,7 +43,7 @@ def parse_file(data_file):
     :param data_file:   file object containing build log
     :type  data_file:   file
 
-    :return:    generator of firehose.Report instances
+    :return:    generator of Report instances
     :rtype:     generator
     """
     # has a value only when in a block of lines where the first line identifies
@@ -71,23 +72,23 @@ def parse_warning(line, func_name):
     :param func_name:   name of the current function
     :type  func_name:   basestring
 
-    :return:    firehose.Report if match, else None
+    :return:    Report if match, else None
     """
     match = GCC_PATTERN.match(line)
     if match:
-        message = firehose.Message(match.group('message'))
-        func = firehose.Function(func_name)
+        message = Message(match.group('message'))
+        func = Function(func_name)
         try:
             column = int(match.group('column'))
         except TypeError:
             column = None
 
-        point = firehose.Point(int(match.group('line')), column)
-        path = firehose.File(match.group('path'))
-        location = firehose.Location(path, func, point)
+        point = Point(int(match.group('line')), column)
+        path = File(match.group('path'))
+        location = Location(path, func, point)
         # dropping switch, which should eventually be worked into the schema
 
-        return firehose.Report(None, location, message, None, None)
+        return Report(None, location, message, None, None)
 
 
 if __name__ == '__main__':
