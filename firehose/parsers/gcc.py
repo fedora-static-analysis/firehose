@@ -31,10 +31,15 @@ from firehose.report import Message, Function, Point, \
 # See e.g.:
 #   http://gcc.gnu.org/viewcvs/trunk/gcc/diagnostic.c?revision=195098&view=markup
 #   http://gcc.gnu.org/viewcvs/trunk/gcc/langhooks.c?revision=195098&view=markup
+# This parser is only intended to be run with the C locale
 
 # column is optional
-GCC_PATTERN = re.compile("^(?P<path>.+?):(?P<line>\d+):(?P<column>\d*):? (?P<type>warning|note): (?P<message>.*) \[(?P<switch>\-\S+)\]$")
+# switch is optional
+GCC_PATTERN = re.compile("^(?P<path>\S.*?):(?P<line>\d+):(?P<column>\d*):? (?P<type>warning|note): (?P<message>.*?)(?P<switch> \[\-W.+\])?$")
 
+SWITCH_SUB_PATTERN = re.compile("^ \[\-W(?P<name>.*)\]$")
+
+# single quotes may not match locales that are not C
 FUNCTION_PATTERN = re.compile(".*: In (?:member )?function '(?P<func>.*)':")
 
 # match when gcc issues a warning for a location it thinks is in global scope
@@ -97,20 +102,25 @@ def parse_warning(line, func_name, gccversion, sut):
     """
     match = GCC_PATTERN.match(line)
     if match:
-        generator = Generator(name='gcc',
-                              version=gccversion)
-        metadata = Metadata(generator, sut)
         message = Message(match.group('message'))
         func = Function(func_name)
         try:
             column = int(match.group('column'))
         except TypeError:
             column = None
+        switch_match = SWITCH_SUB_PATTERN.match(match.group('switch') or '')
+        if switch_match:
+            switch = switch_match.group('name')
+        else:
+            switch = None
+        generator = Generator(name='gcc',
+                              version=gccversion,
+                              internalid=switch)
+        metadata = Metadata(generator, sut)
 
         point = Point(int(match.group('line')), column)
         path = File(match.group('path'))
         location = Location(path, func, point)
-        # dropping switch, which should eventually be worked into the schema
 
         return Report(None, metadata, location, message, None, None)
 

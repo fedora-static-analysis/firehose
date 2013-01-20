@@ -54,7 +54,7 @@ class TestParseWarning(unittest.TestCase):
         self.assertIsInstance(ret.metadata.generator, Generator)
         self.assertEqual(ret.metadata.generator.name, 'gcc')
         self.assertEqual(ret.metadata.generator.version, '4.7.2')
-        self.assertEqual(ret.metadata.generator.internalid, None)
+        self.assertEqual(ret.metadata.generator.internalid, 'unused-result')
         self.assertEqual(ret.metadata.sut, FAKE_SUT)
 
         self.assertIsInstance(ret.metadata.sut, Sut)
@@ -102,6 +102,11 @@ class TestParseWarning(unittest.TestCase):
         line = "    [javac] /builddir/build/BUILD/libreoffice-3.5.7.2/hsqldb/unxlngi6.pro/misc/build/hsqldb/build/build.xml:139: warning: 'includeantruntime' was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds"
         ret = gcc.parse_warning(line, FUNC_NAME, '4.7.2', FAKE_SUT)
         self.assertTrue(ret is None)
+
+    def test_parse_no_switch(self):
+        line = "unix/arlib.c:299:9: warning: ignoring return value of 'fread', declared with attribute warn_unused_result"
+        ret = gcc.parse_warning(line, FUNC_NAME, '4.7.2', FAKE_SUT)
+        self.assertIsInstance(ret, Report)
 
 
 class TestParseFile(unittest.TestCase):
