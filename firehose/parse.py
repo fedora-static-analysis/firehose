@@ -21,6 +21,12 @@ import sys
 
 import firehose
 
+# Parser for warnings emitted by GCC
+# The code that generates these warnings can be seen within gcc's own
+# sources within:
+#   gcc/diagnostic.c
+#   gcc/langhooks.c: lhd_print_error_function
+# (as of gcc-4.7.2)
 
 # column is optional
 GCC_PATTERN = re.compile("^(?P<path>.+?):(?P<line>\d+):(?P<column>\d*):? (?P<type>warning|note): (?P<message>.*) \[(?P<switch>\-\S+)\]$")
