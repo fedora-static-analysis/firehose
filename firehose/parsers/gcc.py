@@ -28,10 +28,15 @@ from firehose.report import Message, Function, Point, \
 #   gcc/diagnostic.c
 #   gcc/langhooks.c: lhd_print_error_function
 # (as of gcc-4.7.2)
+# This parser is only intended to be run with the C locale
 
 # column is optional
-GCC_PATTERN = re.compile("^(?P<path>.+?):(?P<line>\d+):(?P<column>\d*):? (?P<type>warning|note): (?P<message>.*) \[(?P<switch>\-\S+)\]$")
+# switch is optional
+GCC_PATTERN = re.compile("^(?P<path>\S.*?):(?P<line>\d+):(?P<column>\d*):? (?P<type>warning|note): (?P<message>.*?)(?P<switch> \[\-W.+\])?$")
 
+SWITCH_SUB_PATTERN = re.compile("^ \[\-W(?P<name>.*)\]$")
+
+# single quotes may not match locales that are not C
 FUNCTION_PATTERN = re.compile(".*: In (?:member )?function '(?P<func>.*)':")
 
 
@@ -82,11 +87,15 @@ def parse_warning(line, func_name):
             column = int(match.group('column'))
         except TypeError:
             column = None
+        switch_match = SWITCH_SUB_PATTERN.match(match.group('switch') or '')
+        if switch_match:
+            switch = switch_match.group('name')
+        else:
+            switch = None
 
         point = Point(int(match.group('line')), column)
         path = File(match.group('path'))
         location = Location(path, func, point)
-        # dropping switch, which should eventually be worked into the schema
 
         return Report(None, location, message, None, None)
 

@@ -91,6 +91,11 @@ class TestParseWarning(unittest.TestCase):
         ret = gcc.parse_warning(line, FUNC_NAME)
         self.assertTrue(ret is None)
 
+    def test_parse_no_switch(self):
+        line = "unix/arlib.c:299:9: warning: ignoring return value of 'fread', declared with attribute warn_unused_result"
+        ret = gcc.parse_warning(line, FUNC_NAME)
+        self.assertIsInstance(ret, Report)
+
 
 class TestParseFile(unittest.TestCase):
     @staticmethod
