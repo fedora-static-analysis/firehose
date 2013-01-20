@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<results version="2">
+  <cppcheck version="1.57"/>
+  <errors>
+Checking python-ethtool/etherinfo.c...
+1/6 files checked 13% done
+Checking python-ethtool/etherinfo_ipv6_obj.c...
+2/6 files checked 21% done
+Checking python-ethtool/etherinfo_obj.c...
+  <error id="uninitvar" severity="error" msg="Uninitialized variable: ret" verbose="Uninitialized variable: ret">
+    <location file="python-ethtool/etherinfo_obj.c" line="185"/>
+  </error>
+3/6 files checked 35% done
+Checking python-ethtool/ethtool.c...
+  <error id="invalidScanfFormatWidth" severity="error" msg="Width 100 given in format string (no. 1) is larger than destination buffer 'driver[100]', use %99s to prevent overflowing it." verbose="Width 100 given in format string (no. 1) is larger than destination buffer 'driver[100]', use %99s to prevent overflowing it.">
+    <location file="python-ethtool/ethtool.c" line="579"/>
+  </error>
+  <error id="invalidScanfFormatWidth" severity="error" msg="Width 100 given in format string (no. 2) is larger than destination buffer 'dev[100]', use %99s to prevent overflowing it." verbose="Width 100 given in format string (no. 2) is larger than destination buffer 'dev[100]', use %99s to prevent overflowing it.">
+    <location file="python-ethtool/ethtool.c" line="579"/>
+  </error>
+  <error id="nullPointer" severity="error" msg="Possible null pointer dereference: end - otherwise it is redundant to check it against null." verbose="Possible null pointer dereference: end - otherwise it is redundant to check it against null.">
+    <location file="python-ethtool/ethtool.c" line="139"/>
+    <location file="python-ethtool/ethtool.c" line="141"/>
+  </error>
+  <error id="resourceLeak" severity="error" msg="Resource leak: fd" verbose="Resource leak: fd">
+    <location file="python-ethtool/ethtool.c" line="126"/>
+  </error>
+  <error id="uninitvar" severity="error" msg="Uninitialized variable: err" verbose="Uninitialized variable: err">
+    <location file="python-ethtool/ethtool.c" line="659"/>
+  </error>
+4/6 files checked 65% done
+Checking python-ethtool/netlink-address.c...
+5/6 files checked 70% done
+Checking python-ethtool/not-ethtool.c...
+6/6 files checked 100% done
+  </errors>
+</results>
