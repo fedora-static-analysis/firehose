@@ -25,18 +25,21 @@ import xml.etree.ElementTree as ET
 
 class Report:
     __slots__ = ('cwe',
+                 'metadata',
                  'location',
                  'message',
                  'notes',
                  'trace')
     def __init__(self,
                  cwe,
+                 metadata,
                  location,
                  message,
                  notes,
                  trace):
         if cwe is not None:
             assert isinstance(cwe, str)
+        assert isinstance(metadata, Metadata)
         assert isinstance(location, Location)
         assert isinstance(message, Message)
         if notes:
@@ -44,6 +47,7 @@ class Report:
         if trace:
             assert isinstance(trace, Trace)
         self.cwe = cwe
+        self.metadata = metadata
         self.location = location
         self.message = message
         self.notes = notes
@@ -55,6 +59,7 @@ class Report:
         root = tree.getroot()
 
         cwe = root.get('cwe')
+        metadata = Metadata.from_xml(root.find('metadata'))
         location = Location.from_xml(root.find('location'))
         message = Message.from_xml(root.find('message'))
         notes_node = root.find('notes')
@@ -67,7 +72,7 @@ class Report:
             trace = Trace.from_xml(trace_node)
         else:
             trace = None
-        return Report(cwe, location, message, notes, trace)
+        return Report(cwe, metadata, location, message, notes, trace)
 
     def to_xml(self):
         tree = ET.ElementTree()
@@ -75,6 +80,7 @@ class Report:
         tree._setroot(node)
         if self.cwe is not None:
             node.set('cwe', self.cwe)
+        node.append(self.metadata.to_xml())
         node.append(self.location.to_xml())
         node.append(self.message.to_xml())
         if self.notes:
@@ -117,6 +123,71 @@ class Report:
                            column=state.location.column,
                            kind='note',
                            msg=notes.text if notes else '')
+
+class Metadata:
+    __slots__ = ('generator', 'sut', )
+
+    def __init__(self, generator, sut):
+        assert isinstance(generator, Generator)
+        assert isinstance(sut, Sut)
+        self.generator = generator
+        self.sut = sut
+
+    @classmethod
+    def from_xml(cls, node):
+        generator = Generator.from_xml(node.find('generator'))
+        sut = Sut.from_xml(node.find('sut'))
+        result = Metadata(generator, sut)
+        return result
+
+    def to_xml(self):
+        node = ET.Element('metadata')
+        node.append(self.generator.to_xml())
+        node.append(self.sut.to_xml())
+        return node
+
+class Generator:
+    __slots__ = ('name', 'version', 'internalid', )
+
+    def __init__(self, name, version, internalid=None):
+        assert isinstance(name, str)
+        assert isinstance(version, str)
+        if internalid is not None:
+            assert isinstance(internalid, str)
+        self.name = name
+        self.version = version
+        self.internalid = internalid
+
+    @classmethod
+    def from_xml(cls, node):
+        result = Generator(node.get('name'),
+                           node.get('version'),
+                           node.get('internalid')) # FIXME: it's optional
+        return result
+
+    def to_xml(self):
+        node = ET.Element('generator')
+        node.set('name', self.name)
+        node.set('version', self.version)
+        if self.internalid is not None:
+            node.set('internal-id', self.internalid)
+        return node
+
+class Sut:
+    # FIXME: this part of the schema needs more thought/work
+    __slots__ = ('text', )
+
+    def __init__(self):
+        pass
+
+    @classmethod
+    def from_xml(cls, node):
+        result = Sut()
+        return result
+
+    def to_xml(self):
+        node = ET.Element('sut')
+        return node
 
 class Message:
     __slots__ = ('text', )
@@ -292,6 +363,10 @@ class Point:
 
 def test_creation():
     r = Report(cwe='CWE-681',
+               metadata=Metadata(generator=Generator(name='cpychecker',
+                                                     version='0.11',
+                                                     internalid='refcount-too-high'),
+                                 sut=Sut()),
                location=Location(file=File('foo.c'),
                                  function=Function('bar'),
                                  point=Point(10, 15)),

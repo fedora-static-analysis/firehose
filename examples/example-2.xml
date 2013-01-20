@@ -4,7 +4,7 @@
   <!-- Example of a report with a trace -->
 
   <metadata>
-    <generator name="" version=""/>
+    <generator name="cpychecker" version="0.11" internal-id="refcount-too-high"/>
     <sut></sut>
   </metadata>
 

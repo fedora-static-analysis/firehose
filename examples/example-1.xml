@@ -4,7 +4,8 @@
   <!-- Example of a report without a trace -->
 
   <metadata>
-    <generator name="" version=""/>
+    <generator name="cpychecker" version="0.11"
+               internal-id="mismatching-type-in-pyarg-format-string"/>
     <sut></sut>
   </metadata>
 

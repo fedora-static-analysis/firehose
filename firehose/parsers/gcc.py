@@ -20,7 +20,7 @@ import re
 import sys
 
 from firehose.report import Message, Function, Point, \
-    File, Location, Report
+    File, Location, Metadata, Generator, Report
 
 # Parser for warnings emitted by GCC
 # The code that generates these warnings can be seen within gcc's own
@@ -28,6 +28,9 @@ from firehose.report import Message, Function, Point, \
 #   gcc/diagnostic.c
 #   gcc/langhooks.c: lhd_print_error_function
 # (as of gcc-4.7.2)
+# See e.g.:
+#   http://gcc.gnu.org/viewcvs/trunk/gcc/diagnostic.c?revision=195098&view=markup
+#   http://gcc.gnu.org/viewcvs/trunk/gcc/langhooks.c?revision=195098&view=markup
 # This parser is only intended to be run with the C locale
 
 # column is optional
@@ -39,14 +42,25 @@ SWITCH_SUB_PATTERN = re.compile("^ \[\-W(?P<name>.*)\]$")
 # single quotes may not match locales that are not C
 FUNCTION_PATTERN = re.compile(".*: In (?:member )?function '(?P<func>.*)':")
 
+# match when gcc issues a warning for a location it thinks is in global scope
+GLOBAL_PATTERN = re.compile(".*: At global scope:$")
 
-def parse_file(data_file):
+# When gcc issues a warning at spot it thinks is in global scope, use this
+# as the function name
+GLOBAL_FUNC_NAME = '::'
+
+
+def parse_file(data_file, gccversion, sut):
     """
     looks for groups of lines that start with a line identifying a function
     name, followed by one or more lines with a warning or note
 
     :param data_file:   file object containing build log
     :type  data_file:   file
+    :param gccversion:   version of GCC that generated this report
+    :type  gccversion:   str
+    :param sut:   metadata about the software-under-test
+    :type  sut:   Sut
 
     :return:    generator of Report instances
     :rtype:     generator
@@ -56,13 +70,16 @@ def parse_file(data_file):
     current_func_name = None
     for line in data_file.readlines():
         match_func = FUNCTION_PATTERN.match(line)
+        match_global = GLOBAL_PATTERN.match(line)
         # if we found a line that describes a function name
         if match_func:
             current_func_name = match_func.group('func')
+        elif match_global:
+            current_func_name = GLOBAL_FUNC_NAME
 
         # if we think the next line might describe a warning
         elif current_func_name is not None:
-            report = parse_warning(line, current_func_name)
+            report = parse_warning(line, current_func_name, gccversion, sut)
             if report:
                 yield report
             else:
@@ -70,17 +87,24 @@ def parse_file(data_file):
                 current_func_name = None
                 
             
-def parse_warning(line, func_name):
+def parse_warning(line, func_name, gccversion, sut):
     """
     :param line:        current line read from file
     :type  line:        basestring
     :param func_name:   name of the current function
     :type  func_name:   basestring
+    :param gccversion:   version of GCC that generated this report
+    :type  gccversion:   str
+    :param sut:   metadata about the software-under-test
+    :type  sut:   Sut
 
     :return:    Report if match, else None
     """
     match = GCC_PATTERN.match(line)
     if match:
+        generator = Generator(name='gcc',
+                              version=gccversion)
+        metadata = Metadata(generator, sut)
         message = Message(match.group('message'))
         func = Function(func_name)
         try:
@@ -97,7 +121,7 @@ def parse_warning(line, func_name):
         path = File(match.group('path'))
         location = Location(path, func, point)
 
-        return Report(None, location, message, None, None)
+        return Report(None, metadata, location, message, None, None)
 
 
 if __name__ == '__main__':
