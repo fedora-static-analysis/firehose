@@ -20,7 +20,7 @@ import re
 import sys
 
 from firehose.report import Message, Function, Point, \
-    File, Location, Report
+    File, Location, Metadata, Generator, Report
 
 # Parser for warnings emitted by GCC
 # The code that generates these warnings can be seen within gcc's own
@@ -45,13 +45,17 @@ GLOBAL_PATTERN = re.compile(".*: At global scope:$")
 GLOBAL_FUNC_NAME = '::'
 
 
-def parse_file(data_file):
+def parse_file(data_file, gccversion, sut):
     """
     looks for groups of lines that start with a line identifying a function
     name, followed by one or more lines with a warning or note
 
     :param data_file:   file object containing build log
     :type  data_file:   file
+    :param gccversion:   version of GCC that generated this report
+    :type  gccversion:   str
+    :param sut:   metadata about the software-under-test
+    :type  sut:   Sut
 
     :return:    generator of Report instances
     :rtype:     generator
@@ -70,7 +74,7 @@ def parse_file(data_file):
 
         # if we think the next line might describe a warning
         elif current_func_name is not None:
-            report = parse_warning(line, current_func_name)
+            report = parse_warning(line, current_func_name, gccversion, sut)
             if report:
                 yield report
             else:
@@ -78,17 +82,24 @@ def parse_file(data_file):
                 current_func_name = None
                 
             
-def parse_warning(line, func_name):
+def parse_warning(line, func_name, gccversion, sut):
     """
     :param line:        current line read from file
     :type  line:        basestring
     :param func_name:   name of the current function
     :type  func_name:   basestring
+    :param gccversion:   version of GCC that generated this report
+    :type  gccversion:   str
+    :param sut:   metadata about the software-under-test
+    :type  sut:   Sut
 
     :return:    Report if match, else None
     """
     match = GCC_PATTERN.match(line)
     if match:
+        generator = Generator(name='gcc',
+                              version=gccversion)
+        metadata = Metadata(generator, sut)
         message = Message(match.group('message'))
         func = Function(func_name)
         try:
@@ -101,7 +112,7 @@ def parse_warning(line, func_name):
         location = Location(path, func, point)
         # dropping switch, which should eventually be worked into the schema
 
-        return Report(None, location, message, None, None)
+        return Report(None, metadata, location, message, None, None)
 
 
 if __name__ == '__main__':

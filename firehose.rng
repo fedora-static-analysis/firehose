@@ -14,6 +14,14 @@
         <element name="generator">
           <attribute name="name"/>
           <attribute name="version"/>
+          <optional>
+            <!--
+                 Each static analysis tool potentially has multiple tests,
+                 with its own IDs for its own tests.
+                 Capture those that do here, as free-form strings:
+            -->
+            <attribute name="internal-id"/>
+          </optional>
         </element>
         <!-- "sut" = "Software Under Test" -->
         <element name="sut">
