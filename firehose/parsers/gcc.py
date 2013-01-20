@@ -34,6 +34,13 @@ GCC_PATTERN = re.compile("^(?P<path>.+?):(?P<line>\d+):(?P<column>\d*):? (?P<typ
 
 FUNCTION_PATTERN = re.compile(".*: In (?:member )?function '(?P<func>.*)':")
 
+# match when gcc issues a warning for a location it thinks is in global scope
+GLOBAL_PATTERN = re.compile(".*: At global scope:$")
+
+# When gcc issues a warning at spot it thinks is in global scope, use this
+# as the function name
+GLOBAL_FUNC_NAME = '::'
+
 
 def parse_file(data_file):
     """
@@ -51,9 +58,12 @@ def parse_file(data_file):
     current_func_name = None
     for line in data_file.readlines():
         match_func = FUNCTION_PATTERN.match(line)
+        match_global = GLOBAL_PATTERN.match(line)
         # if we found a line that describes a function name
         if match_func:
             current_func_name = match_func.group('func')
+        elif match_global:
+            current_func_name = GLOBAL_FUNC_NAME
 
         # if we think the next line might describe a warning
         elif current_func_name is not None:

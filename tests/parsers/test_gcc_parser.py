@@ -118,6 +118,16 @@ class TestParseFile(unittest.TestCase):
         self.assertEqual(mock_parse_warning.call_args[0][1], "virtual bool CIccMpeAcs::Read(icUInt32Number, CIccIO*)")
 
     @mock.patch.object(gcc, 'parse_warning')
+    def test_identify_global(self, mock_parse_warning):
+        lines = self.create_mock_file(
+            ["/builddir/build/BUILD/libreoffice-3.5.7.2/icc/unxlngi6.pro/misc/build/SampleICC-1.3.2/IccProfLib/IccMpeACS.cpp: At global scope:",
+            "ignored by mock"])
+        ret = list(gcc.parse_file(lines))
+        self.assertEqual(len(ret), 1)
+        self.assertEqual(ret[0], mock_parse_warning.return_value)
+        self.assertEqual(mock_parse_warning.call_args[0][1], gcc.GLOBAL_FUNC_NAME)
+
+    @mock.patch.object(gcc, 'parse_warning')
     def test_multiple_warnings_per_func(self, mock_parse_warning):
         # we expect that upon reaching "None", it will stop looking for
         # warnings, and thus the last MagicMock won't be counted
@@ -128,9 +138,6 @@ class TestParseFile(unittest.TestCase):
     
 
 # This represents a variety of cases that we should handle.
-#
-# For the "At global scope" line, there is no function name, so we should handle
-# this by making the function name perhaps "::".
 #
 # For the first warning (on line 3), there was no function name given, so do
 # we make the function name optional?
