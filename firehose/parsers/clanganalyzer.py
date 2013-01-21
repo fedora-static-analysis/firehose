@@ -76,7 +76,7 @@ def parse_plist(pathOrFile, analyzerversion, sut):
 
                             # FIXME: doesn't tell us function name
                             # TODO: can we patch this upstream?
-                            function=Function(''),
+                            function=None,
 
                             point=Point(int(loc.line),
                                         int(loc.col)))

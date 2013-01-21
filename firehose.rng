@@ -83,9 +83,26 @@
           <text/>
         </element>
       </element>
-      <element name="function">
-        <attribute name="name"/>
-      </element>
+      <!--
+           Ideally, every analyzer would tell us in which function each
+           problem was discovered, given that function names are less
+           likely to change than line numbers.
+
+           Unfortunately many don't - and we should patch these in each
+           upstream analyzer as we go.
+
+           Also, a problem can occur in global scope (e.g. lack of NULL
+           termination in an array-initializer for a global, such as in
+           this checker:
+           http://gcc-python-plugin.readthedocs.org/en/latest/cpychecker.html#verification-of-pymethoddef-tables
+           (although arguably there *is* a relevant function there: the
+           location of the code that uses that data)
+      -->
+      <optional>
+        <element name="function">
+          <attribute name="name"/>
+        </element>
+      </optional>
       <!-- We can refer to either a location, or a range of locations
            within the file: -->
       <choice>

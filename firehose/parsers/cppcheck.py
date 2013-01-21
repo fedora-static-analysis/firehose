@@ -57,7 +57,7 @@ def parse_file(fileobj, sut):
 
                               # FIXME: doesn't tell us function name
                               # TODO: can we patch this upstream?
-                              function=Function(''),
+                              function=None,
 
                               # doesn't emit column
                               point=Point(int(node_location.get('line')), 0)) # FIXME: bogus column

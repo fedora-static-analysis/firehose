@@ -104,10 +104,11 @@ class Report:
             cwetext = ' [%s]' % self.cwe
         else:
             cwetext = ''
-        writeln("%s: In function '%s':%s"
-                % (self.location.file.name,
-                   self.location.function.name,
-                   cwetext))
+        if self.location.function is not None:
+            writeln("%s: In function '%s':%s"
+                    % (self.location.file.name,
+                       self.location.function.name,
+                       cwetext))
         diagnostic(filename=self.location.file.name,
                    line=self.location.line,
                    column=self.location.column,
@@ -280,7 +281,8 @@ class Location:
 
     def __init__(self, file, function, point):
         assert isinstance(file, File)
-        assert isinstance(function, Function)
+        if function is not None:
+            assert isinstance(function, Function)
         assert isinstance(point, Point)
         self.file = file
         self.function = function
@@ -289,7 +291,11 @@ class Location:
     @classmethod
     def from_xml(cls, node):
         file = File.from_xml(node.find('file'))
-        function = Function.from_xml(node.find('function'))
+        function_node = node.find('function')
+        if function_node is not None:
+            function = Function.from_xml(function_node)
+        else:
+            function = None
         point = Point.from_xml(node.find('point'))
         return Location(file, function, point)
 

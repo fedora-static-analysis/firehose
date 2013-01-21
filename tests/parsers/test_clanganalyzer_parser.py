@@ -41,6 +41,7 @@ class TestParsePlist(unittest.TestCase):
         self.assertEqual(r0.notes, None)
         self.assertEqual(r0.location.file.name,
                          'python-ethtool/ethtool.c')
+        self.assertEqual(r0.location.function, None)
         self.assertEqual(r0.location.line, 130)
         self.assertEqual(r0.location.column, 2)
         self.assertNotEqual(r0.trace, None)
