@@ -23,9 +23,11 @@ from firehose.report import Report, Sut
 FAKE_SUT = Sut()
 
 class TestParseXml(unittest.TestCase):
-    def test_example(self):
+    def test_example_001(self):
         ret = list(parse_file(os.path.join(os.path.dirname(__file__),
-                                           'cppcheck-xml-v2-example.xml'),
+                                           'example-output',
+                                           'cppcheck-xml-v2',
+                                           'example-001.xml'),
                               sut=FAKE_SUT))
         self.assertEqual(len(ret), 7)
         r0 = ret[0]
