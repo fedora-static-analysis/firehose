@@ -38,3 +38,4 @@ class TestParseXml(unittest.TestCase):
         self.assertEqual(r0.location.file.name,
                          'python-ethtool/etherinfo_obj.c')
         self.assertEqual(r0.location.line, 185)
+        self.assertEqual(r0.trace, None)

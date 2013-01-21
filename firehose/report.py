@@ -231,6 +231,9 @@ class Trace:
         assert isinstance(states, list)
         self.states = states
 
+    def add_state(self, state):
+        self.states.append(state)
+
     @classmethod
     def from_xml(cls, node):
         states = []
