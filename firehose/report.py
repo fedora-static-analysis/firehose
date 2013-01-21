@@ -100,20 +100,19 @@ class Report:
             out.write('%s:%i:%i: %s: %s\n'
                       % (filename, line, column,
                          kind, msg))
+        if self.location.function is not None:
+            writeln("%s: In function '%s':"
+                    % (self.location.file.name,
+                       self.location.function.name))
         if self.cwe:
             cwetext = ' [%s]' % self.cwe
         else:
             cwetext = ''
-        if self.location.function is not None:
-            writeln("%s: In function '%s':%s"
-                    % (self.location.file.name,
-                       self.location.function.name,
-                       cwetext))
         diagnostic(filename=self.location.file.name,
                    line=self.location.line,
                    column=self.location.column,
                    kind='warning',
-                   msg=self.message.text)
+                   msg='%s%s' % (self.message.text, cwetext))
         if self.notes:
             writeln(self.notes.text.rstrip())
         if self.trace:
