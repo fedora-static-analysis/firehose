@@ -129,21 +129,27 @@ class Metadata:
 
     def __init__(self, generator, sut):
         assert isinstance(generator, Generator)
-        assert isinstance(sut, Sut)
+        if sut is not None:
+            assert isinstance(sut, Sut)
         self.generator = generator
         self.sut = sut
 
     @classmethod
     def from_xml(cls, node):
         generator = Generator.from_xml(node.find('generator'))
-        sut = Sut.from_xml(node.find('sut'))
+        sut_node = node.find('sut')
+        if sut_node is not None:
+            sut = Sut.from_xml(sut_node)
+        else:
+            sut = None
         result = Metadata(generator, sut)
         return result
 
     def to_xml(self):
         node = ET.Element('metadata')
         node.append(self.generator.to_xml())
-        node.append(self.sut.to_xml())
+        if self.sut is not None:
+            node.append(self.sut.to_xml())
         return node
 
 class Generator:
@@ -301,7 +307,8 @@ class Location:
     def to_xml(self):
         node = ET.Element('location')
         node.append(self.file.to_xml())
-        node.append(self.function.to_xml())
+        if self.function is not None:
+            node.append(self.function.to_xml())
         node.append(self.point.to_xml())
         return node
 

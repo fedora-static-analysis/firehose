@@ -68,6 +68,6 @@ if __name__ == '__main__':
         print "provide a build log file path as the only argument"
     else:
         with open(sys.argv[1]) as data_file:
-            for report in parse_file(data_file):
+            for report in parse_file(data_file, sut=None):
                 report.to_xml().write(sys.stdout)
                 print

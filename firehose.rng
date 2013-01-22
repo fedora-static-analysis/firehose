@@ -23,18 +23,21 @@
             <attribute name="internal-id"/>
           </optional>
         </element>
+
         <!-- "sut" = "Software Under Test" -->
-        <element name="sut">
-          <choice>
-            <text/>
-            <element name="rpm">
-              <attribute name="name"/>
-              <attribute name="version"/>
-              <attribute name="release"/>
-              <attribute name="arch"/>
-            </element>
-          </choice>
-        </element>
+        <optional>
+          <element name="sut">
+            <choice>
+              <text/>
+              <element name="rpm">
+                <attribute name="name"/>
+                <attribute name="version"/>
+                <attribute name="release"/>
+                <attribute name="arch"/>
+              </element>
+            </choice>
+          </element>
+        </optional>
       </element>
 
       <!-- A message summarizing the problem -->

@@ -128,10 +128,10 @@ if __name__ == '__main__':
     else:
         path = sys.argv[1]
         if path.endswith('.plist'):
-            for result in parse_plist(path, analyzerversion, Sut()):
+            for result in parse_plist(path, analyzerversion, sut=None):
                 print(result.to_xml().write(sys.stdout))
                 print
         else:
-            for result in parse_scandir(path, analyzerversion, Sut()):
+            for result in parse_scandir(path, analyzerversion, sut=None):
                 print(result.to_xml().write(sys.stdout))
                 print
