@@ -13,7 +13,9 @@
       <element name="metadata">
         <element name="generator">
           <attribute name="name"/>
-          <attribute name="version"/>
+          <optional>
+            <attribute name="version"/>
+          </optional>
           <optional>
             <!--
                  Each static analysis tool potentially has multiple tests,

@@ -40,6 +40,11 @@ class TestParseWarning(unittest.TestCase):
         ret = gcc.parse_warning(line, FUNC_NAME, '4.7.2', FAKE_SUT)
         self.assertIsInstance(ret, Report)
 
+    def test_no_metadata(self):
+        line = "unix/arlib.c:299:9: warning: ignoring return value of 'fread', declared with attribute warn_unused_result [-Wunused-result]"
+        ret = gcc.parse_warning(line, FUNC_NAME, gccversion=None, sut=None)
+        self.assertIsInstance(ret, Report)
+
     def test_parse_cpp(self):
         line = "num_get_float.cpp:535:29: warning: dereferencing type-punned pointer will break strict-aliasing rules [-Wstrict-aliasing]"
         ret = gcc.parse_warning(line, FUNC_NAME, '4.7.2', FAKE_SUT)

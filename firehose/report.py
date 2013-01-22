@@ -217,7 +217,8 @@ class Generator:
 
     def __init__(self, name, version, internalid=None):
         assert isinstance(name, str)
-        assert isinstance(version, str)
+        if version is not None:
+            assert isinstance(version, str)
         if internalid is not None:
             assert isinstance(internalid, str)
         self.name = name
@@ -227,14 +228,15 @@ class Generator:
     @classmethod
     def from_xml(cls, node):
         result = Generator(node.get('name'),
-                           node.get('version'),
-                           node.get('internalid')) # FIXME: it's optional
+                           node.get('version'), # optional
+                           node.get('internalid')) # optional
         return result
 
     def to_xml(self):
         node = ET.Element('generator')
         node.set('name', self.name)
-        node.set('version', self.version)
+        if self.version is not None:
+            node.set('version', self.version)
         if self.internalid is not None:
             node.set('internal-id', self.internalid)
         return node
