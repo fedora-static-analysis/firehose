@@ -14,7 +14,7 @@ due to object being referenced by: PyListObject.ob_item[0]"
 but final item->ob_refcnt is N + 2</notes>
 
   <location>
-    <file name="examples/python-src-example.c">
+    <file given-path="examples/python-src-example.c">
       <hash alg="sha-1">6ba29daa94d64b48071e299a79f2a00dcd99eeb1</hash>
     </file>
     <function name="make_a_list_of_random_ints_badly"/>
@@ -24,7 +24,7 @@ but final item->ob_refcnt is N + 2</notes>
   <trace>
     <state>
       <location>
-        <file name="examples/python-src-example.c">
+        <file given-path="examples/python-src-example.c">
           <hash alg="sha-1">6ba29daa94d64b48071e299a79f2a00dcd99eeb1</hash>
         </file>
         <function name="make_a_list_of_random_ints_badly"/>
@@ -35,7 +35,7 @@ but final item->ob_refcnt is N + 2</notes>
 
     <state>
       <location>
-        <file name="examples/python-src-example.c">
+        <file given-path="examples/python-src-example.c">
           <hash alg="sha-1">6ba29daa94d64b48071e299a79f2a00dcd99eeb1</hash>
         </file>
         <function name="make_a_list_of_random_ints_badly"/>
@@ -46,7 +46,7 @@ but final item->ob_refcnt is N + 2</notes>
 
     <state>
       <location>
-        <file name="examples/python-src-example.c">
+        <file given-path="examples/python-src-example.c">
           <hash alg="sha-1">6ba29daa94d64b48071e299a79f2a00dcd99eeb1</hash>
         </file>
         <function name="make_a_list_of_random_ints_badly"/>

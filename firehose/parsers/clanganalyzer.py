@@ -72,7 +72,8 @@ def parse_plist(pathOrFile, analyzerversion, sut):
         message = Message(text=diagnostic['description'])
 
         loc = diagnostic['location']
-        location = Location(file=File(files[loc.file]),
+        location = Location(file=File(givenpath=files[loc.file],
+                                      abspath=None),
 
                             # FIXME: doesn't tell us function name
                             # TODO: can we patch this upstream?
@@ -107,7 +108,8 @@ def make_trace(files, path):
         #   node['ranges']
 
         loc = node['location']
-        location = Location(file=File(files[loc.file]),
+        location = Location(file=File(givenpath=files[loc.file],
+                                      abspath=None),
 
                             # FIXME: doesn't tell us function name
                             # TODO: can we patch this upstream?

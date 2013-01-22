@@ -39,16 +39,18 @@ class TestParsePlist(unittest.TestCase):
         self.assertEqual(r0.message.text,
                          "Value stored to 'ret' is never read")
         self.assertEqual(r0.notes, None)
-        self.assertEqual(r0.location.file.name,
+        self.assertEqual(r0.location.file.givenpath,
                          'python-ethtool/ethtool.c')
+        self.assertEqual(r0.location.file.abspath, None)
         self.assertEqual(r0.location.function, None)
         self.assertEqual(r0.location.line, 130)
         self.assertEqual(r0.location.column, 2)
         self.assertNotEqual(r0.trace, None)
         self.assertEqual(len(r0.trace.states), 1)
         s0 = r0.trace.states[0]
-        self.assertEqual(s0.location.file.name,
+        self.assertEqual(s0.location.file.givenpath,
                          'python-ethtool/ethtool.c')
+        self.assertEqual(s0.location.file.abspath, None)
         self.assertEqual(s0.location.function.name, '')
         self.assertEqual(s0.location.line, 130)
         self.assertEqual(s0.location.column, 2)

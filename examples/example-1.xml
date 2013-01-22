@@ -17,7 +17,7 @@
   for format code "i"</notes>
 
   <location>
-    <file name="examples/python-src-example.c">
+    <file given-path="examples/python-src-example.c">
       <hash alg="sha-1">6ba29daa94d64b48071e299a79f2a00dcd99eeb1</hash>
     </file>
     <function name="make_a_list_of_random_ints_badly"/>

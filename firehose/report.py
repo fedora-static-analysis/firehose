@@ -109,13 +109,13 @@ class Report:
                          kind, msg))
         if self.location.function is not None:
             writeln("%s: In function '%s':"
-                    % (self.location.file.name,
+                    % (self.location.file.givenpath,
                        self.location.function.name))
         if self.cwe:
             cwetext = ' [%s]' % self.cwe
         else:
             cwetext = ''
-        diagnostic(filename=self.location.file.name,
+        diagnostic(filename=self.location.file.givenpath,
                    line=self.location.line,
                    column=self.location.column,
                    kind='warning',
@@ -125,7 +125,7 @@ class Report:
         if self.trace:
             for state in self.trace.states:
                 notes = state.notes
-                diagnostic(filename=state.location.file.name,
+                diagnostic(filename=state.location.file.givenpath,
                            line=state.location.line,
                            column=state.location.column,
                            kind='note',
@@ -328,20 +328,28 @@ class Location:
         return self.point.column
 
 class File:
-    __slots__ = ('name', )
+    __slots__ = ('givenpath', 'abspath')
 
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, givenpath, abspath):
+        assert isinstance(givenpath, str)
+        if abspath is not None:
+            assert isinstance(abspath, str)
+
+        self.givenpath = givenpath
+        self.abspath = abspath
 
     @classmethod
     def from_xml(cls, node):
-        name = node.get('name')
-        result = File(name)
+        givenpath = node.get('given-path')
+        abspath = node.get('absolute-path')
+        result = File(givenpath, abspath)
         return result
 
     def to_xml(self):
         node = ET.Element('file')
-        node.set('name', self.name)
+        node.set('given-path', self.givenpath)
+        if self.abspath:
+            node.set('absolute-path', self.abspath)
         return node
 
 class Function:
@@ -389,20 +397,20 @@ def test_creation():
                                                      version='0.11',
                                                      internalid='refcount-too-high'),
                                  sut=Sut()),
-               location=Location(file=File('foo.c'),
+               location=Location(file=File('foo.c', None),
                                  function=Function('bar'),
                                  point=Point(10, 15)),
                message=Message(text='something bad involving pointers'),
                notes=Notes('foo'),
-               trace=Trace([State(location=Location(file=File('foo.c'),
+               trace=Trace([State(location=Location(file=File('foo.c', None),
                                                     function=Function('bar'),
                                                     point=Point(10, 15)),
                                   notes=Notes('something')),
-                            State(location=Location(file=File('foo.c'),
+                            State(location=Location(file=File('foo.c', None),
                                                     function=Function('bar'),
                                                     point=Point(10, 15)),
                                   notes=Notes('something')),
-                            State(location=Location(file=File('foo.c'),
+                            State(location=Location(file=File('foo.c', None),
                                                     function=Function('bar'),
                                                     point=Point(10, 15)),
                                   notes=Notes('something'))

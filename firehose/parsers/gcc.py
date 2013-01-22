@@ -119,7 +119,7 @@ def parse_warning(line, func_name, gccversion, sut):
         metadata = Metadata(generator, sut)
 
         point = Point(int(match.group('line')), column)
-        path = File(match.group('path'))
+        path = File(match.group('path'), None)
         location = Location(path, func, point)
 
         return Report(None, metadata, location, message, None, None)

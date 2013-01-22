@@ -65,7 +65,8 @@ class TestParseWarning(unittest.TestCase):
         self.assertIsInstance(ret.message, Message)
         self.assertEqual(ret.message.text,
             "ignoring return value of 'fread', declared with attribute warn_unused_result")
-        self.assertEqual(ret.location.file.name, "unix/arlib.c")
+        self.assertEqual(ret.location.file.givenpath, "unix/arlib.c")
+        self.assertEqual(ret.location.file.abspath, None)
         self.assertEqual(ret.location.point.line, 299)
         self.assertEqual(ret.location.point.column, 9)
         self.assertEqual(ret.location.function.name, FUNC_NAME)
@@ -81,7 +82,8 @@ class TestParseWarning(unittest.TestCase):
         self.assertIsInstance(ret.message, Message)
         self.assertEqual(ret.message.text,
             "dereferencing type-punned pointer will break strict-aliasing rules")
-        self.assertEqual(ret.location.file.name, "num_get_float.cpp")
+        self.assertEqual(ret.location.file.givenpath, "num_get_float.cpp")
+        self.assertEqual(ret.location.file.abspath, None)
         self.assertEqual(ret.location.point.line, 535)
         self.assertEqual(ret.location.point.column, 29)
         self.assertEqual(ret.location.function.name, FUNC_NAME)
@@ -90,8 +92,9 @@ class TestParseWarning(unittest.TestCase):
         line = "/builddir/build/BUILD/libreoffice-3.5.7.2/icc/unxlngi6.pro/misc/build/SampleICC-1.3.2/IccProfLib/IccMpeACS.cpp:203:40: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]"
         ret = gcc.parse_warning(line, FUNC_NAME, '4.7.2', FAKE_SUT)
 
-        self.assertEqual(ret.location.file.name,
+        self.assertEqual(ret.location.file.givenpath,
             "/builddir/build/BUILD/libreoffice-3.5.7.2/icc/unxlngi6.pro/misc/build/SampleICC-1.3.2/IccProfLib/IccMpeACS.cpp")
+        self.assertEqual(ret.location.file.abspath, None)
 
     def test_ignore_zip_warning(self):
         line = "        zip warning: ../../unxlngi6.pro/bin/autotextuser.zip not found or empty"

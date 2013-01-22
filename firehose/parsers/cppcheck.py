@@ -53,7 +53,7 @@ def parse_file(fileobj, sut):
 
         for node_location in node_error.findall('location'):
             # FIXME: do something with "severity"?
-            location=Location(file=File(node_location.get('file')),
+            location=Location(file=File(node_location.get('file'), None),
 
                               # FIXME: doesn't tell us function name
                               # TODO: can we patch this upstream?

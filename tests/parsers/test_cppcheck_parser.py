@@ -37,8 +37,9 @@ class TestParseXml(unittest.TestCase):
         self.assertEqual(r0.metadata.generator.internalid, 'uninitvar')
         self.assertEqual(r0.message.text, 'Uninitialized variable: ret')
         self.assertEqual(r0.notes, None)
-        self.assertEqual(r0.location.file.name,
+        self.assertEqual(r0.location.file.givenpath,
                          'python-ethtool/etherinfo_obj.c')
+        self.assertEqual(r0.location.file.abspath, None)
         self.assertEqual(r0.location.function, None)
         self.assertEqual(r0.location.line, 185)
         self.assertEqual(r0.trace, None)

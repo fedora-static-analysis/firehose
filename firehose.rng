@@ -80,7 +80,27 @@
     <!-- A particular source code location -->
     <element name="location">
       <element name="file">
-        <attribute name="name"/>
+        <!--
+           What filename was given by the analyzer?
+
+           This is typically the one supplied to it on the command line,
+           which might be absolute or relative.
+
+           Examples:
+           - "foo.c"
+           - "./src/foo.c"
+           - "/home/david/libfoo-1.0/src/foo.c"
+        -->
+        <attribute name="given-path"/>
+
+        <!--
+            Optionally, record the absolute path of the file,
+            to help deal with collating results from a build that changes
+            working directory (e.g. recursive make)
+        -->
+        <optional>
+          <attribute name="absolute-path"/>
+        </optional>
         <element name="hash">
           <attribute name="alg"/>
           <text/>
