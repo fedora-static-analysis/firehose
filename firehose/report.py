@@ -20,6 +20,7 @@
 
 import glob
 from subprocess import Popen, PIPE
+import StringIO
 import sys
 import xml.etree.ElementTree as ET
 
@@ -88,6 +89,12 @@ class Report:
         if self.trace:
             node.append(self.trace.to_xml())
         return tree
+
+    def to_xml_str(self):
+        xml = self.to_xml()
+        output = StringIO.StringIO()
+        xml.write(output)
+        return output.getvalue()
 
     def write_as_gcc_output(self, out):
         """
@@ -420,6 +427,7 @@ def main():
         print('%s as gcc output:' % filename)
         with open(filename) as f:
             r = Report.from_xml(f)
+            print(r.to_xml_str())
             r.write_as_gcc_output(sys.stderr)
 
     test_creation()
