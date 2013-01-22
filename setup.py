@@ -4,8 +4,9 @@ from distutils.core import setup
 
 setup(name='firehose',
     version='0.0.1',
-    description='library for parsing gcc build output for warnings',
-    packages=('firehose',),
+    description='Library for working with output from static code analyzers',
+    packages=['firehose',
+              'firehose.parsers'],
     license='GPL3',
     author='David Malcolm',
     url='https://github.com/fedora-static-analysis/firehose',
