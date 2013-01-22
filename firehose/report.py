@@ -19,8 +19,10 @@
 # a command-line tool
 
 import glob
-from subprocess import Popen, PIPE
+import os
+import hashlib
 import StringIO
+from subprocess import Popen, PIPE
 import sys
 import xml.etree.ElementTree as ET
 
@@ -131,6 +133,47 @@ class Report:
                            kind='note',
                            msg=notes.text if notes else '')
 
+    def __repr__(self):
+        return ('Report(cwe=%r, metadata=%r, location=%r, message=%r, notes=%r, trace=%r)'
+                % (self.cwe, self.metadata, self.location, self.message, self.notes, self.trace))
+
+    def accept(self, visitor):
+        visitor.visit_report(self)
+        self.metadata.accept(visitor)
+        self.location.accept(visitor)
+        self.message.accept(visitor)
+        if self.notes:
+            self.notes.accept(visitor)
+        if self.trace:
+            self.trace.accept(visitor)
+
+    def fixup_files(self, relativedir=None, hashalg=None):
+        """
+        Record the absolute path of each file, and record the digest of the
+        file content
+        """
+        class FixupFiles(Visitor):
+            def __init__(self, relativedir, hashalg):
+                self.relativedir = relativedir
+                self.hashalg = hashalg
+
+            def visit_file(self, file_):
+                if self.relativedir is not None:
+                    file_.abspath = os.path.normpath(os.path.join(self.relativedir,
+                                                                  file_.givenpath))
+
+                if hashalg is not None:
+                    bestpath = file_.abspath \
+                        if file_.abspath else file_.givenpath
+
+                    with open(bestpath) as f:
+                        h = hashlib.new(hashalg)
+                        h.update(f.read())
+                        file_.hash = h.hexdigest()
+
+        visitor = FixupFiles(relativedir, hashalg)
+        self.accept(visitor)
+
 class Metadata:
     __slots__ = ('generator', 'sut', )
 
@@ -159,6 +202,16 @@ class Metadata:
             node.append(self.sut.to_xml())
         return node
 
+    def __repr__(self):
+        return ('Metadata(generator=%r, sut=%r)'
+                % (self.generator, self.sut))
+
+    def accept(self, visitor):
+        visitor.visit_metadata(self)
+        self.generator.accept(visitor)
+        if self.sut:
+            self.sut.accept(visitor)
+
 class Generator:
     __slots__ = ('name', 'version', 'internalid', )
 
@@ -186,6 +239,13 @@ class Generator:
             node.set('internal-id', self.internalid)
         return node
 
+    def __repr__(self):
+        return ('Generator(name=%r, version=%r, internalid=%r)'
+                % (self.name, self.version, self.internalid))
+
+    def accept(self, visitor):
+        visitor.visit_generator(self)
+
 class Sut:
     # FIXME: this part of the schema needs more thought/work
     __slots__ = ('text', )
@@ -201,6 +261,9 @@ class Sut:
     def to_xml(self):
         node = ET.Element('sut')
         return node
+
+    def accept(self, visitor):
+        visitor.visit_sut(self)
 
 class Message:
     __slots__ = ('text', )
@@ -219,6 +282,12 @@ class Message:
         node.text = self.text
         return node
 
+    def __repr__(self):
+        return 'Message(text=%r)' % (self.text, )
+
+    def accept(self, visitor):
+        visitor.visit_message(self)
+
 class Notes:
     __slots__ = ('text', )
 
@@ -236,6 +305,12 @@ class Notes:
         node = ET.Element('notes')
         node.text = self.text
         return node
+
+    def __repr__(self):
+        return 'Notes(text=%r)' % (self.text, )
+
+    def accept(self, visitor):
+        visitor.visit_notes(self)
 
 class Trace:
     __slots__ = ('states', )
@@ -260,6 +335,14 @@ class Trace:
         for state in self.states:
             node.append(state.to_xml())
         return node
+
+    def __repr__(self):
+        return 'Trace(states=%r)' % (self.states, )
+
+    def accept(self, visitor):
+        visitor.visit_notes(self)
+        for state in self.states:
+            state.accept(visitor)
 
 class State:
     __slots__ = ('location', 'notes', )
@@ -287,6 +370,14 @@ class State:
         if self.notes:
             node.append(self.notes.to_xml())
         return node
+
+    def __repr__(self):
+        return 'State(location=%r, notes=%r)' % (self.location, self.notes)
+
+    def accept(self, visitor):
+        visitor.visit_state(self)
+        self.location.accept(visitor)
+        self.notes.accept(visitor)
 
 class Location:
     __slots__ = ('file', 'function', 'point', )
@@ -318,6 +409,17 @@ class Location:
             node.append(self.function.to_xml())
         node.append(self.point.to_xml())
         return node
+
+    def __repr__(self):
+        return ('Location(file=%r, function=%r, point=%r)' %
+                (self.file, self.function, self.point))
+
+    def accept(self, visitor):
+        visitor.visit_location(self)
+        self.file.accept(visitor)
+        if self.function:
+            self.function.accept(visitor)
+        self.point.accept(visitor)
 
     @property
     def line(self):
@@ -352,6 +454,13 @@ class File:
             node.set('absolute-path', self.abspath)
         return node
 
+    def __repr__(self):
+        return ('File(givenpath=%r, abspath=%r)' %
+                (self.givenpath, self.abspath))
+
+    def accept(self, visitor):
+        visitor.visit_file(self)
+
 class Function:
     __slots__ = ('name', )
 
@@ -368,6 +477,12 @@ class Function:
         node = ET.Element('function')
         node.set('name', self.name)
         return node
+
+    def __repr__(self):
+        return 'Function(name=%r)' % self.name
+
+    def accept(self, visitor):
+        visitor.visit_function(self)
 
 class Point:
     __slots__ = ('line', 'column', )
@@ -390,6 +505,51 @@ class Point:
         node.set('line', str(self.line))
         node.set('column', str(self.column))
         return node
+
+    def __repr__(self):
+        return ('Location(line=%r, column=%r)' %
+                (self.line, self.column))
+
+    def accept(self, visitor):
+        visitor.visit_point(self)
+
+#
+# Traversal of the report structure
+#
+
+class Visitor:
+    def visit_report(self, report):
+        pass
+
+    def visit_metadata(self, metadata):
+        pass
+
+    def visit_generator(self, generator):
+        pass
+
+    def visit_sut(self, sut):
+        pass
+
+    def visit_message(self, message):
+        pass
+
+    def visit_notes(self, notes):
+        pass
+
+    def visit_state(self, state):
+        pass
+
+    def visit_location(self, location):
+        pass
+
+    def visit_file(self, file_):
+        pass
+
+    def visit_function(self, function):
+        pass
+
+    def visit_point(self, point):
+        pass
 
 def test_creation():
     r = Report(cwe='CWE-681',
@@ -429,6 +589,14 @@ def test_creation():
     #r.write_xml('foo.xml')
     #p = Popen(['xmllint', '--relaxng', 'firehose.rng', 'foo.xml'])
     #p.communicate()
+
+    # Ensure that all the __repr__ methods do something sane:
+    repr(r)
+
+    # Verify that Report.fixup_files() can make paths absolute:
+    assert r.location.file.abspath == None
+    r.fixup_files(relativedir='/home/david/coding/test')
+    assert r.location.file.abspath == '/home/david/coding/test/foo.c'
 
 def main():
     for filename in sorted(glob.glob('examples/example-*.xml')):
