@@ -129,6 +129,9 @@ class ReportTests(unittest.TestCase):
             # FIXME: sut
             self.assertEqual(r.location.file.givenpath, 'examples/python-src-example.c')
             self.assertEqual(r.location.file.abspath, None)
+            self.assertEqual(r.location.file.hash_.alg, 'sha1')
+            self.assertEqual(r.location.file.hash_.hexdigest,
+                             '6ba29daa94d64b48071e299a79f2a00dcd99eeb1')
             self.assertEqual(r.location.function.name, 'make_a_list_of_random_ints_badly')
             self.assertEqual(r.location.line, 21)
             self.assertEqual(r.location.column, 4)
@@ -192,6 +195,18 @@ class ReportTests(unittest.TestCase):
         self.assertEqual(r.location.file.abspath, None)
         r.fixup_files(relativedir='/home/david/coding/test')
         self.assertEqual(r.location.file.abspath, '/home/david/coding/test/foo.c')
+
+    def test_fixup_hashes(self):
+        # Verify that Report.fixup_files() can add hashes to files:
+        r = self.make_simple_report()
+        r.location.file.givenpath = 'examples/python-src-example.c'
+        r.location.file.abspath = None
+        self.assertEqual(r.location.file.hash_, None)
+
+        r.fixup_files(hashalg='sha1')
+        self.assertEqual(r.location.file.hash_.alg, 'sha1')
+        self.assertEqual(r.location.file.hash_.hexdigest,
+                         '6ba29daa94d64b48071e299a79f2a00dcd99eeb1')
 
     def test_gcc_output(self):
         r = self.make_simple_report()

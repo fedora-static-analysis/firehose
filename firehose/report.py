@@ -26,7 +26,7 @@ from subprocess import Popen, PIPE
 import sys
 import xml.etree.ElementTree as ET
 
-class Report:
+class Report(object):
     __slots__ = ('cwe',
                  'metadata',
                  'location',
@@ -171,7 +171,7 @@ class Report:
                     with open(bestpath) as f:
                         h = hashlib.new(hashalg)
                         h.update(f.read())
-                        file_.hash = h.hexdigest()
+                        file_.hash_ = Hash(alg=hashalg, hexdigest=h.hexdigest())
 
         visitor = FixupFiles(relativedir, hashalg)
         self.accept(visitor)
@@ -184,7 +184,7 @@ class Report:
         if self.cwe is not None:
             return 'http://cwe.mitre.org/data/definitions/%i.html' % self.cwe
 
-class Metadata:
+class Metadata(object):
     __slots__ = ('generator', 'sut', )
 
     def __init__(self, generator, sut):
@@ -222,7 +222,7 @@ class Metadata:
         if self.sut:
             self.sut.accept(visitor)
 
-class Generator:
+class Generator(object):
     __slots__ = ('name', 'version', 'internalid', )
 
     def __init__(self, name, version=None, internalid=None):
@@ -258,26 +258,28 @@ class Generator:
     def accept(self, visitor):
         visitor.visit_generator(self)
 
-class Sut:
+class Sut(object):
     # FIXME: this part of the schema needs more thought/work
     __slots__ = ('text', )
 
-    def __init__(self):
-        pass
+    def __init__(self, text=None):
+        self.text = text
 
     @classmethod
     def from_xml(cls, node):
         result = Sut()
+        result.text = node.text
         return result
 
     def to_xml(self):
         node = ET.Element('sut')
+        node.text = self.text
         return node
 
     def accept(self, visitor):
         visitor.visit_sut(self)
 
-class Message:
+class Message(object):
     __slots__ = ('text', )
 
     def __init__(self, text):
@@ -300,7 +302,7 @@ class Message:
     def accept(self, visitor):
         visitor.visit_message(self)
 
-class Notes:
+class Notes(object):
     __slots__ = ('text', )
 
     def __init__(self, text):
@@ -324,7 +326,7 @@ class Notes:
     def accept(self, visitor):
         visitor.visit_notes(self)
 
-class Trace:
+class Trace(object):
     __slots__ = ('states', )
 
     def __init__(self, states):
@@ -356,7 +358,7 @@ class Trace:
         for state in self.states:
             state.accept(visitor)
 
-class State:
+class State(object):
     __slots__ = ('location', 'notes', )
 
     def __init__(self, location, notes):
@@ -391,7 +393,7 @@ class State:
         self.location.accept(visitor)
         self.notes.accept(visitor)
 
-class Location:
+class Location(object):
     __slots__ = ('file', 'function', 'point', )
 
     def __init__(self, file, function, point):
@@ -441,22 +443,30 @@ class Location:
     def column(self):
         return self.point.column
 
-class File:
-    __slots__ = ('givenpath', 'abspath')
+class File(object):
+    __slots__ = ('givenpath', 'abspath', 'hash_')
 
-    def __init__(self, givenpath, abspath):
+    def __init__(self, givenpath, abspath, hash_=None):
         assert isinstance(givenpath, str)
         if abspath is not None:
             assert isinstance(abspath, str)
+        if hash_ is not None:
+            assert isinstance(hash_, Hash)
 
         self.givenpath = givenpath
         self.abspath = abspath
+        self.hash_ = hash_
 
     @classmethod
     def from_xml(cls, node):
         givenpath = node.get('given-path')
         abspath = node.get('absolute-path')
-        result = File(givenpath, abspath)
+        hash_node = node.find('hash')
+        if hash_node is not None:
+            hash_ = Hash.from_xml(hash_node)
+        else:
+            hash_ = None
+        result = File(givenpath, abspath, hash_)
         return result
 
     def to_xml(self):
@@ -464,6 +474,8 @@ class File:
         node.set('given-path', self.givenpath)
         if self.abspath:
             node.set('absolute-path', self.abspath)
+        if self.hash_:
+            node.append(self.hash_.to_xml())
         return node
 
     def __repr__(self):
@@ -473,7 +485,33 @@ class File:
     def accept(self, visitor):
         visitor.visit_file(self)
 
-class Function:
+class Hash(object):
+    __slots__ = ('alg', 'hexdigest')
+
+    def __init__(self, alg, hexdigest):
+        assert isinstance(alg, str)
+        assert isinstance(hexdigest, str)
+        self.alg = alg
+        self.hexdigest = hexdigest
+
+    @classmethod
+    def from_xml(cls, node):
+        alg = node.get('alg')
+        hexdigest = node.get('hexdigest')
+        result = Hash(alg, hexdigest)
+        return result
+
+    def to_xml(self):
+        node = ET.Element('hash')
+        node.set('alg', self.alg)
+        node.set('hexdigest', self.hexdigest)
+        return node
+
+    def __repr__(self):
+        return ('Hash(alg=%r, hexdigest=%r)' %
+                (self.alg, self.hexdigest))
+
+class Function(object):
     __slots__ = ('name', )
 
     def __init__(self, name):
@@ -496,7 +534,7 @@ class Function:
     def accept(self, visitor):
         visitor.visit_function(self)
 
-class Point:
+class Point(object):
     __slots__ = ('line', 'column', )
 
     def __init__(self, line, column):

@@ -15,7 +15,7 @@ but final item->ob_refcnt is N + 2</notes>
 
   <location>
     <file given-path="examples/python-src-example.c">
-      <hash alg="sha-1">6ba29daa94d64b48071e299a79f2a00dcd99eeb1</hash>
+      <hash alg="sha1" hexdigest="6ba29daa94d64b48071e299a79f2a00dcd99eeb1"/>
     </file>
     <function name="make_a_list_of_random_ints_badly"/>
     <point line="21" column="4"/>
@@ -25,7 +25,7 @@ but final item->ob_refcnt is N + 2</notes>
     <state>
       <location>
         <file given-path="examples/python-src-example.c">
-          <hash alg="sha-1">6ba29daa94d64b48071e299a79f2a00dcd99eeb1</hash>
+          <hash alg="sha1" hexdigest="6ba29daa94d64b48071e299a79f2a00dcd99eeb1"/>
         </file>
         <function name="make_a_list_of_random_ints_badly"/>
         <point line="17" column="14"/>
@@ -36,7 +36,7 @@ but final item->ob_refcnt is N + 2</notes>
     <state>
       <location>
         <file given-path="examples/python-src-example.c">
-          <hash alg="sha-1">6ba29daa94d64b48071e299a79f2a00dcd99eeb1</hash>
+          <hash alg="sha1" hexdigest="6ba29daa94d64b48071e299a79f2a00dcd99eeb1"/>
         </file>
         <function name="make_a_list_of_random_ints_badly"/>
         <point line="18" column="8"/>
@@ -47,7 +47,7 @@ but final item->ob_refcnt is N + 2</notes>
     <state>
       <location>
         <file given-path="examples/python-src-example.c">
-          <hash alg="sha-1">6ba29daa94d64b48071e299a79f2a00dcd99eeb1</hash>
+          <hash alg="sha1" hexdigest="6ba29daa94d64b48071e299a79f2a00dcd99eeb1"/>
         </file>
         <function name="make_a_list_of_random_ints_badly"/>
         <point line="21" column="4"/>

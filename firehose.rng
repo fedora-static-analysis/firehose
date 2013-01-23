@@ -110,7 +110,7 @@
         </optional>
         <element name="hash">
           <attribute name="alg"/>
-          <text/>
+          <attribute name="hexdigest"/>
         </element>
       </element>
       <!--
