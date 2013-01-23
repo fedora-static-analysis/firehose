@@ -8,7 +8,7 @@ setup(name='firehose',
     packages=['firehose',
               'firehose.parsers'],
     license='GPL3',
-    author='David Malcolm',
+    author='David Malcolm <dmalcolm@redhat.com>',
     url='https://github.com/fedora-static-analysis/firehose',
     classifiers=(
         'Intended Audience :: Developers',
