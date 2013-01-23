@@ -41,7 +41,7 @@ class Report:
                  notes,
                  trace):
         if cwe is not None:
-            assert isinstance(cwe, str)
+            assert isinstance(cwe, int)
         assert isinstance(metadata, Metadata)
         assert isinstance(location, Location)
         assert isinstance(message, Message)
@@ -62,6 +62,8 @@ class Report:
         root = tree.getroot()
 
         cwe = root.get('cwe')
+        if cwe is not None:
+            cwe = int(cwe)
         metadata = Metadata.from_xml(root.find('metadata'))
         location = Location.from_xml(root.find('location'))
         message = Message.from_xml(root.find('message'))
@@ -82,7 +84,7 @@ class Report:
         node = ET.Element('report')
         tree._setroot(node)
         if self.cwe is not None:
-            node.set('cwe', self.cwe)
+            node.set('cwe', str(self.cwe))
         node.append(self.metadata.to_xml())
         node.append(self.location.to_xml())
         node.append(self.message.to_xml())
@@ -114,7 +116,7 @@ class Report:
                     % (self.location.file.givenpath,
                        self.location.function.name))
         if self.cwe:
-            cwetext = ' [%s]' % self.cwe
+            cwetext = ' [%s]' % self.get_cwe_str()
         else:
             cwetext = ''
         diagnostic(filename=self.location.file.givenpath,
@@ -173,6 +175,14 @@ class Report:
 
         visitor = FixupFiles(relativedir, hashalg)
         self.accept(visitor)
+
+    def get_cwe_str(self):
+        if self.cwe is not None:
+            return 'CWE-%i' % self.cwe
+
+    def get_cwe_url(self):
+        if self.cwe is not None:
+            return 'http://cwe.mitre.org/data/definitions/%i.html' % self.cwe
 
 class Metadata:
     __slots__ = ('generator', 'sut', )
@@ -554,7 +564,7 @@ class Visitor:
         pass
 
 def test_creation():
-    r = Report(cwe='CWE-681',
+    r = Report(cwe=681,
                metadata=Metadata(generator=Generator(name='cpychecker',
                                                      version='0.11',
                                                      internalid='refcount-too-high'),
@@ -594,6 +604,10 @@ def test_creation():
 
     # Ensure that all the __repr__ methods do something sane:
     repr(r)
+
+    # Verify that the CWE methods are sane:
+    assert r.get_cwe_str() == 'CWE-681'
+    assert r.get_cwe_url() == 'http://cwe.mitre.org/data/definitions/681.html'
 
     # Verify that Report.fixup_files() can make paths absolute:
     assert r.location.file.abspath == None

@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<grammar xmlns="http://relaxng.org/ns/structure/1.0">
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <start>
     <!-- A report about a possible problem -->
     <element name="report">
       <optional>
         <!-- The Common Weakness Enumeration ID
              (see http://cwe.mitre.org/index.html )
-             e.g. "CWE-401"
+             e.g. "131" representing CWE-131
+             aka "Incorrect Calculation of Buffer Size"
+             http://cwe.mitre.org/data/definitions/131.html
         -->
-        <attribute name="cwe"/>
+        <attribute name="cwe">
+          <data type="integer"/>
+        </attribute>
       </optional>
       <element name="metadata">
         <element name="generator">
