@@ -225,7 +225,7 @@ class Metadata:
 class Generator:
     __slots__ = ('name', 'version', 'internalid', )
 
-    def __init__(self, name, version, internalid=None):
+    def __init__(self, name, version=None, internalid=None):
         assert isinstance(name, str)
         if version is not None:
             assert isinstance(version, str)
@@ -237,9 +237,9 @@ class Generator:
 
     @classmethod
     def from_xml(cls, node):
-        result = Generator(node.get('name'),
-                           node.get('version'), # optional
-                           node.get('internalid')) # optional
+        result = Generator(name=node.get('name'),
+                           version=node.get('version'), # optional
+                           internalid=node.get('internal-id')) # optional
         return result
 
     def to_xml(self):
@@ -563,66 +563,13 @@ class Visitor:
     def visit_point(self, point):
         pass
 
-def test_creation():
-    r = Report(cwe=681,
-               metadata=Metadata(generator=Generator(name='cpychecker',
-                                                     version='0.11',
-                                                     internalid='refcount-too-high'),
-                                 sut=Sut()),
-               location=Location(file=File('foo.c', None),
-                                 function=Function('bar'),
-                                 point=Point(10, 15)),
-               message=Message(text='something bad involving pointers'),
-               notes=Notes('foo'),
-               trace=Trace([State(location=Location(file=File('foo.c', None),
-                                                    function=Function('bar'),
-                                                    point=Point(10, 15)),
-                                  notes=Notes('something')),
-                            State(location=Location(file=File('foo.c', None),
-                                                    function=Function('bar'),
-                                                    point=Point(10, 15)),
-                                  notes=Notes('something')),
-                            State(location=Location(file=File('foo.c', None),
-                                                    function=Function('bar'),
-                                                    point=Point(10, 15)),
-                                  notes=Notes('something'))
-                            ])
-               )
-    r.write_as_gcc_output(sys.stderr)
-    r.to_xml().write(sys.stdout)
-
-    # TODO: Does it roundtrip?
-    with open('test.xml', 'w') as f:
-        r.to_xml().write(f)
-    with open('test.xml', 'r') as f:
-        r2 = Report.from_xml(f)
-
-    # TODO: Does it validate?
-    #r.write_xml('foo.xml')
-    #p = Popen(['xmllint', '--relaxng', 'firehose.rng', 'foo.xml'])
-    #p.communicate()
-
-    # Ensure that all the __repr__ methods do something sane:
-    repr(r)
-
-    # Verify that the CWE methods are sane:
-    assert r.get_cwe_str() == 'CWE-681'
-    assert r.get_cwe_url() == 'http://cwe.mitre.org/data/definitions/681.html'
-
-    # Verify that Report.fixup_files() can make paths absolute:
-    assert r.location.file.abspath == None
-    r.fixup_files(relativedir='/home/david/coding/test')
-    assert r.location.file.abspath == '/home/david/coding/test/foo.c'
-
 def main():
     for filename in sorted(glob.glob('examples/example-*.xml')):
         print('%s as gcc output:' % filename)
         with open(filename) as f:
             r = Report.from_xml(f)
-            print(r.to_xml_str())
             r.write_as_gcc_output(sys.stderr)
-
-    test_creation()
+            sys.stderr.write('  XML: %s\n' % r.to_xml_str())
 
 if __name__ == '__main__':
     main()

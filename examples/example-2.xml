@@ -10,7 +10,7 @@
 
   <message>ob_refcnt of '*item' is 1 too high</message>
   <notes>was expecting final item->ob_refcnt to be N + 1 (for some unknown N)
-due to object being referenced by: PyListObject.ob_item[0]"
+due to object being referenced by: PyListObject.ob_item[0]
 but final item->ob_refcnt is N + 2</notes>
 
   <location>
