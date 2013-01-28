@@ -18,36 +18,40 @@ import os
 import unittest
 
 from firehose.parsers.clanganalyzer import parse_plist
-from firehose.report import Report, Sut
+from firehose.report import Analysis, Issue, Sut
 
 FAKE_ANALYZER_VERSION = 'clang-3.0-14.fc17.x86_64'
 FAKE_SUT = Sut()
 
 class TestParsePlist(unittest.TestCase):
     def test_example_001(self):
-        ret = list(parse_plist(os.path.join(os.path.dirname(__file__),
-                                            'example-output/clanganalyzer/report-001.plist'),
-                               analyzerversion=FAKE_ANALYZER_VERSION,
-                               sut=FAKE_SUT))
-        self.assertEqual(len(ret), 2)
-        r0 = ret[0]
-        self.assertEqual(r0.cwe, None)
-        self.assertEqual(r0.metadata.generator.name, 'clang-analyzer')
-        self.assertEqual(r0.metadata.generator.version,
+        a = parse_plist(os.path.join(os.path.dirname(__file__),
+                                     'example-output/clanganalyzer/report-001.plist'),
+                        analyzerversion=FAKE_ANALYZER_VERSION,
+                        sut=FAKE_SUT,
+                        file_=None,
+                        stats=None)
+        self.assertEqual(a.metadata.generator.name, 'clang-analyzer')
+        self.assertEqual(a.metadata.generator.version,
                          FAKE_ANALYZER_VERSION)
-        self.assertEqual(r0.metadata.generator.internalid, None)
-        self.assertEqual(r0.message.text,
+
+        self.assertEqual(len(a.results), 2)
+
+        w0 = a.results[0]
+        self.assertEqual(w0.cwe, None)
+        self.assertEqual(w0.testid, None)
+        self.assertEqual(w0.message.text,
                          "Value stored to 'ret' is never read")
-        self.assertEqual(r0.notes, None)
-        self.assertEqual(r0.location.file.givenpath,
+        self.assertEqual(w0.notes, None)
+        self.assertEqual(w0.location.file.givenpath,
                          'python-ethtool/ethtool.c')
-        self.assertEqual(r0.location.file.abspath, None)
-        self.assertEqual(r0.location.function, None)
-        self.assertEqual(r0.location.line, 130)
-        self.assertEqual(r0.location.column, 2)
-        self.assertNotEqual(r0.trace, None)
-        self.assertEqual(len(r0.trace.states), 1)
-        s0 = r0.trace.states[0]
+        self.assertEqual(w0.location.file.abspath, None)
+        self.assertEqual(w0.location.function, None)
+        self.assertEqual(w0.location.line, 130)
+        self.assertEqual(w0.location.column, 2)
+        self.assertNotEqual(w0.trace, None)
+        self.assertEqual(len(w0.trace.states), 1)
+        s0 = w0.trace.states[0]
         self.assertEqual(s0.location.file.givenpath,
                          'python-ethtool/ethtool.c')
         self.assertEqual(s0.location.file.abspath, None)

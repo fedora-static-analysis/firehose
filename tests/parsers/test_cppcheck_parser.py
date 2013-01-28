@@ -18,23 +18,25 @@ import os
 import unittest
 
 from firehose.parsers.cppcheck import parse_file
-from firehose.report import Report, Sut
+from firehose.report import Issue, Sut
 
 FAKE_SUT = Sut()
 
 class TestParseXml(unittest.TestCase):
     def test_example_001(self):
-        ret = list(parse_file(os.path.join(os.path.dirname(__file__),
-                                           'example-output',
-                                           'cppcheck-xml-v2',
-                                           'example-001.xml'),
-                              sut=FAKE_SUT))
-        self.assertEqual(len(ret), 7)
-        r0 = ret[0]
+        a = parse_file(os.path.join(os.path.dirname(__file__),
+                                    'example-output',
+                                    'cppcheck-xml-v2',
+                                    'example-001.xml'))
+        self.assertEqual(a.metadata.generator.name, 'cppcheck')
+        self.assertEqual(a.metadata.generator.version, '1.57')
+        self.assertEqual(a.metadata.sut, None)
+        self.assertEqual(a.metadata.file_, None)
+        self.assertEqual(a.metadata.stats, None)
+        self.assertEqual(len(a.results), 7)
+        r0 = a.results[0]
         self.assertEqual(r0.cwe, None)
-        self.assertEqual(r0.metadata.generator.name, 'cppcheck')
-        self.assertEqual(r0.metadata.generator.version, '1.57')
-        self.assertEqual(r0.metadata.generator.internalid, 'uninitvar')
+        self.assertEqual(r0.testid, 'uninitvar')
         self.assertEqual(r0.message.text, 'Uninitialized variable: ret')
         self.assertEqual(r0.notes, None)
         self.assertEqual(r0.location.file.givenpath,

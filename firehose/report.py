@@ -26,72 +26,40 @@ from subprocess import Popen, PIPE
 import sys
 import xml.etree.ElementTree as ET
 
-class Report(object):
-    __slots__ = ('cwe',
-                 'metadata',
-                 'location',
-                 'message',
-                 'notes',
-                 'trace')
-    def __init__(self,
-                 cwe,
-                 metadata,
-                 location,
-                 message,
-                 notes,
-                 trace):
-        if cwe is not None:
-            assert isinstance(cwe, int)
+class Analysis(object):
+    __slots__ = ('metadata',
+                 'results')
+
+    def __init__(self, metadata, results):
         assert isinstance(metadata, Metadata)
-        assert isinstance(location, Location)
-        assert isinstance(message, Message)
-        if notes:
-            assert isinstance(notes, Notes)
-        if trace:
-            assert isinstance(trace, Trace)
-        self.cwe = cwe
+        assert isinstance(results, list)
+        for result in results:
+            assert isinstance(result, Issue)
+
         self.metadata = metadata
-        self.location = location
-        self.message = message
-        self.notes = notes
-        self.trace = trace
+        self.results = results
 
     @classmethod
     def from_xml(cls, fileobj):
         tree = ET.parse(fileobj)
         root = tree.getroot()
 
-        cwe = root.get('cwe')
-        if cwe is not None:
-            cwe = int(cwe)
         metadata = Metadata.from_xml(root.find('metadata'))
-        location = Location.from_xml(root.find('location'))
-        message = Message.from_xml(root.find('message'))
-        notes_node = root.find('notes')
-        if notes_node is not None:
-            notes = Notes.from_xml(notes_node)
-        else:
-            notes = None
-        trace_node = root.find('trace')
-        if trace_node is not None:
-            trace = Trace.from_xml(trace_node)
-        else:
-            trace = None
-        return Report(cwe, metadata, location, message, notes, trace)
+        results_node = root.find('results')
+        results = []
+        for result_node in results_node.findall('issue'):
+            results.append(Issue.from_xml(result_node))
+        return Analysis(metadata, results)
 
     def to_xml(self):
         tree = ET.ElementTree()
-        node = ET.Element('report')
+        node = ET.Element('analysis')
         tree._setroot(node)
-        if self.cwe is not None:
-            node.set('cwe', str(self.cwe))
         node.append(self.metadata.to_xml())
-        node.append(self.location.to_xml())
-        node.append(self.message.to_xml())
-        if self.notes:
-            node.append(self.notes.to_xml())
-        if self.trace:
-            node.append(self.trace.to_xml())
+        results_node = ET.Element('results')
+        node.append(results_node)
+        for result in self.results:
+            results_node.append(result.to_xml())
         return tree
 
     def to_xml_str(self):
@@ -99,6 +67,106 @@ class Report(object):
         output = StringIO.StringIO()
         xml.write(output)
         return output.getvalue()
+
+    def __repr__(self):
+        return ('Analysis(metadata=%r, results=%r)'
+                % (self.metadata, self.results))
+
+    def accept(self, visitor):
+        visitor.visit_analysis(self)
+        self.metadata.accept(visitor)
+        for result in self.results:
+            result.accept(visitor)
+
+    def fixup_files(self, relativedir=None, hashalg=None):
+        """
+        Record the absolute path of each file, and record the digest of the
+        file content
+        """
+        class FixupFiles(Visitor):
+            def __init__(self, relativedir, hashalg):
+                self.relativedir = relativedir
+                self.hashalg = hashalg
+
+            def visit_file(self, file_):
+                if self.relativedir is not None:
+                    file_.abspath = os.path.normpath(os.path.join(self.relativedir,
+                                                                  file_.givenpath))
+
+                if hashalg is not None:
+                    bestpath = file_.abspath \
+                        if file_.abspath else file_.givenpath
+
+                    with open(bestpath) as f:
+                        h = hashlib.new(hashalg)
+                        h.update(f.read())
+                        file_.hash_ = Hash(alg=hashalg, hexdigest=h.hexdigest())
+
+        visitor = FixupFiles(relativedir, hashalg)
+        self.accept(visitor)
+
+class Issue(object):
+    __slots__ = ('cwe',
+                 'testid',
+                 'location',
+                 'message',
+                 'notes',
+                 'trace')
+    def __init__(self,
+                 cwe,
+                 testid,
+                 location,
+                 message,
+                 notes,
+                 trace):
+        if cwe is not None:
+            assert isinstance(cwe, int)
+        if testid is not None:
+            assert isinstance(testid, str)
+        assert isinstance(location, Location)
+        assert isinstance(message, Message)
+        if notes:
+            assert isinstance(notes, Notes)
+        if trace:
+            assert isinstance(trace, Trace)
+        self.cwe = cwe
+        self.testid = testid
+        self.location = location
+        self.message = message
+        self.notes = notes
+        self.trace = trace
+
+    @classmethod
+    def from_xml(cls, node):
+        cwe = node.get('cwe')
+        if cwe is not None:
+            cwe = int(cwe)
+        testid = node.get('test-id')
+        location = Location.from_xml(node.find('location'))
+        message = Message.from_xml(node.find('message'))
+        notes_node = node.find('notes')
+        if notes_node is not None:
+            notes = Notes.from_xml(notes_node)
+        else:
+            notes = None
+        trace_node = node.find('trace')
+        if trace_node is not None:
+            trace = Trace.from_xml(trace_node)
+        else:
+            trace = None
+        return Issue(cwe, testid, location, message, notes, trace)
+
+    def to_xml(self):
+        node = ET.Element('issue')
+        if self.cwe is not None:
+            node.set('cwe', str(self.cwe))
+        node.append(self.location.to_xml())
+        node.append(self.message.to_xml())
+        if self.notes:
+            node.append(self.notes.to_xml())
+        if self.trace:
+            node.append(self.trace.to_xml())
+        return node
 
     def write_as_gcc_output(self, out):
         """
@@ -136,45 +204,17 @@ class Report(object):
                            msg=notes.text if notes else '')
 
     def __repr__(self):
-        return ('Report(cwe=%r, metadata=%r, location=%r, message=%r, notes=%r, trace=%r)'
-                % (self.cwe, self.metadata, self.location, self.message, self.notes, self.trace))
+        return ('Report(cwe=%r, location=%r, message=%r, notes=%r, trace=%r)'
+                % (self.cwe, self.location, self.message, self.notes, self.trace))
 
     def accept(self, visitor):
-        visitor.visit_report(self)
-        self.metadata.accept(visitor)
+        visitor.visit_warning(self)
         self.location.accept(visitor)
         self.message.accept(visitor)
         if self.notes:
             self.notes.accept(visitor)
         if self.trace:
             self.trace.accept(visitor)
-
-    def fixup_files(self, relativedir=None, hashalg=None):
-        """
-        Record the absolute path of each file, and record the digest of the
-        file content
-        """
-        class FixupFiles(Visitor):
-            def __init__(self, relativedir, hashalg):
-                self.relativedir = relativedir
-                self.hashalg = hashalg
-
-            def visit_file(self, file_):
-                if self.relativedir is not None:
-                    file_.abspath = os.path.normpath(os.path.join(self.relativedir,
-                                                                  file_.givenpath))
-
-                if hashalg is not None:
-                    bestpath = file_.abspath \
-                        if file_.abspath else file_.givenpath
-
-                    with open(bestpath) as f:
-                        h = hashlib.new(hashalg)
-                        h.update(f.read())
-                        file_.hash_ = Hash(alg=hashalg, hexdigest=h.hexdigest())
-
-        visitor = FixupFiles(relativedir, hashalg)
-        self.accept(visitor)
 
     def get_cwe_str(self):
         if self.cwe is not None:
@@ -185,14 +225,20 @@ class Report(object):
             return 'http://cwe.mitre.org/data/definitions/%i.html' % self.cwe
 
 class Metadata(object):
-    __slots__ = ('generator', 'sut', )
+    __slots__ = ('generator', 'sut', 'file_', 'stats')
 
-    def __init__(self, generator, sut):
+    def __init__(self, generator, sut, file_, stats):
         assert isinstance(generator, Generator)
         if sut is not None:
             assert isinstance(sut, Sut)
+        if file_ is not None:
+            assert isinstance(file_, File)
+        if stats is not None:
+            assert isinstance(stats, Stats)
         self.generator = generator
         self.sut = sut
+        self.file_ = file_
+        self.stats = stats
 
     @classmethod
     def from_xml(cls, node):
@@ -202,7 +248,17 @@ class Metadata(object):
             sut = Sut.from_xml(sut_node)
         else:
             sut = None
-        result = Metadata(generator, sut)
+        file_node = node.find('file')
+        if file_node is not None:
+            file_ = File.from_xml(file_node)
+        else:
+            file_ = None
+        stats_node = node.find('stats')
+        if stats_node is not None:
+            stats = Stats.from_xml(stats_node)
+        else:
+            stats = None
+        result = Metadata(generator, sut, file_, stats)
         return result
 
     def to_xml(self):
@@ -210,36 +266,40 @@ class Metadata(object):
         node.append(self.generator.to_xml())
         if self.sut is not None:
             node.append(self.sut.to_xml())
+        if self.file_ is not None:
+            node.append(self.file_.to_xml())
+        if self.stats is not None:
+            node.append(self.stats.to_xml())
         return node
 
     def __repr__(self):
-        return ('Metadata(generator=%r, sut=%r)'
-                % (self.generator, self.sut))
+        return ('Metadata(generator=%r, sut=%r, file_=%r, stats=%r)'
+                % (self.generator, self.sut, self.file_, self.stats))
 
     def accept(self, visitor):
         visitor.visit_metadata(self)
         self.generator.accept(visitor)
         if self.sut:
             self.sut.accept(visitor)
+        if self.file_:
+            self.file_.accept(visitor)
+        if self.stats:
+            self.stats.accept(visitor)
 
 class Generator(object):
-    __slots__ = ('name', 'version', 'internalid', )
+    __slots__ = ('name', 'version', )
 
-    def __init__(self, name, version=None, internalid=None):
+    def __init__(self, name, version=None):
         assert isinstance(name, str)
         if version is not None:
             assert isinstance(version, str)
-        if internalid is not None:
-            assert isinstance(internalid, str)
         self.name = name
         self.version = version
-        self.internalid = internalid
 
     @classmethod
     def from_xml(cls, node):
         result = Generator(name=node.get('name'),
-                           version=node.get('version'), # optional
-                           internalid=node.get('internal-id')) # optional
+                           version=node.get('version')) # optional
         return result
 
     def to_xml(self):
@@ -247,13 +307,11 @@ class Generator(object):
         node.set('name', self.name)
         if self.version is not None:
             node.set('version', self.version)
-        if self.internalid is not None:
-            node.set('internal-id', self.internalid)
         return node
 
     def __repr__(self):
-        return ('Generator(name=%r, version=%r, internalid=%r)'
-                % (self.name, self.version, self.internalid))
+        return ('Generator(name=%r, version=%r)'
+                % (self.name, self.version))
 
     def accept(self, visitor):
         visitor.visit_generator(self)
@@ -278,6 +336,27 @@ class Sut(object):
 
     def accept(self, visitor):
         visitor.visit_sut(self)
+
+class Stats(object):
+    __slots__ = ('wallclocktime', )
+
+    def __init__(self, wallclocktime):
+        assert isinstance(wallclocktime, float)
+        self.wallclocktime = wallclocktime
+
+    @classmethod
+    def from_xml(cls, node):
+        wallclocktime = float(node.get('wall-clock-time'))
+        result = Stats(wallclocktime)
+        return result
+
+    def to_xml(self):
+        node = ET.Element('stats')
+        node.set('wall-clock-time', str(self.wallclocktime))
+        return node
+
+    def accept(self, visitor):
+        visitor.visit_stats(self)
 
 class Message(object):
     __slots__ = ('text', )
@@ -588,7 +667,10 @@ class Point(object):
 #
 
 class Visitor:
-    def visit_report(self, report):
+    def visit_analysis(self, analysis):
+        pass
+
+    def visit_warning(self, warning):
         pass
 
     def visit_metadata(self, metadata):
@@ -598,6 +680,9 @@ class Visitor:
         pass
 
     def visit_sut(self, sut):
+        pass
+
+    def visit_stats(self, stats):
         pass
 
     def visit_message(self, message):
@@ -625,8 +710,9 @@ def main():
     for filename in sorted(glob.glob('examples/example-*.xml')):
         print('%s as gcc output:' % filename)
         with open(filename) as f:
-            r = Report.from_xml(f)
-            r.write_as_gcc_output(sys.stderr)
+            r = Analysis.from_xml(f)
+            for w in r.results:
+                w.write_as_gcc_output(sys.stderr)
             sys.stderr.write('  XML: %s\n' % r.to_xml_str())
 
 if __name__ == '__main__':

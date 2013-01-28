@@ -1,27 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<report cwe="681">
-
-  <!-- Example of a report without a trace -->
-
+<analysis>
   <metadata>
-    <generator name="cpychecker" version="0.11"
-               internal-id="mismatching-type-in-pyarg-format-string"/>
-    <sut></sut>
+    <generator name="cpychecker" version="0.11"/>
+    <sut>
+      <source-rpm name="python-ethtool" version="0.7" release="4.fc19" build-arch="x86_64"/>
+    </sut>
+    <file given-path="examples/python-src-example.c">
+      <hash alg="sha1" hexdigest="6ba29daa94d64b48071e299a79f2a00dcd99eeb1"/>
+    </file>
+    <stats wall-clock-time="5"/>
   </metadata>
 
-  <message>Mismatching type in call to PyArg_ParseTuple with format code "i"</message>
-  <notes>  argument 3 ("&amp;count") had type
+  <results>
+    <!-- Example of a warning without a trace -->
+    <issue cwe="681" test-id="mismatching-type-in-pyarg-format-string">
+      <message>Mismatching type in call to PyArg_ParseTuple with format code "i"</message>
+      <notes>  argument 3 ("&amp;count") had type
     "long int *" (pointing to 64 bits)
   but was expecting
     "int *" (pointing to 32 bits)
   for format code "i"</notes>
-
-  <location>
-    <file given-path="examples/python-src-example.c">
-      <hash alg="sha1" hexdigest="6ba29daa94d64b48071e299a79f2a00dcd99eeb1"/>
-    </file>
-    <function name="make_a_list_of_random_ints_badly"/>
-    <point line="10" column="26"/>
-  </location>
-
-</report>
+      <location>
+        <file given-path="examples/python-src-example.c">
+          <hash alg="sha1" hexdigest="6ba29daa94d64b48071e299a79f2a00dcd99eeb1"/>
+        </file>
+        <function name="make_a_list_of_random_ints_badly"/>
+        <point line="10" column="26"/>
+      </location>
+    </issue>
+  </results>
+</analysis>

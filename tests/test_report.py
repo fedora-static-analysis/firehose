@@ -19,90 +19,102 @@ import glob
 import StringIO
 import unittest
 
-from firehose.report import Report, Metadata, Generator, Sut, Location, \
-    File, Function, Point, Message, Notes, Trace, State
+from firehose.report import Analysis, Issue, Metadata, Generator, Sut, \
+    Location, File, Function, Point, Message, Notes, Trace, State, Stats
 
-class ReportTests(unittest.TestCase):
-    def make_simple_report(self):
+class AnalysisTests(unittest.TestCase):
+    def make_simple_analysis(self):
         """
-        Construct a minimal Report instance
+        Construct a minimal Analysis instance
         """
-        r = Report(cwe=None,
-                   metadata=Metadata(generator=Generator(name='cpychecker'),
-                                     sut=None),
-                   location=Location(file=File('foo.c', None),
-                                     function=None,
-                                     point=Point(10, 15)),
-                   message=Message(text='something bad involving pointers'),
-                   notes=None,
-                   trace=None)
-        return r
+        a = Analysis(metadata=Metadata(generator=Generator(name='cpychecker'),
+                                       sut=None,
+                                       file_=None,
+                                       stats=None),
+                     results=[Issue(cwe=None,
+                                    testid=None,
+                                    location=Location(file=File('foo.c', None),
+                                                      function=None,
+                                                      point=Point(10, 15)),
+                                    message=Message(text='something bad involving pointers'),
+                                    notes=None,
+                                    trace=None)])
+        return a, a.results[0]
 
-    def make_complex_report(self):
+    def make_complex_analysis(self):
         """
-        Construct a Report instance that uses all features
+        Construct a Analysis instance that uses all features
         """
-        r = Report(cwe=681,
-                   metadata=Metadata(generator=Generator(name='cpychecker',
-                                                         version='0.11',
-                                                         internalid='refcount-too-high'),
-                                     sut=Sut()),
-                   location=Location(file=File(givenpath='foo.c',
-                                               abspath='/home/david/coding/foo.c'),
-                                     function=Function('bar'),
-                                     point=Point(10, 15)),
-                   message=Message(text='something bad involving pointers'),
-                   notes=Notes('here is some explanatory text'),
-                   trace=Trace([State(location=Location(file=File('foo.c', None),
-                                                        function=Function('bar'),
-                                                        point=Point(7, 12)),
-                                      notes=Notes('first we do this')),
-                                State(location=Location(file=File('foo.c', None),
-                                                        function=Function('bar'),
-                                                        point=Point(8, 10)),
-                                      notes=Notes('then we do that')),
-                                State(location=Location(file=File('foo.c', None),
-                                                        function=Function('bar'),
-                                                        point=Point(10, 15)),
-                                      notes=Notes('then it crashes here'))
-                                ])
-                   )
-        return r
+        a = Analysis(metadata=Metadata(generator=Generator(name='cpychecker',
+                                                           version='0.11'),
+                                       sut=Sut(),
+                                       file_=File(givenpath='foo.c',
+                                                  abspath='/home/david/coding/foo.c'),
+                                       stats=Stats(wallclocktime=0.4)),
+                     results=[Issue(cwe=681,
+                                    testid='refcount-too-high',
+                                    location=Location(file=File(givenpath='foo.c',
+                                                                abspath='/home/david/coding/foo.c'),
+                                                      function=Function('bar'),
+                                                      point=Point(10, 15)),
+                                    message=Message(text='something bad involving pointers'),
+                                    notes=Notes('here is some explanatory text'),
+                                    trace=Trace([State(location=Location(file=File('foo.c', None),
+                                                                         function=Function('bar'),
+                                                                         point=Point(7, 12)),
+                                                       notes=Notes('first we do this')),
+                                                 State(location=Location(file=File('foo.c', None),
+                                                                         function=Function('bar'),
+                                                                         point=Point(8, 10)),
+                                                       notes=Notes('then we do that')),
+                                                 State(location=Location(file=File('foo.c', None),
+                                                                         function=Function('bar'),
+                                                                         point=Point(10, 15)),
+                                                       notes=Notes('then it crashes here'))
+                                                 ]))
+                              ]
+                     )
+        return a, a.results[0]
 
-    def test_creating_simple_report(self):
-        r = self.make_simple_report()
-        self.assertEqual(r.cwe, None)
-        self.assertEqual(r.metadata.generator.name, 'cpychecker')
-        self.assertEqual(r.metadata.generator.version, None)
-        self.assertEqual(r.metadata.generator.internalid, None)
-        self.assertEqual(r.metadata.sut, None)
-        self.assertEqual(r.location.file.givenpath, 'foo.c')
-        self.assertEqual(r.location.file.abspath, None)
-        self.assertEqual(r.location.function, None)
-        self.assertEqual(r.location.line, 10)
-        self.assertEqual(r.location.column, 15)
-        self.assertEqual(r.message.text, 'something bad involving pointers')
-        self.assertEqual(r.notes, None)
-        self.assertEqual(r.trace, None)
+    def test_creating_simple_analysis(self):
+        a, w = self.make_simple_analysis()
+        self.assertEqual(a.metadata.generator.name, 'cpychecker')
+        self.assertEqual(a.metadata.generator.version, None)
+        self.assertEqual(a.metadata.sut, None)
+        self.assertEqual(a.metadata.file_, None)
+        self.assertEqual(a.metadata.stats, None)
+        self.assertEqual(w.cwe, None)
+        self.assertEqual(w.testid, None)
+        self.assertEqual(w.location.file.givenpath, 'foo.c')
+        self.assertEqual(w.location.file.abspath, None)
+        self.assertEqual(w.location.function, None)
+        self.assertEqual(w.location.line, 10)
+        self.assertEqual(w.location.column, 15)
+        self.assertEqual(w.message.text, 'something bad involving pointers')
+        self.assertEqual(w.notes, None)
+        self.assertEqual(w.trace, None)
 
-    def test_creating_complex_report(self):
-        r = self.make_complex_report()
-        self.assertEqual(r.cwe, 681)
-        self.assertEqual(r.metadata.generator.name, 'cpychecker')
-        self.assertEqual(r.metadata.generator.version, '0.11')
-        self.assertEqual(r.metadata.generator.internalid, 'refcount-too-high')
+    def test_creating_complex_analysis(self):
+        a, w = self.make_complex_analysis()
+        self.assertEqual(a.metadata.generator.name, 'cpychecker')
+        self.assertEqual(a.metadata.generator.version, '0.11')
         # FIXME: sut
-        self.assertEqual(r.location.file.givenpath, 'foo.c')
-        self.assertEqual(r.location.file.abspath, '/home/david/coding/foo.c')
-        self.assertEqual(r.location.function.name, 'bar')
-        self.assertEqual(r.location.line, 10)
-        self.assertEqual(r.location.column, 15)
-        self.assertEqual(r.message.text, 'something bad involving pointers')
-        self.assertEqual(r.notes.text, 'here is some explanatory text')
+        self.assertEqual(a.metadata.file_.givenpath, 'foo.c')
+        self.assertEqual(a.metadata.file_.abspath, '/home/david/coding/foo.c')
+        self.assertEqual(a.metadata.stats.wallclocktime, 0.4)
+        self.assertEqual(w.cwe, 681)
+        self.assertEqual(w.testid, 'refcount-too-high')
+        self.assertEqual(w.location.file.givenpath, 'foo.c')
+        self.assertEqual(w.location.file.abspath, '/home/david/coding/foo.c')
+        self.assertEqual(w.location.function.name, 'bar')
+        self.assertEqual(w.location.line, 10)
+        self.assertEqual(w.location.column, 15)
+        self.assertEqual(w.message.text, 'something bad involving pointers')
+        self.assertEqual(w.notes.text, 'here is some explanatory text')
 
-        self.assertIsInstance(r.trace, Trace)
-        self.assertEqual(len(r.trace.states), 3)
-        s0 = r.trace.states[0]
+        self.assertIsInstance(w.trace, Trace)
+        self.assertEqual(len(w.trace.states), 3)
+        s0 = w.trace.states[0]
         self.assertIsInstance(s0, State)
         self.assertEqual(s0.location.file.givenpath, 'foo.c')
         self.assertEqual(s0.location.function.name, 'bar')
@@ -111,39 +123,42 @@ class ReportTests(unittest.TestCase):
         self.assertEqual(s0.notes.text, 'first we do this')
 
     def test_from_xml(self):
-        num_reports = 0
+        num_analyses = 0
         for filename in sorted(glob.glob('examples/example-*.xml')):
             with open(filename) as f:
-                r = Report.from_xml(f)
-                num_reports += 1
+                r = Analysis.from_xml(f)
+                num_analyses += 1
         # Ensure that all of the reports were indeed parsed:
-        self.assertEqual(num_reports, 2)
+        self.assertEqual(num_analyses, 2)
 
         # Verify that the parser works:
         with open('examples/example-2.xml') as f:
-            r = Report.from_xml(f)
-            self.assertEqual(r.cwe, 401)
-            self.assertEqual(r.metadata.generator.name, 'cpychecker')
-            self.assertEqual(r.metadata.generator.version, '0.11')
-            self.assertEqual(r.metadata.generator.internalid, 'refcount-too-high')
+            a = Analysis.from_xml(f)
+            self.assertEqual(a.metadata.generator.name, 'cpychecker')
+            self.assertEqual(a.metadata.generator.version, '0.11')
             # FIXME: sut
-            self.assertEqual(r.location.file.givenpath, 'examples/python-src-example.c')
-            self.assertEqual(r.location.file.abspath, None)
-            self.assertEqual(r.location.file.hash_.alg, 'sha1')
-            self.assertEqual(r.location.file.hash_.hexdigest,
+
+            self.assertEqual(len(a.results), 1)
+            w = a.results[0]
+            self.assertEqual(w.cwe, 401)
+            self.assertEqual(w.testid, 'refcount-too-high')
+            self.assertEqual(w.location.file.givenpath, 'examples/python-src-example.c')
+            self.assertEqual(w.location.file.abspath, None)
+            self.assertEqual(w.location.file.hash_.alg, 'sha1')
+            self.assertEqual(w.location.file.hash_.hexdigest,
                              '6ba29daa94d64b48071e299a79f2a00dcd99eeb1')
-            self.assertEqual(r.location.function.name, 'make_a_list_of_random_ints_badly')
-            self.assertEqual(r.location.line, 21)
-            self.assertEqual(r.location.column, 4)
-            self.assertEqual(r.message.text, "ob_refcnt of '*item' is 1 too high")
-            self.assertMultiLineEqual(r.notes.text,
+            self.assertEqual(w.location.function.name, 'make_a_list_of_random_ints_badly')
+            self.assertEqual(w.location.line, 21)
+            self.assertEqual(w.location.column, 4)
+            self.assertEqual(w.message.text, "ob_refcnt of '*item' is 1 too high")
+            self.assertMultiLineEqual(w.notes.text,
                 ("was expecting final item->ob_refcnt to be N + 1 (for some unknown N)\n"
                  "due to object being referenced by: PyListObject.ob_item[0]\n"
                  "but final item->ob_refcnt is N + 2"))
 
-            self.assertIsInstance(r.trace, Trace)
-            self.assertEqual(len(r.trace.states), 3)
-            s0 = r.trace.states[0]
+            self.assertIsInstance(w.trace, Trace)
+            self.assertEqual(len(w.trace.states), 3)
+            s0 = w.trace.states[0]
             self.assertIsInstance(s0, State)
             self.assertEqual(s0.location.file.givenpath, 'examples/python-src-example.c')
             self.assertEqual(s0.location.function.name, 'make_a_list_of_random_ints_badly')
@@ -153,11 +168,11 @@ class ReportTests(unittest.TestCase):
                 'PyLongObject allocated at:         item = PyLong_FromLong(random());')
 
     def test_to_xml(self):
-        r = self.make_simple_report()
-        r.to_xml()
+        a, w = self.make_simple_analysis()
+        a.to_xml()
 
-        r = self.make_complex_report()
-        r.to_xml()
+        a, w = self.make_complex_analysis()
+        a.to_xml()
 
         # FIXME: do they roundtrip?
 
@@ -168,57 +183,57 @@ class ReportTests(unittest.TestCase):
 
     def test_repr(self):
         # Verify that the various __repr__ methods are sane:
-        r = self.make_simple_report()
-        self.assertIn('Report(', repr(r))
+        a, w = self.make_simple_analysis()
+        self.assertIn('Analysis(', repr(a))
 
-        r = self.make_complex_report()
-        self.assertIn('Report(', repr(r))
+        a, w = self.make_complex_analysis()
+        self.assertIn('Analysis(', repr(a))
 
     def test_cwe(self):
         # Verify that the CWE methods are sane:
-        r = self.make_complex_report()
-        self.assertIsInstance(r.cwe, int)
-        self.assertEqual(r.get_cwe_str(), 'CWE-681')
-        self.assertEqual(r.get_cwe_url(),
+        a, w = self.make_complex_analysis()
+        self.assertIsInstance(w.cwe, int)
+        self.assertEqual(w.get_cwe_str(), 'CWE-681')
+        self.assertEqual(w.get_cwe_url(),
                          'http://cwe.mitre.org/data/definitions/681.html')
 
-        # Verify that they are sane for a report without a CWE:
-        r = self.make_simple_report()
-        self.assertEqual(r.cwe, None)
-        self.assertEqual(r.get_cwe_str(), None)
-        self.assertEqual(r.get_cwe_url(), None)
+        # Verify that they are sane for a warning without a CWE:
+        a, w = self.make_simple_analysis()
+        self.assertEqual(w.cwe, None)
+        self.assertEqual(w.get_cwe_str(), None)
+        self.assertEqual(w.get_cwe_url(), None)
 
     def test_fixup_paths(self):
         # Verify that Report.fixup_files() can make paths absolute:
-        r = self.make_simple_report()
+        a, w = self.make_simple_analysis()
 
-        self.assertEqual(r.location.file.abspath, None)
-        r.fixup_files(relativedir='/home/david/coding/test')
-        self.assertEqual(r.location.file.abspath, '/home/david/coding/test/foo.c')
+        self.assertEqual(w.location.file.abspath, None)
+        a.fixup_files(relativedir='/home/david/coding/test')
+        self.assertEqual(w.location.file.abspath, '/home/david/coding/test/foo.c')
 
     def test_fixup_hashes(self):
         # Verify that Report.fixup_files() can add hashes to files:
-        r = self.make_simple_report()
-        r.location.file.givenpath = 'examples/python-src-example.c'
-        r.location.file.abspath = None
-        self.assertEqual(r.location.file.hash_, None)
+        a, w = self.make_simple_analysis()
+        w.location.file.givenpath = 'examples/python-src-example.c'
+        w.location.file.abspath = None
+        self.assertEqual(w.location.file.hash_, None)
 
-        r.fixup_files(hashalg='sha1')
-        self.assertEqual(r.location.file.hash_.alg, 'sha1')
-        self.assertEqual(r.location.file.hash_.hexdigest,
+        a.fixup_files(hashalg='sha1')
+        self.assertEqual(w.location.file.hash_.alg, 'sha1')
+        self.assertEqual(w.location.file.hash_.hexdigest,
                          '6ba29daa94d64b48071e299a79f2a00dcd99eeb1')
 
     def test_gcc_output(self):
-        r = self.make_simple_report()
+        a, w = self.make_simple_analysis()
 
         output = StringIO.StringIO()
-        r.write_as_gcc_output(output)
+        w.write_as_gcc_output(output)
         self.assertEqual(output.getvalue(),
                          'foo.c:10:15: warning: something bad involving pointers\n')
 
-        r = self.make_complex_report()
+        a, w = self.make_complex_analysis()
         output = StringIO.StringIO()
-        r.write_as_gcc_output(output)
+        w.write_as_gcc_output(output)
         self.assertMultiLineEqual(output.getvalue(),
             ("foo.c: In function 'bar':\n"
              "foo.c:10:15: warning: something bad involving pointers [CWE-681]\n"

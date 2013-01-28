@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<report cwe="401">
+<analysis>
+  <metadata>
+    <generator name="cpychecker" version="0.11"/>
+  </metadata>
+
+  <results>
+    <issue cwe="401" test-id="refcount-too-high">
 
   <!-- Example of a report with a trace -->
-
-  <metadata>
-    <generator name="cpychecker" version="0.11" internal-id="refcount-too-high"/>
-    <sut></sut>
-  </metadata>
 
   <message>ob_refcnt of '*item' is 1 too high</message>
   <notes>was expecting final item->ob_refcnt to be N + 1 (for some unknown N)
@@ -54,5 +55,6 @@ but final item->ob_refcnt is N + 2</notes>
       </location>
     </state>
   </trace>
-
-</report>
+    </issue>
+  </results>
+</analysis>

@@ -20,7 +20,7 @@ import re
 import sys
 
 from firehose.report import Message, Function, Point, \
-    File, Location, Metadata, Generator, Report
+    File, Location, Metadata, Generator, Issue, Analysis
 
 # Parser for warnings emitted by GCC
 # The code that generates these warnings can be seen within gcc's own
@@ -50,7 +50,7 @@ GLOBAL_PATTERN = re.compile(".*: At global scope:$")
 GLOBAL_FUNC_NAME = '::'
 
 
-def parse_file(data_file, gccversion, sut):
+def parse_file(data_file, gccversion=None, sut=None, file_=None, stats=None):
     """
     looks for groups of lines that start with a line identifying a function
     name, followed by one or more lines with a warning or note
@@ -59,14 +59,17 @@ def parse_file(data_file, gccversion, sut):
     :type  data_file:   file
     :param gccversion:   version of GCC that generated this report
     :type  gccversion:   str
-    :param sut:   metadata about the software-under-test
-    :type  sut:   Sut
 
-    :return:    generator of Report instances
-    :rtype:     generator
+    :return:    Analysis instance
     """
     # has a value only when in a block of lines where the first line identifies
     # a function and is followed by 0 or more warning lines
+
+    generator = Generator(name='gcc',
+                          version=gccversion)
+    metadata = Metadata(generator, sut, file_, stats)
+    analysis = Analysis(metadata, [])
+
     current_func_name = None
     for line in data_file.readlines():
         match_func = FUNCTION_PATTERN.match(line)
@@ -79,15 +82,16 @@ def parse_file(data_file, gccversion, sut):
 
         # if we think the next line might describe a warning
         elif current_func_name is not None:
-            report = parse_warning(line, current_func_name, gccversion, sut)
-            if report:
-                yield report
+            issue = parse_warning(line, current_func_name)
+            if issue:
+                analysis.results.append(issue)
             else:
                 # reset this when we run out of warnings associated with it
                 current_func_name = None
+    return analysis
                 
             
-def parse_warning(line, func_name, gccversion, sut):
+def parse_warning(line, func_name):
     """
     :param line:        current line read from file
     :type  line:        basestring
@@ -98,7 +102,7 @@ def parse_warning(line, func_name, gccversion, sut):
     :param sut:   metadata about the software-under-test
     :type  sut:   Sut
 
-    :return:    Report if match, else None
+    :return:    Issue if match, else None
     """
     match = GCC_PATTERN.match(line)
     if match:
@@ -113,16 +117,12 @@ def parse_warning(line, func_name, gccversion, sut):
             switch = switch_match.group('name')
         else:
             switch = None
-        generator = Generator(name='gcc',
-                              version=gccversion,
-                              internalid=switch)
-        metadata = Metadata(generator, sut)
 
         point = Point(int(match.group('line')), column)
         path = File(match.group('path'), None)
         location = Location(path, func, point)
 
-        return Report(None, metadata, location, message, None, None)
+        return Issue(None, switch, location, message, None, None)
 
 
 if __name__ == '__main__':
@@ -130,6 +130,5 @@ if __name__ == '__main__':
         print "provide a build log file path as the only argument"
     else:
         with open(sys.argv[1]) as data_file:
-            for report in parse_file(data_file):
-                report.to_xml().write(sys.stdout)
-                print
+            analysis = parse_file(data_file)
+            analysis.to_xml().write(sys.stdout)

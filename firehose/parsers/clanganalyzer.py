@@ -27,21 +27,22 @@ from pprint import pprint
 import sys
 
 from firehose.report import Message, Function, Point, \
-    File, Location, Generator, Metadata, Report, Sut, Trace, State, Notes
+    File, Location, Generator, Metadata, Analysis, Issue, Sut, Trace, \
+    State, Notes
 
-def parse_scandir(resultdir, analyzerversion, sut):
+def parse_scandir(resultdir, analyzerversion=None, sut=None):
     """
     Given a path to a directory of scan-build output, parse it and
-    yield Report instances
+    yield Analysis instances
     """
     for filename in glob.glob(os.path.join(resultdir, 'report-*.plist')):
-        for report in parse_plist(filename, analyzerversion, sut):
-            yield report
+        for analysis in parse_plist(filename, analyzerversion, sut):
+            yield analysis
 
-def parse_plist(pathOrFile, analyzerversion, sut):
+def parse_plist(pathOrFile, analyzerversion=None, sut=None, file_=None, stats=None):
     """
     Given a .plist file emitted by clang-static-analyzer (e.g. via
-    scan-build), parse it and yield Report instances
+    scan-build), parse it and return an Analysis instance
     """
     plist = plistlib.readPlist(pathOrFile)
     # We now have the .plist file as a hierarchy of dicts, lists, etc
@@ -54,20 +55,20 @@ def parse_plist(pathOrFile, analyzerversion, sut):
     # diagnostics:
     files = plist['files']
 
+    generator = Generator(name='clang-analyzer',
+                          version=analyzerversion)
+    metadata = Metadata(generator, sut, file_, stats)
+    analysis = Analysis(metadata, [])
+
     for diagnostic in plist['diagnostics']:
         if 0:
             pprint(diagnostic)
 
         cwe = None
 
-        generator=Generator(name='clang-analyzer',
-                            version=analyzerversion,
-                            internalid=None) # FIXME
         # TODO: we're not yet handling the following:
         #   diagnostic['category']
         #   diagnostic['type']
-
-        metadata=Metadata(generator, sut)
 
         message = Message(text=diagnostic['description'])
 
@@ -86,7 +87,13 @@ def parse_plist(pathOrFile, analyzerversion, sut):
 
         trace = make_trace(files, diagnostic['path'])
 
-        yield Report(cwe, metadata, location, message, notes, trace)
+        issue = Issue(cwe,
+                      None, # FIXME: can we get at the test id?
+                      location, message, notes, trace)
+
+        analysis.results.append(issue)
+
+    return analysis
 
 def make_trace(files, path):
     """
@@ -130,10 +137,10 @@ if __name__ == '__main__':
     else:
         path = sys.argv[1]
         if path.endswith('.plist'):
-            for result in parse_plist(path, analyzerversion, sut=None):
-                print(result.to_xml().write(sys.stdout))
-                print
+            analysis = parse_plist(path, analyzerversion)
+            print(analysis.to_xml().write(sys.stdout))
+            print
         else:
-            for result in parse_scandir(path, analyzerversion, sut=None):
+            for result in parse_scandir(path, analyzerversion):
                 print(result.to_xml().write(sys.stdout))
                 print

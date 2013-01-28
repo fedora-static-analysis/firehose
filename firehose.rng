@@ -2,8 +2,60 @@
 <grammar xmlns="http://relaxng.org/ns/structure/1.0"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <start>
-    <!-- A report about a possible problem -->
-    <element name="report">
+    <!-- Results from the invocation of an analysis tool -->
+    <element name="analysis">
+      <ref name="metadata-element"/>
+      <element name="results">
+        <zeroOrMore>
+          <ref name="issue-element"/>
+        </zeroOrMore>
+      </element>
+    </element>
+  </start>
+
+  <define name="metadata-element">
+      <element name="metadata">
+        <element name="generator">
+          <attribute name="name"/>
+          <optional>
+            <attribute name="version"/>
+          </optional>
+        </element>
+
+        <!-- "sut" = "Software Under Test" -->
+        <optional>
+          <element name="sut">
+            <choice>
+              <element name="source-rpm">
+                <attribute name="name"/>
+                <attribute name="version"/>
+                <attribute name="release"/>
+                <attribute name="build-arch"/>
+              </element>
+              <!-- What other options should we have? -->
+            </choice>
+          </element>
+        </optional>
+
+        <optional>
+          <ref name="file-element"/>
+        </optional>
+
+        <optional>
+          <element name="stats">
+            <!-- actual time taken to run the analysis, in seconds -->
+            <attribute name="wall-clock-time">
+              <data type="float"/>
+            </attribute>
+          </element>
+        </optional>
+
+      </element>
+  </define>
+
+  <!-- A report about a possible problem -->
+  <define name="issue-element">
+    <element name="issue">
       <optional>
         <!-- The Common Weakness Enumeration ID
              (see http://cwe.mitre.org/index.html )
@@ -15,37 +67,15 @@
           <data type="integer"/>
         </attribute>
       </optional>
-      <element name="metadata">
-        <element name="generator">
-          <attribute name="name"/>
-          <optional>
-            <attribute name="version"/>
-          </optional>
-          <optional>
-            <!--
-                 Each static analysis tool potentially has multiple tests,
-                 with its own IDs for its own tests.
-                 Capture those that do here, as free-form strings:
-            -->
-            <attribute name="internal-id"/>
-          </optional>
-        </element>
 
-        <!-- "sut" = "Software Under Test" -->
-        <optional>
-          <element name="sut">
-            <choice>
-              <text/>
-              <element name="rpm">
-                <attribute name="name"/>
-                <attribute name="version"/>
-                <attribute name="release"/>
-                <attribute name="arch"/>
-              </element>
-            </choice>
-          </element>
-        </optional>
-      </element>
+      <optional>
+        <!--
+            Each static analysis tool potentially has multiple tests,
+            with its own IDs for its own tests.
+            Capture those that do here, as free-form strings:
+        -->
+        <attribute name="test-id"/>
+      </optional>
 
       <!-- A message summarizing the problem -->
       <element name="message"><text/></element>
@@ -81,11 +111,49 @@
         </element>
       </optional>
     </element>
-  </start>
+  </define>
 
   <define name="location-element">
     <!-- A particular source code location -->
     <element name="location">
+      <ref name="file-element"/>
+
+      <!--
+           Ideally, every analyzer would tell us in which function each
+           problem was discovered, given that function names are less
+           likely to change than line numbers.
+
+           Unfortunately many don't - and we should patch these in each
+           upstream analyzer as we go.
+
+           Also, a problem can occur in global scope (e.g. lack of NULL
+           termination in an array-initializer for a global, such as in
+           this checker:
+           http://gcc-python-plugin.readthedocs.org/en/latest/cpychecker.html#verification-of-pymethoddef-tables
+           (although arguably there *is* a relevant function there: the
+           location of the code that uses that data)
+      -->
+
+      <optional>
+        <element name="function">
+          <attribute name="name"/>
+        </element>
+      </optional>
+      <!-- We can refer to either a location, or a range of locations
+           within the file: -->
+      <choice>
+        <ref name="point-element"/>
+        <element name="range">
+          <!-- start of range: -->
+          <ref name="point-element"/>
+          <!-- end of range: -->
+          <ref name="point-element"/>
+        </element>
+      </choice>
+    </element>
+  </define>
+
+  <define name="file-element">
       <element name="file">
         <!--
            What filename was given by the analyzer?
@@ -113,38 +181,6 @@
           <attribute name="hexdigest"/>
         </element>
       </element>
-      <!--
-           Ideally, every analyzer would tell us in which function each
-           problem was discovered, given that function names are less
-           likely to change than line numbers.
-
-           Unfortunately many don't - and we should patch these in each
-           upstream analyzer as we go.
-
-           Also, a problem can occur in global scope (e.g. lack of NULL
-           termination in an array-initializer for a global, such as in
-           this checker:
-           http://gcc-python-plugin.readthedocs.org/en/latest/cpychecker.html#verification-of-pymethoddef-tables
-           (although arguably there *is* a relevant function there: the
-           location of the code that uses that data)
-      -->
-      <optional>
-        <element name="function">
-          <attribute name="name"/>
-        </element>
-      </optional>
-      <!-- We can refer to either a location, or a range of locations
-           within the file: -->
-      <choice>
-        <ref name="point-element"/>
-        <element name="range">
-          <!-- start of range: -->
-          <ref name="point-element"/>
-          <!-- end of range: -->
-          <ref name="point-element"/>
-        </element>
-      </choice>
-    </element>
   </define>
 
   <define name="point-element">
