@@ -485,8 +485,8 @@ class File(object):
         return node
 
     def __repr__(self):
-        return ('File(givenpath=%r, abspath=%r)' %
-                (self.givenpath, self.abspath))
+        return ('File(givenpath=%r, abspath=%r hash_=%r)' %
+                (self.givenpath, self.abspath, self.hash_))
 
     def accept(self, visitor):
         visitor.visit_file(self)
