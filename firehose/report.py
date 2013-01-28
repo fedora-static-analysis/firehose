@@ -299,6 +299,12 @@ class Message(object):
     def __repr__(self):
         return 'Message(text=%r)' % (self.text, )
 
+    def __eq__(self, other):
+        return self.text == other.text
+
+    def __ne__(self, other):
+        return self.text != other.text
+
     def accept(self, visitor):
         visitor.visit_message(self)
 
@@ -531,6 +537,12 @@ class Function(object):
     def __repr__(self):
         return 'Function(name=%r)' % self.name
 
+    def __eq__(self, other):
+        return self.name == other.name
+
+    def __ne__(self, other):
+        return self.name != other.name
+
     def accept(self, visitor):
         visitor.visit_function(self)
 
@@ -559,6 +571,14 @@ class Point(object):
     def __repr__(self):
         return ('Location(line=%r, column=%r)' %
                 (self.line, self.column))
+
+    def __eq__(self, other):
+        if self.line == other.line:
+            if self.column == other.column:
+                return True
+
+    def __ne__(self, other):
+        return not self == other
 
     def accept(self, visitor):
         visitor.visit_point(self)
