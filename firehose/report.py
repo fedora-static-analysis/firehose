@@ -204,7 +204,7 @@ class Issue(object):
                            msg=notes.text if notes else '')
 
     def __repr__(self):
-        return ('Report(cwe=%r, location=%r, message=%r, notes=%r, trace=%r)'
+        return ('Issue(cwe=%r, location=%r, message=%r, notes=%r, trace=%r)'
                 % (self.cwe, self.location, self.message, self.notes, self.trace))
 
     def accept(self, visitor):

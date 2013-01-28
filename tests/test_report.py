@@ -185,9 +185,11 @@ class AnalysisTests(unittest.TestCase):
         # Verify that the various __repr__ methods are sane:
         a, w = self.make_simple_analysis()
         self.assertIn('Analysis(', repr(a))
+        self.assertIn('Issue(', repr(a))
 
         a, w = self.make_complex_analysis()
         self.assertIn('Analysis(', repr(a))
+        self.assertIn('Issue(', repr(a))
 
     def test_cwe(self):
         # Verify that the CWE methods are sane:
