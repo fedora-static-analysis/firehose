@@ -16,10 +16,13 @@
 #   <http://www.gnu.org/licenses/>.
 
 import glob
+import os
 import StringIO
+import subprocess
+import tempfile
 import unittest
 
-from firehose.report import Analysis, Issue, Metadata, Generator, Sut, \
+from firehose.report import Analysis, Issue, Metadata, Generator, SourceRpm, \
     Location, File, Function, Point, Message, Notes, Trace, State, Stats
 
 class AnalysisTests(unittest.TestCase):
@@ -47,7 +50,10 @@ class AnalysisTests(unittest.TestCase):
         """
         a = Analysis(metadata=Metadata(generator=Generator(name='cpychecker',
                                                            version='0.11'),
-                                       sut=Sut(),
+                                       sut=SourceRpm(name='python-ethtool',
+                                                     version='0.7',
+                                                     release='4.fc19',
+                                                     buildarch='x86_64'),
                                        file_=File(givenpath='foo.c',
                                                   abspath='/home/david/coding/foo.c'),
                                        stats=Stats(wallclocktime=0.4)),
@@ -98,7 +104,11 @@ class AnalysisTests(unittest.TestCase):
         a, w = self.make_complex_analysis()
         self.assertEqual(a.metadata.generator.name, 'cpychecker')
         self.assertEqual(a.metadata.generator.version, '0.11')
-        # FIXME: sut
+        self.assertIsInstance(a.metadata.sut, SourceRpm)
+        self.assertEqual(a.metadata.sut.name, 'python-ethtool')
+        self.assertEqual(a.metadata.sut.version, '0.7')
+        self.assertEqual(a.metadata.sut.release, '4.fc19')
+        self.assertEqual(a.metadata.sut.buildarch, 'x86_64')
         self.assertEqual(a.metadata.file_.givenpath, 'foo.c')
         self.assertEqual(a.metadata.file_.abspath, '/home/david/coding/foo.c')
         self.assertEqual(a.metadata.stats.wallclocktime, 0.4)
@@ -136,7 +146,11 @@ class AnalysisTests(unittest.TestCase):
             a = Analysis.from_xml(f)
             self.assertEqual(a.metadata.generator.name, 'cpychecker')
             self.assertEqual(a.metadata.generator.version, '0.11')
-            # FIXME: sut
+            self.assertIsInstance(a.metadata.sut, SourceRpm)
+            self.assertEqual(a.metadata.sut.name, 'python-ethtool')
+            self.assertEqual(a.metadata.sut.version, '0.7')
+            self.assertEqual(a.metadata.sut.release, '4.fc19')
+            self.assertEqual(a.metadata.sut.buildarch, 'x86_64')
 
             self.assertEqual(len(a.results), 1)
             w = a.results[0]
@@ -168,11 +182,24 @@ class AnalysisTests(unittest.TestCase):
                 'PyLongObject allocated at:         item = PyLong_FromLong(random());')
 
     def test_to_xml(self):
+        def validate(xmlstr):
+            f = tempfile.NamedTemporaryFile(delete=False)
+            f.write(xmlstr)
+            f.flush()
+            print
+            p = subprocess.check_output(['xmllint',
+                                         '--relaxng', 'firehose.rng',
+                                         '--noout',
+                                         f.name])
+            # do this by hand: if a test fails, we'll want to inspect the
+            # file:
+            os.unlink(f.name)
+
         a, w = self.make_simple_analysis()
-        a.to_xml()
+        validate(a.to_xml_str())
 
         a, w = self.make_complex_analysis()
-        a.to_xml()
+        validate(a.to_xml_str())
 
     def test_xml_roundtrip(self):
         def roundtrip_through_xml(a):

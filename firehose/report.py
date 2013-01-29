@@ -167,10 +167,10 @@ class Issue(object):
             node.set('cwe', str(self.cwe))
         if self.testid is not None:
             node.set('test-id', str(self.testid))
-        node.append(self.location.to_xml())
         node.append(self.message.to_xml())
         if self.notes:
             node.append(self.notes.to_xml())
+        node.append(self.location.to_xml())
         if self.trace:
             node.append(self.trace.to_xml())
         return node
@@ -346,28 +346,65 @@ class Generator(object):
 
 class Sut(object):
     # FIXME: this part of the schema needs more thought/work
-    __slots__ = ('text', )
-
-    def __init__(self, text=None):
-        self.text = text
 
     @classmethod
     def from_xml(cls, node):
-        result = Sut()
-        result.text = node.text
-        return result
+        srpm_node = node.find('source-rpm')
+        if srpm_node is not None:
+            return SourceRpm.from_xml(srpm_node)
+        raise ValueError('unknown sut kind')
 
     def to_xml(self):
+        innernode = self._to_xml_inner_node()
         node = ET.Element('sut')
-        node.text = self.text
+        node.append(innernode)
         return node
 
-    def __eq__(self, other):
-        if self.text == other.text:
-            return True
+    def _to_xml_inner_node(self):
+        raise NotImplementedError
 
     def accept(self, visitor):
         visitor.visit_sut(self)
+
+class SourceRpm(Sut):
+    __slots__ = ('name', 'version', 'release', 'buildarch')
+
+    def __init__(self, name, version, release, buildarch):
+        assert isinstance(name, str)
+        assert isinstance(version, str)
+        assert isinstance(release, str)
+        assert isinstance(buildarch, str)
+        self.name = name
+        self.version = version
+        self.release = release
+        self.buildarch = buildarch
+
+    @classmethod
+    def from_xml(cls, node):
+        result = SourceRpm(name=node.get('name'),
+                           version=node.get('version'),
+                           release=node.get('release'),
+                           buildarch=node.get('build-arch'))
+        return result
+
+    def _to_xml_inner_node(self):
+        node = ET.Element('source-rpm')
+        node.set('name', self.name)
+        node.set('version', self.version)
+        node.set('release', self.release)
+        node.set('build-arch', self.buildarch)
+        return node
+
+    def __repr__(self):
+        return ('SourceRpm(name=%r, version=%r, release=%r, buildarch=%r)'
+                % (self.name, self.version, self.release, self.buildarch))
+
+    def __eq__(self, other):
+        if self.name == other.name:
+            if self.version == other.version:
+                if self.release == other.release:
+                    if self.buildarch == other.buildarch:
+                        return True
 
 class Stats(object):
     __slots__ = ('wallclocktime', )

@@ -176,10 +176,12 @@
         <optional>
           <attribute name="absolute-path"/>
         </optional>
-        <element name="hash">
-          <attribute name="alg"/>
-          <attribute name="hexdigest"/>
-        </element>
+        <optional>
+          <element name="hash">
+            <attribute name="alg"/>
+            <attribute name="hexdigest"/>
+          </element>
+        </optional>
       </element>
   </define>
 

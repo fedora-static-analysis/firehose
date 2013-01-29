@@ -2,6 +2,10 @@
 <analysis>
   <metadata>
     <generator name="cpychecker" version="0.11"/>
+    <sut>
+      <source-rpm name="python-ethtool" version="0.7"
+                  release="4.fc19" build-arch="x86_64"/>
+    </sut>
   </metadata>
 
   <results>
