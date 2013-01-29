@@ -72,6 +72,11 @@ class Analysis(object):
         return ('Analysis(metadata=%r, results=%r)'
                 % (self.metadata, self.results))
 
+    def __eq__(self, other):
+        if self.metadata == other.metadata:
+            if self.results == other.results:
+                return True
+
     def accept(self, visitor):
         visitor.visit_analysis(self)
         self.metadata.accept(visitor)
@@ -160,6 +165,8 @@ class Issue(object):
         node = ET.Element('issue')
         if self.cwe is not None:
             node.set('cwe', str(self.cwe))
+        if self.testid is not None:
+            node.set('test-id', str(self.testid))
         node.append(self.location.to_xml())
         node.append(self.message.to_xml())
         if self.notes:
@@ -204,8 +211,17 @@ class Issue(object):
                            msg=notes.text if notes else '')
 
     def __repr__(self):
-        return ('Issue(cwe=%r, location=%r, message=%r, notes=%r, trace=%r)'
-                % (self.cwe, self.location, self.message, self.notes, self.trace))
+        return ('Issue(cwe=%r, testid=%r, location=%r, message=%r, notes=%r, trace=%r)'
+                % (self.cwe, self.testid, self.location, self.message, self.notes, self.trace))
+
+    def __eq__(self, other):
+        if self.cwe == other.cwe:
+            if self.testid == other.testid:
+                if self.location == other.location:
+                    if self.message == other.message:
+                        if self.notes == other.notes:
+                            if self.trace == other.trace:
+                                return True
 
     def accept(self, visitor):
         visitor.visit_warning(self)
@@ -276,6 +292,13 @@ class Metadata(object):
         return ('Metadata(generator=%r, sut=%r, file_=%r, stats=%r)'
                 % (self.generator, self.sut, self.file_, self.stats))
 
+    def __eq__(self, other):
+        if self.generator == other.generator:
+            if self.sut == other.sut:
+                if self.file_ == other.file_:
+                    if self.stats == other.stats:
+                        return True
+
     def accept(self, visitor):
         visitor.visit_metadata(self)
         self.generator.accept(visitor)
@@ -313,6 +336,11 @@ class Generator(object):
         return ('Generator(name=%r, version=%r)'
                 % (self.name, self.version))
 
+    def __eq__(self, other):
+        if self.name == other.name:
+            if self.version == other.version:
+                return True
+
     def accept(self, visitor):
         visitor.visit_generator(self)
 
@@ -334,6 +362,10 @@ class Sut(object):
         node.text = self.text
         return node
 
+    def __eq__(self, other):
+        if self.text == other.text:
+            return True
+
     def accept(self, visitor):
         visitor.visit_sut(self)
 
@@ -354,6 +386,10 @@ class Stats(object):
         node = ET.Element('stats')
         node.set('wall-clock-time', str(self.wallclocktime))
         return node
+
+    def __eq__(self, other):
+        if self.wallclocktime == other.wallclocktime:
+            return True
 
     def accept(self, visitor):
         visitor.visit_stats(self)
@@ -408,6 +444,10 @@ class Notes(object):
     def __repr__(self):
         return 'Notes(text=%r)' % (self.text, )
 
+    def __eq__(self, other):
+        if self.text == other.text:
+            return True
+
     def accept(self, visitor):
         visitor.visit_notes(self)
 
@@ -437,6 +477,10 @@ class Trace(object):
 
     def __repr__(self):
         return 'Trace(states=%r)' % (self.states, )
+
+    def __eq__(self, other):
+        if self.states == other.states:
+            return True
 
     def accept(self, visitor):
         visitor.visit_notes(self)
@@ -472,6 +516,11 @@ class State(object):
 
     def __repr__(self):
         return 'State(location=%r, notes=%r)' % (self.location, self.notes)
+
+    def __eq__(self, other):
+        if self.location == other.location:
+            if self.notes == other.notes:
+                return True
 
     def accept(self, visitor):
         visitor.visit_state(self)
@@ -512,6 +561,12 @@ class Location(object):
     def __repr__(self):
         return ('Location(file=%r, function=%r, point=%r)' %
                 (self.file, self.function, self.point))
+
+    def __eq__(self, other):
+        if self.file == other.file:
+            if self.function == other.function:
+                if self.point == other.point:
+                    return True
 
     def accept(self, visitor):
         visitor.visit_location(self)
@@ -564,8 +619,14 @@ class File(object):
         return node
 
     def __repr__(self):
-        return ('File(givenpath=%r, abspath=%r hash_=%r)' %
+        return ('File(givenpath=%r, abspath=%r, hash_=%r)' %
                 (self.givenpath, self.abspath, self.hash_))
+
+    def __eq__(self, other):
+        if self.givenpath == other.givenpath:
+            if self.abspath == other.abspath:
+                if self.hash_ == other.hash_:
+                    return True
 
     def accept(self, visitor):
         visitor.visit_file(self)
@@ -595,6 +656,11 @@ class Hash(object):
     def __repr__(self):
         return ('Hash(alg=%r, hexdigest=%r)' %
                 (self.alg, self.hexdigest))
+
+    def __eq__(self, other):
+        if self.alg == other.alg:
+            if self.hexdigest == other.hexdigest:
+                return True
 
 class Function(object):
     __slots__ = ('name', )
