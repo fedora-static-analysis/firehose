@@ -24,7 +24,7 @@ import unittest
 
 from firehose.report import Analysis, Issue, Metadata, Generator, SourceRpm, \
     Location, File, Function, Point, Message, Notes, Trace, State, Stats, \
-    Failure
+    Failure, Range
 
 class AnalysisTests(unittest.TestCase):
     def make_simple_analysis(self):
@@ -76,7 +76,8 @@ class AnalysisTests(unittest.TestCase):
                                                        notes=Notes('then we do that')),
                                                  State(location=Location(file=File('foo.c', None),
                                                                          function=Function('bar'),
-                                                                         point=Point(10, 15)),
+                                                                         range_=Range(Point(10, 15),
+                                                                                      Point(10, 25))),
                                                        notes=Notes('then it crashes here'))
                                                  ]))
                               ]
@@ -146,6 +147,11 @@ class AnalysisTests(unittest.TestCase):
         self.assertEqual(s0.location.column, 12)
         self.assertEqual(s0.notes.text, 'first we do this')
 
+        # Verify the Range type within the final state in the trace:
+        s2 = w.trace.states[2]
+        self.assertIsInstance(s2, State)
+        self.assertEqual(s2.location.line, 10)
+        self.assertEqual(s2.location.column, 15)
 
     def test_making_failed_analysis(self):
         a, f = self.make_failed_analysis()
@@ -166,7 +172,7 @@ class AnalysisTests(unittest.TestCase):
                 r = Analysis.from_xml(f)
                 num_analyses += 1
         # Ensure that all of the reports were indeed parsed:
-        self.assertEqual(num_analyses, 4)
+        self.assertEqual(num_analyses, 5)
 
     def test_example_2(self):
         # Verify that the parser works:

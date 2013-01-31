@@ -18,19 +18,24 @@ import os
 import unittest
 
 from firehose.parsers.clanganalyzer import parse_plist
-from firehose.report import Analysis, Issue, Sut
+from firehose.report import Analysis, Issue, Sut, Trace
 
 FAKE_ANALYZER_VERSION = 'clang-3.0-14.fc17.x86_64'
 FAKE_SUT = Sut()
 
 class TestParsePlist(unittest.TestCase):
-    def test_example_001(self):
+    def parse_example(self, filename):
         a = parse_plist(os.path.join(os.path.dirname(__file__),
-                                     'example-output/clanganalyzer/report-001.plist'),
+                                     'example-output/clanganalyzer',
+                                     filename),
                         analyzerversion=FAKE_ANALYZER_VERSION,
                         sut=FAKE_SUT,
                         file_=None,
                         stats=None)
+        return a
+
+    def test_example_001(self):
+        a = self.parse_example('report-001.plist')
         self.assertEqual(a.metadata.generator.name, 'clang-analyzer')
         self.assertEqual(a.metadata.generator.version,
                          FAKE_ANALYZER_VERSION)
@@ -60,3 +65,146 @@ class TestParsePlist(unittest.TestCase):
         self.assertEqual(s0.location.column, 2)
         self.assertEqual(s0.notes.text,
                          "Value stored to 'ret' is never read")
+
+    def test_example_002(self):
+        a = self.parse_example('report-002.plist')
+        self.assertEqual(a.metadata.generator.name, 'clang-analyzer')
+        self.assertEqual(a.metadata.generator.version,
+                         FAKE_ANALYZER_VERSION)
+
+        self.assertEqual(len(a.results), 4)
+
+        w0 = a.results[0]
+        self.assertEqual(w0.message.text,
+                         "Value stored to 'error' is never read")
+        self.assertEqual(w0.location.file.givenpath, 'search.c')
+        self.assertEqual(w0.location.line, 454)
+        self.assertEqual(w0.location.column, 3)
+
+        w1 = a.results[1]
+        print(w1)
+        self.assertEqual(w1.message.text,
+                         "Value stored to 'pol_opt' is never read")
+        self.assertEqual(w1.location.file.givenpath, 'search.c')
+        self.assertEqual(w1.location.line, 824)
+        self.assertEqual(w1.location.column, 2)
+
+        w2 = a.results[2]
+        print(w2)
+        self.assertEqual(w2.message.text,
+                         "Access to field 'ob_refcnt' results in a dereference of a null pointer (loaded from variable 'dict')")
+        self.assertEqual(w2.location.file.givenpath, 'search.c')
+        self.assertEqual(w2.location.line, 215)
+        self.assertEqual(w2.location.column, 2)
+        trace2 = w2.trace
+        self.assertIsInstance(trace2, Trace)
+
+        self.assertEqual(len(trace2.states), 13)
+
+        # s0 and s1 come from the first control edge in the input file:
+        #         'path': [{'edges': [{'end': [{'col': 9,
+        #                                       'file': 0,
+        #                                       'line': 161},
+        #                                      {'col': 9,
+        #                                       'file': 0,
+        #                                       'line': 161}],
+        #                              'start': [{'col': 2,
+        #                                         'file': 0,
+        #                                         'line': 161},
+        #                                        {'col': 2,
+        #                                         'file': 0,
+        #                                         'line': 161}]}],
+        #                   'kind': 'control'},
+
+        s0 = trace2.states[0]
+        self.assertEqual(s0.location.point.line, 161)
+        self.assertEqual(s0.location.point.column, 2)
+        self.assertEqual(s0.location.range_, None)
+
+
+        s1 = trace2.states[1]
+        self.assertEqual(s1.location.point.line, 161)
+        self.assertEqual(s1.location.point.column, 9)
+        self.assertEqual(s1.location.range_, None)
+
+        # s2 comes from the endpoint of the second control edge in the
+        # input file (the startpoint == s1).
+        #                  {'edges': [{'end': [{'col': 18,
+        #                                       'file': 0,
+        #                                       'line': 165},
+        #                                      {'col': 21,
+        #                                       'file': 0,
+        #                                       'line': 165}],
+        #                              'start': [{'col': 9,
+        #                                         'file': 0,
+        #                                         'line': 161},
+        #                                        {'col': 9,
+        #                                         'file': 0,
+        #                                         'line': 161}]}],
+        #                   'kind': 'control'},
+        #
+        # It is a range rather than a point:
+        s2 = trace2.states[2]
+        self.assertEqual(s2.location.point, None)
+        self.assertEqual(s2.location.range_.start.line, 165)
+        self.assertEqual(s2.location.range_.start.column, 18)
+        self.assertEqual(s2.location.range_.end.line, 165)
+        self.assertEqual(s2.location.range_.end.column, 21)
+
+        # s3 comes from the next entry in the input file, which is the first
+        # "event" in the trace:
+        #                  {'extended_message': "Variable 'dict' initialized to a null pointer value",
+        #                   'kind': 'event',
+        #                   'location': {'col': 18,
+        #                                'file': 0,
+        #                                'line': 165},
+        #                   'message': "Variable 'dict' initialized to a null pointer value",
+        #                   'ranges': [[{'col': 18,
+        #                                'file': 0,
+        #                                'line': 165},
+        #                               {'col': 21,
+        #                                'file': 0,
+        #                                'line': 165}]]},
+        s3 = trace2.states[3]
+        # The importer uses the 'location' point for the event, and hence
+        # is treated as a different location.  However, as an event, it is
+        # always given its own state in the imported data:
+        self.assertEqual(s3.location.point.line, 165)
+        self.assertEqual(s3.location.point.column, 18)
+        self.assertEqual(s3.notes.text,
+                         "Variable 'dict' initialized to a null pointer value")
+        self.assertEqual(s3.location.range_, None)
+
+        # The next entry in the input file is another kind == 'control':
+        #                  {'edges': [{'end': [{'col': 2,
+        #                                       'file': 0,
+        #                                       'line': 171},
+        #                                      {'col': 2,
+        #                                       'file': 0,
+        #                                       'line': 171}],
+        #                              'start': [{'col': 18,
+        #                                         'file': 0,
+        #                                         'line': 165},
+        #                                        {'col': 21,
+        #                                         'file': 0,
+        #                                         'line': 165}]}],
+        #                   'kind': 'control'},
+        # The "start" is range-based, whereas the previous event was
+        # handled as a point, so the importer will treat it as two
+        # different locations (s3 and s4):
+        s4 = trace2.states[4]
+        self.assertEqual(s4.location.point, None)
+        self.assertEqual(s4.location.range_.start.line, 165)
+        self.assertEqual(s4.location.range_.start.column, 18)
+        self.assertEqual(s4.location.range_.end.line, 165)
+        self.assertEqual(s4.location.range_.end.column, 21)
+
+        s5 = trace2.states[5]
+        self.assertEqual(s5.location.point.line, 171)
+        self.assertEqual(s5.location.point.column, 2)
+        self.assertEqual(s5.location.range_, None)
+
+        # etc
+
+if __name__ == '__main__':
+    unittest.main()

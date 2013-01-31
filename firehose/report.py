@@ -260,7 +260,7 @@ class Failure(Result):
     @classmethod
     def from_xml(cls, node):
         location_node = node.find('location')
-        if location_node:
+        if location_node is not None:
             location = Location.from_xml(location_node)
         else:
             location = None
@@ -558,8 +558,9 @@ class Notes(object):
         return 'Notes(text=%r)' % (self.text, )
 
     def __eq__(self, other):
-        if self.text == other.text:
-            return True
+        if isinstance(other, Notes):
+            if self.text == other.text:
+                return True
 
     def accept(self, visitor):
         visitor.visit_notes(self)
@@ -641,16 +642,20 @@ class State(object):
         self.notes.accept(visitor)
 
 class Location(object):
-    __slots__ = ('file', 'function', 'point', )
+    __slots__ = ('file', 'function', 'point', 'range_', )
 
-    def __init__(self, file, function, point):
+    def __init__(self, file, function, point=None, range_=None):
         assert isinstance(file, File)
         if function is not None:
             assert isinstance(function, Function)
-        assert isinstance(point, Point)
+        if point is not None:
+            assert isinstance(point, Point)
+        if range_ is not None:
+            assert isinstance(range_, Range)
         self.file = file
         self.function = function
         self.point = point
+        self.range_ = range_
 
     @classmethod
     def from_xml(cls, node):
@@ -660,41 +665,67 @@ class Location(object):
             function = Function.from_xml(function_node)
         else:
             function = None
-        point = Point.from_xml(node.find('point'))
-        return Location(file, function, point)
+        point_node = node.find('point')
+        if point_node is not None:
+            point = Point.from_xml(point_node)
+        else:
+            point = None
+        range_node = node.find('range')
+        if range_node is not None:
+            range_ = Range.from_xml(range_node)
+        else:
+            range_ = None
+        return Location(file, function, point, range_)
 
     def to_xml(self):
         node = ET.Element('location')
         node.append(self.file.to_xml())
         if self.function is not None:
             node.append(self.function.to_xml())
-        node.append(self.point.to_xml())
+        if self.point is not None:
+            node.append(self.point.to_xml())
+        if self.range_ is not None:
+            node.append(self.range_.to_xml())
         return node
 
     def __repr__(self):
-        return ('Location(file=%r, function=%r, point=%r)' %
-                (self.file, self.function, self.point))
+        return ('Location(file=%r, function=%r, point=%r, range_=%r)' %
+                (self.file, self.function, self.point, self.range_))
 
     def __eq__(self, other):
-        if self.file == other.file:
-            if self.function == other.function:
-                if self.point == other.point:
-                    return True
+        if isinstance(other, Location):
+            if self.file == other.file:
+                if self.function == other.function:
+                    if self.point == other.point:
+                        if self.range_ == other.range_:
+                            return True
+
+    def __ne__(self, other):
+        return not (self == other)
 
     def accept(self, visitor):
         visitor.visit_location(self)
         self.file.accept(visitor)
         if self.function:
             self.function.accept(visitor)
-        self.point.accept(visitor)
+        if self.point:
+            self.point.accept(visitor)
+        if self.range_:
+            self.range_.accept(visitor)
 
     @property
     def line(self):
-        return self.point.line
+        if self.point is not None:
+            return self.point.line
+        if self.range_ is not None:
+            return self.range_.start.line
 
     @property
     def column(self):
-        return self.point.column
+        if self.point is not None:
+            return self.point.column
+        if self.range_ is not None:
+            return self.range_.start.column
 
 class File(object):
     __slots__ = ('givenpath', 'abspath', 'hash_')
@@ -831,15 +862,54 @@ class Point(object):
                 (self.line, self.column))
 
     def __eq__(self, other):
-        if self.line == other.line:
-            if self.column == other.column:
-                return True
+        if isinstance(other, Point):
+            if self.line == other.line:
+                if self.column == other.column:
+                    return True
 
     def __ne__(self, other):
         return not self == other
 
     def accept(self, visitor):
         visitor.visit_point(self)
+
+class Range(object):
+    __slots__ = ('start', 'end', )
+
+    def __init__(self, start, end):
+        assert isinstance(start, Point)
+        assert isinstance(end, Point)
+        self.start = start
+        self.end = end
+
+    @classmethod
+    def from_xml(cls, node):
+        children = list(node)
+        start = Point.from_xml(children[0])
+        end = Point.from_xml(children[1])
+        result = Range(start, end)
+        return result
+
+    def to_xml(self):
+        node = ET.Element('range')
+        node.append(self.start.to_xml())
+        node.append(self.end.to_xml())
+        return node
+
+    def __repr__(self):
+        return ('Range(start=%r, end=%r)' %
+                (self.start, self.end))
+
+    def __eq__(self, other):
+        if isinstance(other, Range):
+            if self.start == other.start:
+                if self.end == other.end:
+                    return True
+
+    def accept(self, visitor):
+        visitor.visit_range(self)
+        self.start.accept(visitor)
+        self.end.accept(visitor)
 
 #
 # Traversal of the report structure
@@ -886,6 +956,9 @@ class Visitor:
         pass
 
     def visit_point(self, point):
+        pass
+
+    def visit_range(self, range_):
         pass
 
 def main():

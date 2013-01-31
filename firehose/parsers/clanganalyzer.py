@@ -26,7 +26,7 @@ import plistlib
 from pprint import pprint
 import sys
 
-from firehose.report import Message, Function, Point, \
+from firehose.report import Message, Function, Point, Range, \
     File, Location, Generator, Metadata, Analysis, Issue, Sut, Trace, \
     State, Notes
 
@@ -95,38 +95,109 @@ def parse_plist(pathOrFile, analyzerversion=None, sut=None, file_=None, stats=No
 
     return analysis
 
+def make_point_from_plist_point(loc):
+    # point:
+    #   e.g. {'col': 2, 'file': 0, 'line': 130}
+    return Point(int(loc.line),
+                 int(loc.col))
+
+def make_location_from_point(files, loc):
+    # loc:
+    #   e.g. {'col': 2, 'file': 0, 'line': 130}
+    location = Location(file=File(givenpath=files[loc.file],
+                                  abspath=None),
+
+                        # FIXME: doesn't tell us function name
+                        # TODO: can we patch this upstream?
+                        function=Function(''),
+
+                        point=make_point_from_plist_point(loc))
+    return location
+
+def make_location_from_range(files, range_):
+    # range_:
+    #    e.g.:
+    #     [{'col': 18, 'file': 0, 'line': 165},
+    #      {'col': 21, 'file': 0, 'line': 165}]
+    assert len(range_) == 2
+    start = range_[0]
+    end = range_[1]
+    assert start['file'] == end['file']
+
+    if start == end:
+        point = make_point_from_plist_point(start)
+        range_ = None
+    else:
+        point = None
+        range_ = Range(start=make_point_from_plist_point(start),
+                       end=make_point_from_plist_point(end))
+
+    location = Location(file=File(givenpath=files[start['file']],
+                                  abspath=None),
+
+                        # FIXME: doesn't tell us function name
+                        # TODO: can we patch this upstream?
+                        function=Function(''),
+
+                        point=point,
+                        range_=range_)
+
+    return location
+
 def make_trace(files, path):
     """
     Construct a Trace instance from the .plist's 'path' list
     """
     trace = Trace([])
+    lastlocation = None
     for node in path:
-        # e.g.:
-        #  {'extended_message': "Value stored to 'ret' is never read",
-        #   'kind': 'event',
-        #   'location': {'col': 2, 'file': 0, 'line': 130},
-        #   'message': "Value stored to 'ret' is never read",
-        #   'ranges': [[{'col': 8, 'file': 0, 'line': 130},
-        #               {'col': 29, 'file': 0, 'line': 130}]]}
+        if 0:
+            pprint(node)
 
-        # TODO: we're not yet handling the following:
-        #   node['extended_message']
-        #   node['kind']
-        #   node['ranges']
+        kind = node['kind']
 
-        loc = node['location']
-        location = Location(file=File(givenpath=files[loc.file],
-                                      abspath=None),
+        if kind == 'event':
+            # e.g.:
+            #  {'extended_message': "Value stored to 'ret' is never read",
+            #   'kind': 'event',
+            #   'location': {'col': 2, 'file': 0, 'line': 130},
+            #   'message': "Value stored to 'ret' is never read",
+            #   'ranges': [[{'col': 8, 'file': 0, 'line': 130},
+            #               {'col': 29, 'file': 0, 'line': 130}]]}
 
-                            # FIXME: doesn't tell us function name
-                            # TODO: can we patch this upstream?
-                            function=Function(''),
+            # TODO: we're not yet handling the following:
+            #   node['extended_message']
+            #   node['ranges']
 
-                            point=Point(int(loc.line),
-                                        int(loc.col)))
+            loc = node['location']
+            location = make_location_from_point(files, loc)
 
-        notes = Notes(node['message'])
-        trace.add_state(State(location, notes))
+            notes = Notes(node['message'])
+            trace.add_state(State(location, notes))
+
+            lastlocation = location
+
+        elif kind == 'control':
+            # e.g.:
+            #  {'edges': [{'end': [{'col': 9, 'file': 0, 'line': 161},
+            #                      {'col': 9, 'file': 0, 'line': 161}],
+            #              'start': [{'col': 2, 'file': 0, 'line': 161},
+            #                        {'col': 2, 'file': 0, 'line': 161}]}],
+            #   'kind': 'control'}
+            edges = node['edges']
+            for edge in edges:
+                edge_start = edge.start
+                edge_end = edge.end
+
+                startloc = make_location_from_range(files, edge_start)
+                endloc = make_location_from_range(files, edge_end)
+
+                if startloc != lastlocation:
+                    trace.add_state(State(startloc, None))
+                trace.add_state(State(endloc, None))
+                lastlocation = endloc
+        else:
+            raise ValueError('unknown kind: %r' % kind)
     return trace
 
 analyzerversion = 'clang-3.0-14.fc17.x86_64' # FIXME
@@ -138,9 +209,9 @@ if __name__ == '__main__':
         path = sys.argv[1]
         if path.endswith('.plist'):
             analysis = parse_plist(path, analyzerversion)
-            print(analysis.to_xml().write(sys.stdout))
-            print
+            analysis.to_xml().write(sys.stdout)
+            sys.stdout.write('\n')
         else:
             for result in parse_scandir(path, analyzerversion):
-                print(result.to_xml().write(sys.stdout))
-                print
+                result.to_xml().write(sys.stdout)
+                sys.stdout.write('\n')
