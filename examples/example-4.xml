@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<analysis>
+  <metadata>
+    <generator name="cpychecker" version="0.11"/>
+    <sut>
+      <source-rpm name="python-ethtool" version="0.7" release="4.fc19" build-arch="x86_64"/>
+    </sut>
+    <file given-path="wspy_register.c">
+      <hash alg="sha1" hexdigest="6ba29daa94d64b48071e299a79f2a00dcd99eeb1"/>
+    </file>
+    <stats wall-clock-time="5"/>
+  </metadata>
+
+  <results>
+    <!-- Example of an analysis failure where we have a traceback
+         and the location of the code that broke the checker: -->
+    <failure>
+      <location>
+        <file given-path="wspy_register.c"/>
+        <function name="register_all_py_protocols_func"/>
+        <point line="159" column="42"/>
+      </location>
+      <stdout></stdout>
+      <stderr>wspy_register.c: In function 'register_all_py_protocols_func':
+wspy_register.c:159:42: error: Unhandled Python exception raised calling 'execute' method
+Traceback (most recent call last):
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/__init__.py", line 75, in execute
+    self._check_refcounts(fun)
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/__init__.py", line 79, in _check_refcounts
+    self.show_possible_null_derefs)
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/refcounts.py", line 3668, in check_refcounts
+    limits=limits)
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2929, in iter_traces
+    depth + 1):
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2929, in iter_traces
+    depth + 1):
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2929, in iter_traces
+    depth + 1):
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2929, in iter_traces
+    depth + 1):
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2929, in iter_traces
+    depth + 1):
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2929, in iter_traces
+    depth + 1):
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2929, in iter_traces
+    depth + 1):
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2929, in iter_traces
+    depth + 1):
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2929, in iter_traces
+    depth + 1):
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2929, in iter_traces
+    depth + 1):
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2929, in iter_traces
+    depth + 1):
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2929, in iter_traces
+    depth + 1):
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2929, in iter_traces
+    depth + 1):
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2929, in iter_traces
+    depth + 1):
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2929, in iter_traces
+    depth + 1):
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2929, in iter_traces
+    depth + 1):
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2929, in iter_traces
+    depth + 1):
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2929, in iter_traces
+    depth + 1):
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2929, in iter_traces
+    depth + 1):
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2929, in iter_traces
+    depth + 1):
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2929, in iter_traces
+    depth + 1):
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2929, in iter_traces
+    depth + 1):
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2929, in iter_traces
+    depth + 1):
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2929, in iter_traces
+    depth + 1):
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2929, in iter_traces
+    depth + 1):
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2929, in iter_traces
+    depth + 1):
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2929, in iter_traces
+    depth + 1):
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2929, in iter_traces
+    depth + 1):
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2929, in iter_traces
+    depth + 1):
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2893, in iter_traces
+    transitions = curstate.get_transitions()
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2013, in get_transitions
+    return self._get_transitions_for_stmt(stmt)
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2029, in _get_transitions_for_stmt
+    return self._get_transitions_for_GimpleCall(stmt)
+  File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2212, in _get_transitions_for_GimpleCall
+    raise NotImplementedError('not yet implemented: %s' % fnname)
+NotImplementedError: not yet implemented: PySequence_Check
+</stderr>
+      <returncode>0</returncode>
+    </failure>
+  </results>
+</analysis>

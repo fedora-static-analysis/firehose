@@ -7,7 +7,10 @@
       <ref name="metadata-element"/>
       <element name="results">
         <zeroOrMore>
-          <ref name="issue-element"/>
+          <choice>
+            <ref name="issue-element"/>
+            <ref name="failure-element"/>
+          </choice>
         </zeroOrMore>
       </element>
     </element>
@@ -110,6 +113,48 @@
           </oneOrMore>
         </element>
       </optional>
+    </element>
+  </define>
+
+  <!--
+      A report about a failed analysis.
+
+      If any of these are present then we don't have full coverage.
+
+      For some analyzers this is an all-or-nothing affair: we either
+      get issues reported, or a failure happens (e.g. a segfault of the
+      analysis tool).
+
+      Other analyzers may be more fine-grained: able to report some issues,
+      but choke on some subset of the code under analysis.  For example
+      cpychecker runs once per function, and any unhandled Python exceptions
+      only affect one function.
+  -->
+  <define name="failure-element">
+    <element name="failure">
+      <optional>
+        <!--
+           Some analysis tools may be able to annotate a failure report by
+           providing the location *within the software-under-test* that
+           broke them.
+
+           For example, gcc-python-plugin has a gcc.set_location() method
+           which can be used by a code analysis script to record what
+           location is being analyzed, so that if unhandled Python exception
+           happens, it is reported at that location.  This is invaluable
+           when debugging analysis failures.
+        -->
+        <ref name="location-element"/>
+      </optional>
+      <element name="stdout">
+        <text/>
+      </element>
+      <element name="stderr">
+        <text/>
+      </element>
+      <element name="returncode">
+        <data type="integer"/>
+      </element>
     </element>
   </define>
 

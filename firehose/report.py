@@ -34,7 +34,7 @@ class Analysis(object):
         assert isinstance(metadata, Metadata)
         assert isinstance(results, list)
         for result in results:
-            assert isinstance(result, Issue)
+            assert isinstance(result, Result)
 
         self.metadata = metadata
         self.results = results
@@ -47,8 +47,11 @@ class Analysis(object):
         metadata = Metadata.from_xml(root.find('metadata'))
         results_node = root.find('results')
         results = []
-        for result_node in results_node.findall('issue'):
-            results.append(Issue.from_xml(result_node))
+        for result_node in results_node:
+            if result_node.tag == 'issue':
+                results.append(Issue.from_xml(result_node))
+            elif result_node.tag == 'failure':
+                results.append(Failure.from_xml(result_node))
         return Analysis(metadata, results)
 
     def to_xml(self):
@@ -110,7 +113,10 @@ class Analysis(object):
         visitor = FixupFiles(relativedir, hashalg)
         self.accept(visitor)
 
-class Issue(object):
+class Result(object):
+    pass
+
+class Issue(Result):
     __slots__ = ('cwe',
                  'testid',
                  'location',
@@ -239,6 +245,76 @@ class Issue(object):
     def get_cwe_url(self):
         if self.cwe is not None:
             return 'http://cwe.mitre.org/data/definitions/%i.html' % self.cwe
+
+class Failure(Result):
+    __slots__ = ('location', 'stdout', 'stderr', 'returncode')
+
+    def __init__(self, location, stdout, stderr, returncode):
+        if location is not None:
+            assert isinstance(location, Location)
+        self.location = location
+        self.stdout = stdout
+        self.stderr = stderr
+        self.returncode = returncode
+
+    @classmethod
+    def from_xml(cls, node):
+        location_node = node.find('location')
+        if location_node:
+            location = Location.from_xml(location_node)
+        else:
+            location = None
+
+        stdout_node = node.find('stdout')
+        stdout = stdout_node.text
+        if stdout is None:
+            stdout = ''
+
+        stderr_node = node.find('stderr')
+        stderr = stderr_node.text
+        if stderr is None:
+            stderr = ''
+
+        returncode_node = node.find('returncode')
+        returncode = int(returncode_node.text)
+
+        return Failure(location, stdout, stderr, returncode)
+
+    def to_xml(self):
+        node = ET.Element('failure')
+
+        if self.location is not None:
+            node.append(self.location.to_xml())
+
+        stdout_node = ET.Element('stdout')
+        stdout_node.text = self.stdout
+        node.append(stdout_node)
+
+        stderr_node = ET.Element('stderr')
+        stderr_node.text = self.stderr
+        node.append(stderr_node)
+
+        returncode_node = ET.Element('returncode')
+        returncode_node.text = str(self.returncode)
+        node.append(returncode_node)
+
+        return node
+
+    def __repr__(self):
+        return ('Failure(location=%r, stdout=%r, stderr=%r, returncode=%r)'
+                % (self.location, self.stdout, self.stderr, self.returncode))
+
+    def __eq__(self, other):
+        if self.location == other.location:
+            if self.stdout == other.stdout:
+                if self.stderr == other.stderr:
+                    if self.returncode == other.returncode:
+                        return True
+
+    def accept(self, visitor):
+        visitor.visit_failure(self)
+        if self.location:
+            self.location.accept(visitor)
 
 class Metadata(object):
     __slots__ = ('generator', 'sut', 'file_', 'stats')
@@ -776,6 +852,9 @@ class Visitor:
     def visit_warning(self, warning):
         pass
 
+    def visit_failure(self, failure):
+        pass
+
     def visit_metadata(self, metadata):
         pass
 
@@ -815,7 +894,8 @@ def main():
         with open(filename) as f:
             r = Analysis.from_xml(f)
             for w in r.results:
-                w.write_as_gcc_output(sys.stderr)
+                if isinstance(w, Issue):
+                    w.write_as_gcc_output(sys.stderr)
             sys.stderr.write('  XML: %s\n' % r.to_xml_str())
 
 if __name__ == '__main__':

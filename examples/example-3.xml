@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<analysis>
+  <metadata>
+    <generator name="cpychecker" version="0.11"/>
+    <sut>
+      <source-rpm name="python-ethtool" version="0.7" release="4.fc19" build-arch="x86_64"/>
+    </sut>
+    <file given-path="examples/python-src-example.c">
+      <hash alg="sha1" hexdigest="6ba29daa94d64b48071e299a79f2a00dcd99eeb1"/>
+    </file>
+    <stats wall-clock-time="5"/>
+  </metadata>
+
+  <results>
+    <!-- Example of an analysis failure where we have nothing except the
+         knowledge of a segfault: -->
+    <failure>
+      <stdout></stdout>
+      <stderr></stderr>
+      <returncode>-11</returncode>
+    </failure>
+  </results>
+</analysis>

@@ -23,7 +23,8 @@ import tempfile
 import unittest
 
 from firehose.report import Analysis, Issue, Metadata, Generator, SourceRpm, \
-    Location, File, Function, Point, Message, Notes, Trace, State, Stats
+    Location, File, Function, Point, Message, Notes, Trace, State, Stats, \
+    Failure
 
 class AnalysisTests(unittest.TestCase):
     def make_simple_analysis(self):
@@ -82,6 +83,19 @@ class AnalysisTests(unittest.TestCase):
                      )
         return a, a.results[0]
 
+    def make_failed_analysis(self):
+        a = Analysis(metadata=Metadata(generator=Generator(name='yet-another-checker'),
+                                       sut=None,
+                                       file_=None,
+                                       stats=None),
+                     results=[Failure(location=Location(file=File('foo.c', None),
+                                                        function=Function('something_complicated'),
+                                                        point=Point(10, 15)),
+                                      stdout='got here',
+                                      stderr='out of memory',
+                                      returncode=-9)]) # (killed)
+        return a, a.results[0]
+
     def test_creating_simple_analysis(self):
         a, w = self.make_simple_analysis()
         self.assertEqual(a.metadata.generator.name, 'cpychecker')
@@ -132,6 +146,19 @@ class AnalysisTests(unittest.TestCase):
         self.assertEqual(s0.location.column, 12)
         self.assertEqual(s0.notes.text, 'first we do this')
 
+
+    def test_making_failed_analysis(self):
+        a, f = self.make_failed_analysis()
+
+        self.assertIsInstance(f, Failure)
+        self.assertEqual(f.location.file.givenpath, 'foo.c')
+        self.assertEqual(f.location.function.name, 'something_complicated')
+        self.assertEqual(f.location.line, 10)
+        self.assertEqual(f.location.column, 15)
+        self.assertEqual(f.stdout, 'got here')
+        self.assertEqual(f.stderr, 'out of memory')
+        self.assertEqual(f.returncode, -9)
+
     def test_from_xml(self):
         num_analyses = 0
         for filename in sorted(glob.glob('examples/example-*.xml')):
@@ -139,8 +166,9 @@ class AnalysisTests(unittest.TestCase):
                 r = Analysis.from_xml(f)
                 num_analyses += 1
         # Ensure that all of the reports were indeed parsed:
-        self.assertEqual(num_analyses, 2)
+        self.assertEqual(num_analyses, 4)
 
+    def test_example_2(self):
         # Verify that the parser works:
         with open('examples/example-2.xml') as f:
             a = Analysis.from_xml(f)
@@ -154,6 +182,7 @@ class AnalysisTests(unittest.TestCase):
 
             self.assertEqual(len(a.results), 1)
             w = a.results[0]
+            self.assertIsInstance(w, Issue)
             self.assertEqual(w.cwe, 401)
             self.assertEqual(w.testid, 'refcount-too-high')
             self.assertEqual(w.location.file.givenpath, 'examples/python-src-example.c')
@@ -180,6 +209,43 @@ class AnalysisTests(unittest.TestCase):
             self.assertEqual(s0.location.column, 14)
             self.assertEqual(s0.notes.text,
                 'PyLongObject allocated at:         item = PyLong_FromLong(random());')
+
+    def test_example_3(self):
+        # Verify that the parser works:
+        with open('examples/example-3.xml') as f:
+            a = Analysis.from_xml(f)
+            self.assertEqual(a.metadata.generator.name, 'cpychecker')
+            self.assertEqual(a.metadata.generator.version, '0.11')
+            self.assertIsInstance(a.metadata.sut, SourceRpm)
+            self.assertEqual(a.metadata.sut.name, 'python-ethtool')
+            self.assertEqual(a.metadata.sut.version, '0.7')
+            self.assertEqual(a.metadata.sut.release, '4.fc19')
+            self.assertEqual(a.metadata.sut.buildarch, 'x86_64')
+
+            self.assertEqual(len(a.results), 1)
+            w = a.results[0]
+            self.assertIsInstance(w, Failure)
+            self.assertEqual(w.stdout, '')
+            self.assertEqual(w.stderr, '')
+            self.assertEqual(w.returncode, -11)
+
+    def test_example_4(self):
+        with open('examples/example-4.xml') as f:
+            a = Analysis.from_xml(f)
+            self.assertEqual(a.metadata.generator.name, 'cpychecker')
+            self.assertEqual(a.metadata.generator.version, '0.11')
+            self.assertIsInstance(a.metadata.sut, SourceRpm)
+            self.assertEqual(a.metadata.sut.name, 'python-ethtool')
+            self.assertEqual(a.metadata.sut.version, '0.7')
+            self.assertEqual(a.metadata.sut.release, '4.fc19')
+            self.assertEqual(a.metadata.sut.buildarch, 'x86_64')
+
+            self.assertEqual(len(a.results), 1)
+            w = a.results[0]
+            self.assertIsInstance(w, Failure)
+            self.assertEqual(w.stdout, '')
+            self.assert_(w.stderr.startswith('wspy_register.c: In function \'register_all_py_protocols_func\':\n'))
+            self.assertEqual(w.returncode, 0)
 
     def test_to_xml(self):
         def validate(xmlstr):
@@ -222,10 +288,12 @@ class AnalysisTests(unittest.TestCase):
         self.assertEqual(a3.results, a4.results)
         self.assertEqual(a3, a4)
 
-        # TODO: Does it validate?
-        # r.write_xml('foo.xml')
-        # p = Popen(['xmllint', '--relaxng', 'firehose.rng', 'foo.xml'])
-        # p.communicate()
+        a5, f = self.make_failed_analysis()
+        a6 = roundtrip_through_xml(a5)
+
+        self.assertEqual(a5.metadata, a6.metadata)
+        self.assertEqual(a5.results, a6.results)
+        self.assertEqual(a5, a6)
 
     def test_repr(self):
         # Verify that the various __repr__ methods are sane:
@@ -236,6 +304,10 @@ class AnalysisTests(unittest.TestCase):
         a, w = self.make_complex_analysis()
         self.assertIn('Analysis(', repr(a))
         self.assertIn('Issue(', repr(a))
+
+        a, f = self.make_failed_analysis()
+        self.assertIn('Analysis(', repr(a))
+        self.assertIn('Failure(', repr(a))
 
     def test_cwe(self):
         # Verify that the CWE methods are sane:
