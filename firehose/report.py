@@ -417,6 +417,9 @@ class Generator(object):
             if self.version == other.version:
                 return True
 
+    def __hash__(self):
+        return hash(self.name) ^ hash(self.version)
+
     def accept(self, visitor):
         visitor.visit_generator(self)
 
@@ -773,6 +776,9 @@ class File(object):
                 if self.hash_ == other.hash_:
                     return True
 
+    def __hash__(self):
+        return hash(self.givenpath) ^ hash(self.abspath) ^ hash(self.hash_)
+
     def accept(self, visitor):
         visitor.visit_file(self)
 
@@ -806,6 +812,9 @@ class Hash(object):
         if self.alg == other.alg:
             if self.hexdigest == other.hexdigest:
                 return True
+
+    def __hash__(self):
+        return hash(self.alg) ^ hash(self.hexdigest)
 
 class Function(object):
     __slots__ = ('name', )
