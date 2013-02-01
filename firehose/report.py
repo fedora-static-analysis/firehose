@@ -639,7 +639,8 @@ class State(object):
     def accept(self, visitor):
         visitor.visit_state(self)
         self.location.accept(visitor)
-        self.notes.accept(visitor)
+        if self.notes:
+            self.notes.accept(visitor)
 
 class Location(object):
     __slots__ = ('file', 'function', 'point', 'range_', )
