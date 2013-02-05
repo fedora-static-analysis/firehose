@@ -1,5 +1,7 @@
 Motivation: http://lists.fedoraproject.org/pipermail/devel/2012-December/175232.html
 
+Mailing list: https://admin.fedoraproject.org/mailman/listinfo/firehose-devel
+
 I want to slurp the results from static code analysis into a database,
 which means coercing all of the results into some common interchange format,
 codenamed "firehose" (which could also be the name of the database).
