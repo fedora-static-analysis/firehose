@@ -315,6 +315,15 @@ class AnalysisTests(unittest.TestCase):
         self.assertIn('Analysis(', repr(a))
         self.assertIn('Failure(', repr(a))
 
+    def test_hash(self):
+        def compare_hashes(creator):
+            a1, w1 = creator()
+            a2, w2 = creator()
+            self.assertEqual(hash(a1), hash(a2))
+        compare_hashes(self.make_simple_analysis)
+        compare_hashes(self.make_complex_analysis)
+        compare_hashes(self.make_failed_analysis)
+
     def test_cwe(self):
         # Verify that the CWE methods are sane:
         a, w = self.make_complex_analysis()

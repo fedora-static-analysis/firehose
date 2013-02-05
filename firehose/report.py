@@ -80,6 +80,10 @@ class Analysis(object):
             if self.results == other.results:
                 return True
 
+    def __hash__(self):
+        # (self.results is a list and is thus not hashable)
+        return hash(self.metadata)
+
     def accept(self, visitor):
         visitor.visit_analysis(self)
         self.metadata.accept(visitor)
@@ -229,6 +233,11 @@ class Issue(Result):
                             if self.trace == other.trace:
                                 return True
 
+    def __hash__(self):
+        return (hash(self.cwe) ^ hash(self.testid)
+                ^ hash(self.location) ^ hash(self.message)
+                ^ hash(self.notes) ^ hash(self.trace))
+
     def accept(self, visitor):
         visitor.visit_warning(self)
         self.location.accept(visitor)
@@ -311,6 +320,10 @@ class Failure(Result):
                     if self.returncode == other.returncode:
                         return True
 
+    def __hash__(self):
+        return (hash(self.location) ^ hash(self.stdout)
+                ^ hash(self.stderr) ^ hash(self.returncode))
+
     def accept(self, visitor):
         visitor.visit_failure(self)
         if self.location:
@@ -374,6 +387,10 @@ class Metadata(object):
                 if self.file_ == other.file_:
                     if self.stats == other.stats:
                         return True
+
+    def __hash__(self):
+        return (hash(self.generator) ^ hash(self.sut)
+                ^ hash(self.file_) ^ hash(self.stats))
 
     def accept(self, visitor):
         visitor.visit_metadata(self)
@@ -485,6 +502,10 @@ class SourceRpm(Sut):
                     if self.buildarch == other.buildarch:
                         return True
 
+    def __hash__(self):
+        return (hash(self.name) ^ hash(self.version)
+                ^ hash(self.release) ^ hash(self.buildarch))
+
 class Stats(object):
     __slots__ = ('wallclocktime', )
 
@@ -506,6 +527,9 @@ class Stats(object):
     def __eq__(self, other):
         if self.wallclocktime == other.wallclocktime:
             return True
+
+    def __hash__(self):
+        return hash(self.wallclocktime)
 
     def accept(self, visitor):
         visitor.visit_stats(self)
@@ -536,6 +560,9 @@ class Message(object):
     def __ne__(self, other):
         return self.text != other.text
 
+    def __hash__(self):
+        return hash(self.text)
+
     def accept(self, visitor):
         visitor.visit_message(self)
 
@@ -564,6 +591,9 @@ class Notes(object):
         if isinstance(other, Notes):
             if self.text == other.text:
                 return True
+
+    def __hash__(self):
+        return hash(self.text)
 
     def accept(self, visitor):
         visitor.visit_notes(self)
@@ -598,6 +628,12 @@ class Trace(object):
     def __eq__(self, other):
         if self.states == other.states:
             return True
+
+    def __hash__(self):
+        result = 0
+        for state in self.states:
+            result ^= hash(state)
+        return result
 
     def accept(self, visitor):
         visitor.visit_notes(self)
@@ -638,6 +674,9 @@ class State(object):
         if self.location == other.location:
             if self.notes == other.notes:
                 return True
+
+    def __hash__(self):
+        return hash(self.location) ^ hash(self.notes)
 
     def accept(self, visitor):
         visitor.visit_state(self)
@@ -706,6 +745,10 @@ class Location(object):
 
     def __ne__(self, other):
         return not (self == other)
+
+    def __hash__(self):
+        return (hash(self.file) ^ hash(self.function)
+                ^ hash(self.point) ^ hash(self.range_))
 
     def accept(self, visitor):
         visitor.visit_location(self)
@@ -842,6 +885,9 @@ class Function(object):
     def __ne__(self, other):
         return self.name != other.name
 
+    def __hash__(self):
+        return hash(self.name)
+
     def accept(self, visitor):
         visitor.visit_function(self)
 
@@ -880,6 +926,9 @@ class Point(object):
     def __ne__(self, other):
         return not self == other
 
+    def __hash__(self):
+        return hash(self.line) ^ hash(self.column)
+
     def accept(self, visitor):
         visitor.visit_point(self)
 
@@ -915,6 +964,9 @@ class Range(object):
             if self.start == other.start:
                 if self.end == other.end:
                     return True
+
+    def __hash__(self):
+        return hash(self.start) ^ hash(self.end)
 
     def accept(self, visitor):
         visitor.visit_range(self)
