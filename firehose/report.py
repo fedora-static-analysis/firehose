@@ -126,14 +126,16 @@ class Issue(Result):
                  'location',
                  'message',
                  'notes',
-                 'trace')
+                 'trace',
+                 'severity',)
     def __init__(self,
                  cwe,
                  testid,
                  location,
                  message,
                  notes,
-                 trace):
+                 trace,
+                 severity=None):
         if cwe is not None:
             assert isinstance(cwe, int)
         if testid is not None:
@@ -144,12 +146,15 @@ class Issue(Result):
             assert isinstance(notes, Notes)
         if trace:
             assert isinstance(trace, Trace)
+        if severity is not None:
+            assert isinstance(severity, str)
         self.cwe = cwe
         self.testid = testid
         self.location = location
         self.message = message
         self.notes = notes
         self.trace = trace
+        self.severity = severity
 
     @classmethod
     def from_xml(cls, node):
@@ -169,7 +174,8 @@ class Issue(Result):
             trace = Trace.from_xml(trace_node)
         else:
             trace = None
-        return Issue(cwe, testid, location, message, notes, trace)
+        severity = node.get('severity')
+        return Issue(cwe, testid, location, message, notes, trace, severity)
 
     def to_xml(self):
         node = ET.Element('issue')
@@ -183,6 +189,8 @@ class Issue(Result):
         node.append(self.location.to_xml())
         if self.trace:
             node.append(self.trace.to_xml())
+        if self.severity is not None:
+            node.set('severity', str(self.severity))
         return node
 
     def write_as_gcc_output(self, out):
@@ -221,8 +229,8 @@ class Issue(Result):
                            msg=notes.text if notes else '')
 
     def __repr__(self):
-        return ('Issue(cwe=%r, testid=%r, location=%r, message=%r, notes=%r, trace=%r)'
-                % (self.cwe, self.testid, self.location, self.message, self.notes, self.trace))
+        return ('Issue(cwe=%r, testid=%r, location=%r, message=%r, notes=%r, trace=%r, severity=%r)'
+                % (self.cwe, self.testid, self.location, self.message, self.notes, self.trace, self.severity))
 
     def __eq__(self, other):
         if self.cwe == other.cwe:
@@ -231,12 +239,13 @@ class Issue(Result):
                     if self.message == other.message:
                         if self.notes == other.notes:
                             if self.trace == other.trace:
-                                return True
+                                if self.severity == other.severity:
+                                    return True
 
     def __hash__(self):
         return (hash(self.cwe) ^ hash(self.testid)
                 ^ hash(self.location) ^ hash(self.message)
-                ^ hash(self.notes) ^ hash(self.trace))
+                ^ hash(self.notes) ^ hash(self.trace) ^ hash(self.severity))
 
     def accept(self, visitor):
         visitor.visit_warning(self)

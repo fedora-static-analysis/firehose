@@ -80,6 +80,21 @@
         <attribute name="test-id"/>
       </optional>
 
+      <optional>
+        <!--
+            Each static analysis tool potentially can report a "severity",
+            which may be of use for filtering.
+
+            The precise strings are likely to vary from tool to tool.
+            To avoid data-transfer issues, support storing it as an optional
+            freeform string here.
+
+            See:
+            http://lists.fedoraproject.org/pipermail/firehose-devel/2013-February/000001.html
+        -->
+        <attribute name="severity"/>
+      </optional>
+
       <!-- A message summarizing the problem -->
       <element name="message"><text/></element>
 

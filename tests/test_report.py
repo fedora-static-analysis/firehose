@@ -79,7 +79,8 @@ class AnalysisTests(unittest.TestCase):
                                                                          range_=Range(Point(10, 15),
                                                                                       Point(10, 25))),
                                                        notes=Notes('then it crashes here'))
-                                                 ]))
+                                                 ]),
+                                    severity='really bad'),
                               ]
                      )
         return a, a.results[0]
@@ -136,6 +137,7 @@ class AnalysisTests(unittest.TestCase):
         self.assertEqual(w.location.column, 15)
         self.assertEqual(w.message.text, 'something bad involving pointers')
         self.assertEqual(w.notes.text, 'here is some explanatory text')
+        self.assertEqual(w.severity, 'really bad')
 
         self.assertIsInstance(w.trace, Trace)
         self.assertEqual(len(w.trace.states), 3)
