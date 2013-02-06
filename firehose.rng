@@ -40,7 +40,6 @@
                 <!-- Report for a Debian source package -->
                 <attribute name="name"/>
                 <attribute name="version"/>
-                <attribute name="release"/>
                 <optional>
                   <!-- This entry is optional because Debian packages may be
                        `native' (e.g. no local version, since local and
