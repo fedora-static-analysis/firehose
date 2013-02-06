@@ -233,14 +233,10 @@ class Issue(Result):
                 % (self.cwe, self.testid, self.location, self.message, self.notes, self.trace, self.severity))
 
     def __eq__(self, other):
-        if self.cwe == other.cwe:
-            if self.testid == other.testid:
-                if self.location == other.location:
-                    if self.message == other.message:
-                        if self.notes == other.notes:
-                            if self.trace == other.trace:
-                                if self.severity == other.severity:
-                                    return True
+        for slot in self.__slots__:
+            if not (getattr(self, slot) == getattr(other, slot)):
+                return False
+        return True
 
     def __hash__(self):
         return (hash(self.cwe) ^ hash(self.testid)
