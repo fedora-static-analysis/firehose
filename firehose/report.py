@@ -283,18 +283,22 @@ class Failure(Result):
         else:
             location = None
 
-        stdout_node = node.find('stdout')
-        stdout = stdout_node.text
-        if stdout is None:
-            stdout = ''
+        def get_text_from_node(tag):
+            child_node = node.find(tag)
+            if child_node is not None:
+                result = child_node.text
+                if result is None:
+                    result = ''
+                return result
 
-        stderr_node = node.find('stderr')
-        stderr = stderr_node.text
-        if stderr is None:
-            stderr = ''
+        stdout = get_text_from_node('stdout')
+        stderr = get_text_from_node('stderr')
 
         returncode_node = node.find('returncode')
-        returncode = int(returncode_node.text)
+        if returncode_node is not None:
+            returncode = int(returncode_node.text)
+        else:
+            returncode = None
 
         return Failure(location, stdout, stderr, returncode)
 
@@ -304,17 +308,20 @@ class Failure(Result):
         if self.location is not None:
             node.append(self.location.to_xml())
 
-        stdout_node = ET.Element('stdout')
-        stdout_node.text = self.stdout
-        node.append(stdout_node)
+        if self.stdout is not None:
+            stdout_node = ET.Element('stdout')
+            stdout_node.text = self.stdout
+            node.append(stdout_node)
 
-        stderr_node = ET.Element('stderr')
-        stderr_node.text = self.stderr
-        node.append(stderr_node)
+        if self.stderr is not None:
+            stderr_node = ET.Element('stderr')
+            stderr_node.text = self.stderr
+            node.append(stderr_node)
 
-        returncode_node = ET.Element('returncode')
-        returncode_node.text = str(self.returncode)
-        node.append(returncode_node)
+        if self.returncode is not None:
+            returncode_node = ET.Element('returncode')
+            returncode_node.text = str(self.returncode)
+            node.append(returncode_node)
 
         return node
 

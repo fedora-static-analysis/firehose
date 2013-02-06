@@ -161,15 +161,21 @@
         -->
         <ref name="location-element"/>
       </optional>
-      <element name="stdout">
-        <text/>
-      </element>
-      <element name="stderr">
-        <text/>
-      </element>
-      <element name="returncode">
-        <data type="integer"/>
-      </element>
+      <optional>
+        <element name="stdout">
+          <text/>
+        </element>
+      </optional>
+      <optional>
+        <element name="stderr">
+          <text/>
+        </element>
+      </optional>
+      <optional>
+        <element name="returncode">
+          <data type="integer"/>
+        </element>
+      </optional>
     </element>
   </define>
 

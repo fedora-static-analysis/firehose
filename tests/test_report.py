@@ -174,7 +174,7 @@ class AnalysisTests(unittest.TestCase):
                 r = Analysis.from_xml(f)
                 num_analyses += 1
         # Ensure that all of the reports were indeed parsed:
-        self.assertEqual(num_analyses, 5)
+        self.assertEqual(num_analyses, 6)
 
     def test_example_2(self):
         # Verify that the parser works:
@@ -254,6 +254,21 @@ class AnalysisTests(unittest.TestCase):
             self.assertEqual(w.stdout, '')
             self.assert_(w.stderr.startswith('wspy_register.c: In function \'register_all_py_protocols_func\':\n'))
             self.assertEqual(w.returncode, 0)
+
+    def test_example_6(self):
+        with open('examples/example-6.xml') as f:
+            a = Analysis.from_xml(f)
+            self.assertEqual(a.metadata.generator.name, 'cpychecker')
+
+            self.assertEqual(len(a.results), 1)
+            w = a.results[0]
+            self.assertIsInstance(w, Failure)
+            self.assertEqual(w.stdout, None)
+            self.assertEqual(w.stderr,
+                             'this function is too complicated for the'
+                             ' reference-count checker to fully analyze:'
+                             ' not all paths were analyzed')
+            self.assertEqual(w.returncode, None)
 
     def test_to_xml(self):
         def validate(xmlstr):

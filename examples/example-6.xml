@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<analysis>
+  <metadata>
+    <generator name="cpychecker"/>
+  </metadata>
+  <results>
+    <!--
+       Example of a failure-to-analyze in which we have an error message
+       and a location, but the other failure fields (stdout, returncode)
+       wouldn't make sense and so are omitted.
+
+       The error message is a warning from cpychecker that the results
+       are only a partial analysis; it's not achieving full coverage.
+
+       (this was added to cpychecker in:
+          http://git.fedorahosted.org/cgit/gcc-python-plugin.git/commit/?h=firehose&id=1fbb678bb121099a8161031aae9e39c75e3faea7 )
+    -->
+    <failure>
+      <location>
+        <file given-path="tests/cpychecker/refcounts/combinatorial-explosion/input.c"/>
+        <function name="test_adding_module_objects"/>
+        <point column="1" line="31"/>
+      </location>
+      <stderr>this function is too complicated for the reference-count checker to fully analyze: not all paths were analyzed</stderr>
+    </failure>
+  </results>
+</analysis>
