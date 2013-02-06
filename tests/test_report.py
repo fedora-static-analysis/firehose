@@ -255,6 +255,25 @@ class AnalysisTests(unittest.TestCase):
             self.assert_(w.stderr.startswith('wspy_register.c: In function \'register_all_py_protocols_func\':\n'))
             self.assertEqual(w.returncode, 0)
 
+    def test_example_5(self):
+        # Ensure that we can load range information from XML
+        with open('examples/example-5.xml') as f:
+            a = Analysis.from_xml(f)
+            self.assertEqual(len(a.results), 1)
+
+            w = a.results[0]
+            self.assertIsInstance(w, Issue)
+            self.assertEqual(w.location.range_.start.line, 10)
+            self.assertEqual(w.location.range_.start.column, 9)
+            self.assertEqual(w.location.range_.end.line, 10)
+            self.assertEqual(w.location.range_.end.column, 44)
+
+            self.assertEqual(w.location.point, None)
+
+            # The line/column getters use the start:
+            self.assertEqual(w.location.line, 10)
+            self.assertEqual(w.location.column, 9)
+
     def test_example_6(self):
         with open('examples/example-6.xml') as f:
             a = Analysis.from_xml(f)
