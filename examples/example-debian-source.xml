@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<analysis>
+  <metadata>
+    <generator name="handmade" version="0.1"/>
+    <sut>
+      <debian-source name="python-ethtool" version="0.7"
+                     release="4.1+b1" build-arch="amd64"/>
+    </sut>
+  </metadata>
+
+  <results>
+      <!-- we check for results elsewhere, no need to populate this with
+           senseless error messages. -->
+  </results>
+</analysis>

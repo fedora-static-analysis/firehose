@@ -464,6 +464,9 @@ class Sut(object):
         srpm_node = node.find('source-rpm')
         if srpm_node is not None:
             return SourceRpm.from_xml(srpm_node)
+        dsc_node = node.find('debian-source')
+        if dsc_node is not None:
+            return DebianSource.from_xml(dsc_node)
         raise ValueError('unknown sut kind')
 
     def to_xml(self):
@@ -521,6 +524,48 @@ class SourceRpm(Sut):
     def __hash__(self):
         return (hash(self.name) ^ hash(self.version)
                 ^ hash(self.release) ^ hash(self.buildarch))
+
+
+class DebianSource(Sut):
+    __slots__ = ('name', 'version', 'release')
+
+    def __init__(self, name, version, release):
+        assert isinstance(name, str)
+        assert isinstance(version, str)
+        assert (isinstance(release, str) or release is None)
+
+        self.name = name
+        self.version = version
+        self.release = release
+
+    @classmethod
+    def from_xml(cls, node):
+        result = DebianSource(name=node.get('name'),
+                              version=node.get('version'),
+                              release=node.get('release'))
+        return result
+
+    def _to_xml_inner_node(self):
+        node = ET.Element('debian-source')
+        node.set('name', self.name)
+        node.set('version', self.version)
+        node.set('release', self.release)
+        return node
+
+    def __repr__(self):
+        return ('DebianSource(name=%r, version=%r, release=%r)'
+                % (self.name, self.version, self.release))
+
+    def __eq__(self, other):
+        if self.name == other.name:
+            if self.version == other.version:
+                if self.release == other.release:
+                    return True
+
+    def __hash__(self):
+        return (hash(self.name) ^ hash(self.version)
+                ^ hash(self.release))
+
 
 class Stats(object):
     __slots__ = ('wallclocktime', )

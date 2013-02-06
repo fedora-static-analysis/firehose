@@ -24,7 +24,7 @@ import unittest
 
 from firehose.report import Analysis, Issue, Metadata, Generator, SourceRpm, \
     Location, File, Function, Point, Message, Notes, Trace, State, Stats, \
-    Failure, Range
+    Failure, Range, DebianSource
 
 class AnalysisTests(unittest.TestCase):
     def make_simple_analysis(self):
@@ -174,7 +174,7 @@ class AnalysisTests(unittest.TestCase):
                 r = Analysis.from_xml(f)
                 num_analyses += 1
         # Ensure that all of the reports were indeed parsed:
-        self.assertEqual(num_analyses, 6)
+        self.assertEqual(num_analyses, 7)
 
     def test_example_2(self):
         # Verify that the parser works:
@@ -412,3 +412,15 @@ class AnalysisTests(unittest.TestCase):
              "foo.c:7:12: note: first we do this\n"
              "foo.c:8:10: note: then we do that\n"
              "foo.c:10:15: note: then it crashes here\n"))
+
+    def test_debian_source(self):
+        """ Test to ensure that Debian source package Sut Loading works. """
+        with open('examples/example-debian-source.xml') as f:
+            a = Analysis.from_xml(f)
+            self.assertEqual(a.metadata.generator.name, 'handmade')
+            self.assertEqual(a.metadata.generator.version, '0.1')
+            self.assertIsInstance(a.metadata.sut, DebianSource)
+            self.assertEqual(a.metadata.sut.name, 'python-ethtool')
+            self.assertEqual(a.metadata.sut.version, '0.7')
+            self.assertEqual(a.metadata.sut.release, '4.1+b1')
+            self.assertFalse(hasattr(a.metadata.sut, 'buildarch'))
