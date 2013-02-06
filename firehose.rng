@@ -35,6 +35,31 @@
                 <attribute name="release"/>
                 <attribute name="build-arch"/>
               </element>
+              <!-- Debian SUT entries -->
+              <element name="debian-source">
+                <!-- Report for a Debian source package -->
+                <attribute name="name"/>
+                <attribute name="version"/>
+                <attribute name="release"/>
+                <optional>
+                  <!-- This entry is optional because Debian packages may be
+                       `native' (e.g. no local version, since local and
+                       upstream are the same). -->
+                  <attribute name="release"/>
+                </optional>
+                <!-- No build arch; source is arch indep. -->
+              </element>
+              <element name="debian-binary">
+                <!-- Report for a Debian .deb package -->
+                <attribute name="name"/>
+                <attribute name="version"/>
+                <optional>
+                  <attribute name="release"/>
+                </optional>
+                <attribute name="build-arch"/>
+                <!-- Valid entries include `amd64', `kfreebsd-amd64', `armhf',
+                     `hurd-i386', among others for Debian. -->
+              </element>
               <!-- What other options should we have? -->
             </choice>
           </element>
