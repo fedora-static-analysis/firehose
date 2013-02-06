@@ -3,8 +3,7 @@
   <metadata>
     <generator name="handmade" version="0.1"/>
     <sut>
-      <debian-source name="python-ethtool" version="0.7"
-                     release="4.1+b1" />
+      <debian-source name="python-ethtool" version="0.7" release="4.1+b1" />
     </sut>
   </metadata>
 
