@@ -265,11 +265,14 @@ class Issue(Result):
             return 'http://cwe.mitre.org/data/definitions/%i.html' % self.cwe
 
 class Failure(Result):
-    __slots__ = ('location', 'stdout', 'stderr', 'returncode')
+    __slots__ = ('failureid', 'location', 'stdout', 'stderr', 'returncode')
 
-    def __init__(self, location, stdout, stderr, returncode):
+    def __init__(self, failureid, location, stdout, stderr, returncode):
+        if failureid is not None:
+            assert isinstance(failureid, str)
         if location is not None:
             assert isinstance(location, Location)
+        self.failureid = failureid
         self.location = location
         self.stdout = stdout
         self.stderr = stderr
@@ -277,6 +280,7 @@ class Failure(Result):
 
     @classmethod
     def from_xml(cls, node):
+        failureid = node.get('failure-id')
         location_node = node.find('location')
         if location_node is not None:
             location = Location.from_xml(location_node)
@@ -300,10 +304,13 @@ class Failure(Result):
         else:
             returncode = None
 
-        return Failure(location, stdout, stderr, returncode)
+        return Failure(failureid, location, stdout, stderr, returncode)
 
     def to_xml(self):
         node = ET.Element('failure')
+
+        if self.failureid is not None:
+            node.set('failure-id', self.failureid)
 
         if self.location is not None:
             node.append(self.location.to_xml())
@@ -326,18 +333,20 @@ class Failure(Result):
         return node
 
     def __repr__(self):
-        return ('Failure(location=%r, stdout=%r, stderr=%r, returncode=%r)'
-                % (self.location, self.stdout, self.stderr, self.returncode))
+        return ('Failure(failureid=%r, location=%r, stdout=%r, stderr=%r, returncode=%r)'
+                % (self.failureid, self.location, self.stdout, self.stderr, self.returncode))
 
     def __eq__(self, other):
-        if self.location == other.location:
-            if self.stdout == other.stdout:
-                if self.stderr == other.stderr:
-                    if self.returncode == other.returncode:
-                        return True
+        if self.failureid == other.failureid:
+            if self.location == other.location:
+                if self.stdout == other.stdout:
+                    if self.stderr == other.stderr:
+                        if self.returncode == other.returncode:
+                            return True
 
     def __hash__(self):
-        return (hash(self.location) ^ hash(self.stdout)
+        return (hash(self.failureid)
+                ^ hash(self.location) ^ hash(self.stdout)
                 ^ hash(self.stderr) ^ hash(self.returncode))
 
     def accept(self, visitor):

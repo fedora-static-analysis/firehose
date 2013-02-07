@@ -90,7 +90,8 @@ class AnalysisTests(unittest.TestCase):
                                        sut=None,
                                        file_=None,
                                        stats=None),
-                     results=[Failure(location=Location(file=File('foo.c', None),
+                     results=[Failure(failureid='out-of-memory',
+                                      location=Location(file=File('foo.c', None),
                                                         function=Function('something_complicated'),
                                                         point=Point(10, 15)),
                                       stdout='got here',
@@ -159,6 +160,7 @@ class AnalysisTests(unittest.TestCase):
         a, f = self.make_failed_analysis()
 
         self.assertIsInstance(f, Failure)
+        self.assertEqual(f.failureid, 'out-of-memory')
         self.assertEqual(f.location.file.givenpath, 'foo.c')
         self.assertEqual(f.location.function.name, 'something_complicated')
         self.assertEqual(f.location.line, 10)

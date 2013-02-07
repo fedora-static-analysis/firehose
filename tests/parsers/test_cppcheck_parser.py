@@ -61,6 +61,7 @@ class TestParseXml(unittest.TestCase):
         self.assertEqual(len(a.results), 1)
         r0 = a.results[0]
         self.assertIsInstance(r0, Failure)
+        self.assertEqual(r0.failureid, 'toomanyconfigs')
         self.assertEqual(r0.location, None)
         self.assertEqual(r0.stdout,
                          (# from msg:

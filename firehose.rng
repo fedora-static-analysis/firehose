@@ -149,6 +149,15 @@
     <element name="failure">
       <optional>
         <!--
+            Each static analysis tool potentially can identify types of way
+            that it can fail.
+
+            Capture those that do here, as (optional) free-form strings:
+        -->
+        <attribute name="failure-id"/>
+      </optional>
+      <optional>
+        <!--
            Some analysis tools may be able to annotate a failure report by
            providing the location *within the software-under-test* that
            broke them.

@@ -69,7 +69,8 @@ def parse_file(fileobj, sut=None, file_=None, stats=None):
             analysis.results.append(issue)
 
         if not location_nodes:
-            failure = Failure(location=None,
+            failure = Failure(failureid=testid,
+                              location=None,
                               stdout=('%s%s'
                                       % (message.text,
                                          (' %s' % notes.text) if notes else '')),
