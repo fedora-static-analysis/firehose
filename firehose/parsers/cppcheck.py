@@ -20,7 +20,7 @@ import sys
 import xml.etree.ElementTree as ET
 
 from firehose.report import Message, Function, Point, \
-    File, Location, Generator, Metadata, Analysis, Issue
+    File, Location, Generator, Metadata, Analysis, Issue, Notes, Failure
 
 # Parser for output from cppcheck:
 #   http://sourceforge.net/apps/mediawiki/cppcheck/index.php?title=Main_Page
@@ -54,8 +54,8 @@ def parse_file(fileobj, sut=None, file_=None, stats=None):
         else:
             notes = None
 
-        for node_location in node_error.findall('location'):
-            # FIXME: do something with "severity"?
+        location_nodes = list(node_error.findall('location'))
+        for node_location in location_nodes:
             location=Location(file=File(node_location.get('file'), None),
 
                               # FIXME: doesn't tell us function name
@@ -64,8 +64,18 @@ def parse_file(fileobj, sut=None, file_=None, stats=None):
 
                               # doesn't emit column
                               point=Point(int(node_location.get('line')), 0)) # FIXME: bogus column
-            issue = Issue(None, testid, location, message, notes, None)
+            issue = Issue(None, testid, location, message, notes, None,
+                          severity=node_error.get('severity'))
             analysis.results.append(issue)
+
+        if not location_nodes:
+            failure = Failure(location=None,
+                              stdout=('%s%s'
+                                      % (message.text,
+                                         (' %s' % notes.text) if notes else '')),
+                              stderr=None,
+                              returncode=None)
+            analysis.results.append(failure)
 
     return analysis
 
