@@ -473,6 +473,9 @@ class Sut(object):
         srpm_node = node.find('source-rpm')
         if srpm_node is not None:
             return SourceRpm.from_xml(srpm_node)
+        dsc_node = node.find('debian-source')
+        if dsc_node is not None:
+            return DebianSource.from_xml(dsc_node)
         raise ValueError('unknown sut kind')
 
     def to_xml(self):
@@ -530,6 +533,71 @@ class SourceRpm(Sut):
     def __hash__(self):
         return (hash(self.name) ^ hash(self.version)
                 ^ hash(self.release) ^ hash(self.buildarch))
+
+
+class DebianSource(Sut):
+    """
+    Internal Firehose represntation of a Debian source package. This Object
+    is extremely similar to a SourceRpm, but does not include the `buildarch`
+    attribute.
+    """
+    __slots__ = ('name', 'version', 'release')
+
+    def __init__(self, name, version, release):
+        """
+        Simple constructor. Name should be the *source* package name,
+        version should match Upstream's version number, and release (if
+        given) should be the Debian package local version. This should
+        only be ommited if the package is a Debian Native package.
+        """
+        assert isinstance(name, str)
+        assert isinstance(version, str)
+        assert (isinstance(release, str) or release is None)
+        if release is None and "-" in version:
+            # XXX: Do we have a better Exception for here?
+            raise Exception("Native package with dash in the version string")
+
+        self.name = name
+        self.version = version
+        self.release = release
+
+    @classmethod
+    def from_xml(cls, node):
+        """
+        Construct a DebianSource object from an XML payload.
+        """
+        result = DebianSource(name=node.get('name'),
+                              version=node.get('version'),
+                              release=node.get('release'))
+        return result
+
+    def _to_xml_inner_node(self):
+        """
+        (internal use only)
+
+        Produce a DebianSource XML ET for searlizing the data back down to
+        XML again.
+        """
+        node = ET.Element('debian-source')
+        node.set('name', self.name)
+        node.set('version', self.version)
+        node.set('release', self.release)
+        return node
+
+    def __repr__(self):
+        return ('DebianSource(name=%r, version=%r, release=%r)'
+                % (self.name, self.version, self.release))
+
+    def __eq__(self, other):
+        if self.name == other.name:
+            if self.version == other.version:
+                if self.release == other.release:
+                    return True
+
+    def __hash__(self):
+        return (hash(self.name) ^ hash(self.version)
+                ^ hash(self.release))
+
 
 class Stats(object):
     __slots__ = ('wallclocktime', )
