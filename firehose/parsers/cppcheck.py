@@ -20,7 +20,8 @@ import sys
 import xml.etree.ElementTree as ET
 
 from firehose.report import Message, Function, Point, \
-    File, Location, Generator, Metadata, Analysis, Issue, Notes, Failure
+    File, Location, Generator, Metadata, Analysis, Issue, Notes, Failure, \
+    CustomFields
 
 # Parser for output from cppcheck:
 #   http://sourceforge.net/apps/mediawiki/cppcheck/index.php?title=Main_Page
@@ -69,13 +70,13 @@ def parse_file(fileobj, sut=None, file_=None, stats=None):
             analysis.results.append(issue)
 
         if not location_nodes:
+            customfields=CustomFields()
+            if str_verbose != str_msg:
+                customfields['verbose'] = str_verbose
             failure = Failure(failureid=testid,
                               location=None,
-                              stdout=('%s%s'
-                                      % (message.text,
-                                         (' %s' % notes.text) if notes else '')),
-                              stderr=None,
-                              returncode=None)
+                              message=message,
+                              customfields=customfields)
             analysis.results.append(failure)
 
     return analysis

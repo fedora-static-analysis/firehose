@@ -63,19 +63,15 @@ class TestParseXml(unittest.TestCase):
         self.assertIsInstance(r0, Failure)
         self.assertEqual(r0.failureid, 'toomanyconfigs')
         self.assertEqual(r0.location, None)
-        self.assertEqual(r0.stdout,
-                         (# from msg:
-                          'Too many #ifdef configurations - cppcheck only'
+        self.assertEqual(r0.message.text,
+                         ('Too many #ifdef configurations - cppcheck only'
                           ' checks 12 configurations. Use --force to check'
                           ' all configurations. For more details, use'
-                          ' --enable=information.'
-                          ' '
-                          # from "verbose":
-                          'The checking of the file will be interrupted because'
+                          ' --enable=information.'))
+        self.assertEqual(r0.customfields['verbose'],
+                         ('The checking of the file will be interrupted because'
                           ' there are too many #ifdef configurations. Checking of'
                           ' all #ifdef configurations can be forced by --force'
                           ' command line option or from GUI preferences. However'
                           ' that may increase the checking time. For more details,'
                           ' use --enable=information.'))
-        self.assertEqual(r0.stderr, None)
-        self.assertEqual(r0.returncode, None)

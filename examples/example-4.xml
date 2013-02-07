@@ -14,14 +14,14 @@
   <results>
     <!-- Example of an analysis failure where we have a traceback
          and the location of the code that broke the checker: -->
-    <failure>
+    <failure failure-id="python-exception">
       <location>
         <file given-path="wspy_register.c"/>
         <function name="register_all_py_protocols_func"/>
         <point line="159" column="42"/>
       </location>
-      <stdout></stdout>
-      <stderr>wspy_register.c: In function 'register_all_py_protocols_func':
+      <custom-fields>
+        <str-field name="traceback">wspy_register.c: In function 'register_all_py_protocols_func':
 wspy_register.c:159:42: error: Unhandled Python exception raised calling 'execute' method
 Traceback (most recent call last):
   File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/__init__.py", line 75, in execute
@@ -97,8 +97,7 @@ Traceback (most recent call last):
   File "/usr/lib/gcc/x86_64-redhat-linux/4.6.2/plugin/python2/libcpychecker/absinterp.py", line 2212, in _get_transitions_for_GimpleCall
     raise NotImplementedError('not yet implemented: %s' % fnname)
 NotImplementedError: not yet implemented: PySequence_Check
-</stderr>
-      <returncode>0</returncode>
+</str-field></custom-fields>
     </failure>
   </results>
 </analysis>

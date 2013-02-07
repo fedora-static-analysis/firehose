@@ -120,7 +120,7 @@
       </optional>
 
       <!-- A message summarizing the problem -->
-      <element name="message"><text/></element>
+      <ref name="message-element"/>
 
       <!-- Additional descriptive details
            This might support some simple markup at some point
@@ -195,21 +195,34 @@
         <ref name="location-element"/>
       </optional>
       <optional>
-        <element name="stdout">
+        <!-- summary of the failure -->
+        <element name="message">
           <text/>
         </element>
       </optional>
+
+      <!--
+         Every type of failure seems to have its own kinds of data that
+         are worth capturing:
+           * stdout/stderr/returncode for a failed subprocess
+           * traceback for an unhandled Python exception
+           * verbose extra information about a cppcheck failure
+         etc.
+         Hence allow a <failure> to optionally contain extra key/value
+         pairs, based on the failure-id.
+      -->
       <optional>
-        <element name="stderr">
-          <text/>
-        </element>
-      </optional>
-      <optional>
-        <element name="returncode">
-          <data type="integer"/>
-        </element>
+        <ref name="custom-fields-element"/>
       </optional>
     </element>
+  </define>
+
+  <!--
+     Summary text aimed at a developer.  This is required for an <issue>,
+     but is also can (optionally) be provided by a <failure>.
+  -->
+  <define name="message-element">
+    <element name="message"><text/></element>
   </define>
 
   <define name="location-element">
@@ -288,6 +301,28 @@
     <element name="point">
       <attribute name="line"/>
       <attribute name="column"/>
+    </element>
+  </define>
+
+  <!--
+     A big escape-hatch in the schema: support for arbitrary, ordered
+     key/value pairs for roundtripping data specific to a particular
+     situation.  e.g. debugging attributes for a particular failure
+  -->
+  <define name="custom-fields-element">
+    <element name="custom-fields">
+      <zeroOrMore>
+        <choice>
+          <element name="str-field">
+            <attribute name="name"/>
+            <text/>
+          </element>
+          <element name="int-field">
+            <attribute name="name"/>
+            <data type="integer"/>
+          </element>
+        </choice>
+      </zeroOrMore>
     </element>
   </define>
 

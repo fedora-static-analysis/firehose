@@ -20,6 +20,7 @@
 
 import glob
 import os
+from collections import OrderedDict
 import hashlib
 import StringIO
 from subprocess import Popen, PIPE
@@ -261,18 +262,21 @@ class Issue(Result):
             return 'http://cwe.mitre.org/data/definitions/%i.html' % self.cwe
 
 class Failure(Result):
-    __slots__ = ('failureid', 'location', 'stdout', 'stderr', 'returncode')
+    __slots__ = ('failureid', 'location', 'message', 'customfields')
 
-    def __init__(self, failureid, location, stdout, stderr, returncode):
+    def __init__(self, failureid, location, message, customfields):
         if failureid is not None:
             assert isinstance(failureid, str)
         if location is not None:
             assert isinstance(location, Location)
+        if message is not None:
+            assert isinstance(message, Message)
+        if customfields is not None:
+            assert isinstance(customfields, CustomFields)
         self.failureid = failureid
         self.location = location
-        self.stdout = stdout
-        self.stderr = stderr
-        self.returncode = returncode
+        self.message = message
+        self.customfields = customfields
 
     @classmethod
     def from_xml(cls, node):
@@ -282,25 +286,17 @@ class Failure(Result):
             location = Location.from_xml(location_node)
         else:
             location = None
-
-        def get_text_from_node(tag):
-            child_node = node.find(tag)
-            if child_node is not None:
-                result = child_node.text
-                if result is None:
-                    result = ''
-                return result
-
-        stdout = get_text_from_node('stdout')
-        stderr = get_text_from_node('stderr')
-
-        returncode_node = node.find('returncode')
-        if returncode_node is not None:
-            returncode = int(returncode_node.text)
+        message_node = node.find('message')
+        if message_node is not None:
+            message = Message.from_xml(message_node)
         else:
-            returncode = None
-
-        return Failure(failureid, location, stdout, stderr, returncode)
+            message = None
+        customfields_node = node.find('custom-fields')
+        if customfields_node is not None:
+            customfields = CustomFields.from_xml(customfields_node)
+        else:
+            customfields = None
+        return Failure(failureid, location, message, customfields)
 
     def to_xml(self):
         node = ET.Element('failure')
@@ -311,44 +307,35 @@ class Failure(Result):
         if self.location is not None:
             node.append(self.location.to_xml())
 
-        if self.stdout is not None:
-            stdout_node = ET.Element('stdout')
-            stdout_node.text = self.stdout
-            node.append(stdout_node)
+        if self.message is not None:
+            node.append(self.message.to_xml())
 
-        if self.stderr is not None:
-            stderr_node = ET.Element('stderr')
-            stderr_node.text = self.stderr
-            node.append(stderr_node)
-
-        if self.returncode is not None:
-            returncode_node = ET.Element('returncode')
-            returncode_node.text = str(self.returncode)
-            node.append(returncode_node)
+        if self.customfields is not None:
+            node.append(self.customfields.to_xml())
 
         return node
 
     def __repr__(self):
-        return ('Failure(failureid=%r, location=%r, stdout=%r, stderr=%r, returncode=%r)'
-                % (self.failureid, self.location, self.stdout, self.stderr, self.returncode))
+        return ('Failure(failureid=%r, location=%r, message=%r, customfields=%r)'
+                % (self.failureid, self.location, self.message, self.customfields))
 
     def __eq__(self, other):
         if self.failureid == other.failureid:
             if self.location == other.location:
-                if self.stdout == other.stdout:
-                    if self.stderr == other.stderr:
-                        if self.returncode == other.returncode:
-                            return True
+                if self.message == other.message:
+                    if self.customfields == other.customfields:
+                        return True
 
     def __hash__(self):
-        return (hash(self.failureid)
-                ^ hash(self.location) ^ hash(self.stdout)
-                ^ hash(self.stderr) ^ hash(self.returncode))
+        return (hash(self.failureid) ^ hash(self.location)
+                ^ hash(self.message) ^ hash(self.customfields))
 
     def accept(self, visitor):
         visitor.visit_failure(self)
         if self.location:
             self.location.accept(visitor)
+        if self.message:
+            self.message.accept(visitor)
 
 class Metadata(object):
     __slots__ = ('generator', 'sut', 'file_', 'stats')
@@ -1061,6 +1048,44 @@ class Range(object):
         visitor.visit_range(self)
         self.start.accept(visitor)
         self.end.accept(visitor)
+
+class CustomFields(OrderedDict):
+    @classmethod
+    def from_xml(cls, node):
+        kvs = []
+        for child_node in node:
+            if child_node.tag == 'str-field':
+                value = child_node.text
+            elif child_node.tag == 'int-field':
+                value = int(child_node.text)
+            else:
+                raise ValueError('unrecognized element within'
+                                 ' <custom-fields>: %s'
+                                 % child_node.tag)
+            key = child_node.get('name')
+            if key is None:
+                raise ValueError('missing "name" attribute within'
+                                 ' <%s>' % child_node.tag)
+            kvs.append( (key, value) )
+        result = cls(kvs)
+        return result
+
+    def to_xml(self):
+        node = ET.Element('custom-fields')
+        for key, value in self.iteritems():
+            if isinstance(value, str):
+                tag = 'str-field'
+                text = value
+            elif isinstance(value, (int, long)):
+                tag = 'int-field'
+                text = str(value)
+            else:
+                raise TypeError('unhandled type within CustomFields instance')
+            field_node = ET.Element(tag)
+            field_node.set('name', key)
+            field_node.text = text
+            node.append(field_node)
+        return node
 
 #
 # Traversal of the report structure

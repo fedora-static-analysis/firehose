@@ -24,7 +24,7 @@ import unittest
 
 from firehose.report import Analysis, Issue, Metadata, Generator, SourceRpm, \
     Location, File, Function, Point, Message, Notes, Trace, State, Stats, \
-    Failure, Range, DebianSource
+    Failure, Range, DebianSource, CustomFields
 
 class AnalysisTests(unittest.TestCase):
     def make_simple_analysis(self):
@@ -94,9 +94,11 @@ class AnalysisTests(unittest.TestCase):
                                       location=Location(file=File('foo.c', None),
                                                         function=Function('something_complicated'),
                                                         point=Point(10, 15)),
-                                      stdout='got here',
-                                      stderr='out of memory',
-                                      returncode=-9)]) # (killed)
+                                      message=Message('out of memory'),
+                                      customfields=CustomFields(stdout='sample stdout',
+                                                                stderr='sample stderr',
+                                                                returncode=-9)) # (killed)
+                              ])
         return a, a.results[0]
 
     def test_creating_simple_analysis(self):
@@ -165,9 +167,10 @@ class AnalysisTests(unittest.TestCase):
         self.assertEqual(f.location.function.name, 'something_complicated')
         self.assertEqual(f.location.line, 10)
         self.assertEqual(f.location.column, 15)
-        self.assertEqual(f.stdout, 'got here')
-        self.assertEqual(f.stderr, 'out of memory')
-        self.assertEqual(f.returncode, -9)
+        self.assertEqual(f.message.text, 'out of memory')
+        self.assertEqual(f.customfields['stdout'], 'sample stdout')
+        self.assertEqual(f.customfields['stderr'], 'sample stderr')
+        self.assertEqual(f.customfields['returncode'], -9)
 
     def test_from_xml(self):
         num_analyses = 0
@@ -235,9 +238,8 @@ class AnalysisTests(unittest.TestCase):
             self.assertEqual(len(a.results), 1)
             w = a.results[0]
             self.assertIsInstance(w, Failure)
-            self.assertEqual(w.stdout, '')
-            self.assertEqual(w.stderr, '')
-            self.assertEqual(w.returncode, -11)
+            self.assertEqual(w.failureid, 'bad-exit-code')
+            self.assertEqual(w.customfields['returncode'], -11)
 
     def test_example_4(self):
         with open('examples/example-4.xml') as f:
@@ -253,9 +255,13 @@ class AnalysisTests(unittest.TestCase):
             self.assertEqual(len(a.results), 1)
             w = a.results[0]
             self.assertIsInstance(w, Failure)
-            self.assertEqual(w.stdout, '')
-            self.assert_(w.stderr.startswith('wspy_register.c: In function \'register_all_py_protocols_func\':\n'))
-            self.assertEqual(w.returncode, 0)
+            self.assertEqual(w.failureid, 'python-exception')
+            self.assertEqual(w.location.file.givenpath, 'wspy_register.c')
+            self.assertEqual(w.location.function.name,
+                             'register_all_py_protocols_func')
+            self.assertEqual(w.location.line, 159)
+            self.assertEqual(w.location.column, 42)
+            self.assert_(w.customfields['traceback'].startswith('wspy_register.c: In function \'register_all_py_protocols_func\':\n'))
 
     def test_example_5(self):
         # Ensure that we can load range information from XML
@@ -284,12 +290,12 @@ class AnalysisTests(unittest.TestCase):
             self.assertEqual(len(a.results), 1)
             w = a.results[0]
             self.assertIsInstance(w, Failure)
-            self.assertEqual(w.stdout, None)
-            self.assertEqual(w.stderr,
+            self.assertEqual(w.failureid, 'too-complicated')
+            self.assertEqual(w.message.text,
                              'this function is too complicated for the'
                              ' reference-count checker to fully analyze:'
                              ' not all paths were analyzed')
-            self.assertEqual(w.returncode, None)
+            self.assertEqual(w.customfields, None)
 
     def test_to_xml(self):
         def validate(xmlstr):

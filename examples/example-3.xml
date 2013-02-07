@@ -14,10 +14,10 @@
   <results>
     <!-- Example of an analysis failure where we have nothing except the
          knowledge of a segfault: -->
-    <failure>
-      <stdout></stdout>
-      <stderr></stderr>
-      <returncode>-11</returncode>
+    <failure failure-id='bad-exit-code'>
+      <custom-fields>
+        <int-field name="returncode">-11</int-field>
+      </custom-fields>
     </failure>
   </results>
 </analysis>
