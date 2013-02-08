@@ -544,10 +544,10 @@ class DebianBinary(Sut):
 
         buildarch is the Debian binary arch (like amd64, armhf, hurd-i386)
         """
-        assert isinstance(name, str)
-        assert isinstance(version, str)
-        assert (isinstance(release, str) or release is None)
-        assert isinstance(buildarch, str)
+        assert isinstance(name, _string_type)
+        assert isinstance(version, _string_type)
+        assert (isinstance(release, _string_type) or release is None)
+        assert isinstance(buildarch, _string_type)
 
         if release is None and "-" in version:
             # XXX: Do we have a better Exception for here?
