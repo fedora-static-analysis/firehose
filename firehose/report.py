@@ -27,6 +27,10 @@ from subprocess import Popen, PIPE
 import sys
 import xml.etree.ElementTree as ET
 
+
+_string_type = basestring
+
+
 class Analysis(object):
     __slots__ = ('metadata',
                  'results')
@@ -140,7 +144,7 @@ class Issue(Result):
         if cwe is not None:
             assert isinstance(cwe, int)
         if testid is not None:
-            assert isinstance(testid, str)
+            assert isinstance(testid, _string_type)
         assert isinstance(location, Location)
         assert isinstance(message, Message)
         if notes:
@@ -148,7 +152,7 @@ class Issue(Result):
         if trace:
             assert isinstance(trace, Trace)
         if severity is not None:
-            assert isinstance(severity, str)
+            assert isinstance(severity, _string_type)
         self.cwe = cwe
         self.testid = testid
         self.location = location
@@ -266,7 +270,7 @@ class Failure(Result):
 
     def __init__(self, failureid, location, message, customfields):
         if failureid is not None:
-            assert isinstance(failureid, str)
+            assert isinstance(failureid, _string_type)
         if location is not None:
             assert isinstance(location, Location)
         if message is not None:
@@ -414,9 +418,9 @@ class Generator(object):
     __slots__ = ('name', 'version', )
 
     def __init__(self, name, version=None):
-        assert isinstance(name, str)
+        assert isinstance(name, _string_type)
         if version is not None:
-            assert isinstance(version, str)
+            assert isinstance(version, _string_type)
         self.name = name
         self.version = version
 
@@ -483,10 +487,10 @@ class SourceRpm(Sut):
     __slots__ = ('name', 'version', 'release', 'buildarch')
 
     def __init__(self, name, version, release, buildarch):
-        assert isinstance(name, str)
-        assert isinstance(version, str)
-        assert isinstance(release, str)
-        assert isinstance(buildarch, str)
+        assert isinstance(name, _string_type)
+        assert isinstance(version, _string_type)
+        assert isinstance(release, _string_type)
+        assert isinstance(buildarch, _string_type)
         self.name = name
         self.version = version
         self.release = release
@@ -540,10 +544,10 @@ class DebianBinary(Sut):
 
         buildarch is the Debian binary arch (like amd64, armhf, hurd-i386)
         """
-        assert isinstance(name, str)
-        assert isinstance(version, str)
-        assert (isinstance(release, str) or release is None)
-        assert isinstance(buildarch, str)
+        assert isinstance(name, _string_type)
+        assert isinstance(version, _string_type)
+        assert (isinstance(release, _string_type) or release is None)
+        assert isinstance(buildarch, _string_type)
 
         if release is None and "-" in version:
             # XXX: Do we have a better Exception for here?
@@ -610,9 +614,9 @@ class DebianSource(Sut):
         given) should be the Debian package local version. This should
         only be ommited if the package is a Debian Native package.
         """
-        assert isinstance(name, str)
-        assert isinstance(version, str)
-        assert (isinstance(release, str) or release is None)
+        assert isinstance(name, _string_type)
+        assert isinstance(version, _string_type)
+        assert (isinstance(release, _string_type) or release is None)
         if release is None and "-" in version:
             # XXX: Do we have a better Exception for here?
             raise Exception("Native package with dash in the version string")
@@ -691,7 +695,7 @@ class Message(object):
     __slots__ = ('text', )
 
     def __init__(self, text):
-        assert isinstance(text, str)
+        assert isinstance(text, _string_type)
         self.text = text
 
     @classmethod
@@ -723,7 +727,7 @@ class Notes(object):
     __slots__ = ('text', )
 
     def __init__(self, text):
-        assert isinstance(text, str)
+        assert isinstance(text, _string_type)
         self.text = text
 
     @classmethod
@@ -931,9 +935,9 @@ class File(object):
     __slots__ = ('givenpath', 'abspath', 'hash_')
 
     def __init__(self, givenpath, abspath, hash_=None):
-        assert isinstance(givenpath, str)
+        assert isinstance(givenpath, _string_type)
         if abspath is not None:
-            assert isinstance(abspath, str)
+            assert isinstance(abspath, _string_type)
         if hash_ is not None:
             assert isinstance(hash_, Hash)
 
@@ -982,8 +986,8 @@ class Hash(object):
     __slots__ = ('alg', 'hexdigest')
 
     def __init__(self, alg, hexdigest):
-        assert isinstance(alg, str)
-        assert isinstance(hexdigest, str)
+        assert isinstance(alg, _string_type)
+        assert isinstance(hexdigest, _string_type)
         self.alg = alg
         self.hexdigest = hexdigest
 
@@ -1150,7 +1154,7 @@ class CustomFields(OrderedDict):
     def to_xml(self):
         node = ET.Element('custom-fields')
         for key, value in self.iteritems():
-            if isinstance(value, str):
+            if isinstance(value, _string_type):
                 tag = 'str-field'
                 text = value
             elif isinstance(value, (int, long)):
