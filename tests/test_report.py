@@ -24,7 +24,7 @@ import unittest
 
 from firehose.report import Analysis, Issue, Metadata, Generator, SourceRpm, \
     Location, File, Function, Point, Message, Notes, Trace, State, Stats, \
-    Failure, Range, DebianSource, CustomFields
+    Failure, Range, DebianSource, DebianBinary, CustomFields
 
 class AnalysisTests(unittest.TestCase):
     def make_simple_analysis(self):
@@ -179,7 +179,7 @@ class AnalysisTests(unittest.TestCase):
                 r = Analysis.from_xml(f)
                 num_analyses += 1
         # Ensure that all of the reports were indeed parsed:
-        self.assertEqual(num_analyses, 7)
+        self.assertEqual(num_analyses, 8)
 
     def test_example_2(self):
         # Verify that the parser works:
@@ -422,7 +422,7 @@ class AnalysisTests(unittest.TestCase):
              "foo.c:10:15: note: then it crashes here\n"))
 
     def test_debian_source(self):
-        """ Test to ensure that Debian source package Sut Loading works. """
+        """ Test to ensure that Debian source package Sut loading works. """
         with open('examples/example-debian-source.xml') as f:
             a = Analysis.from_xml(f)
             self.assertEqual(a.metadata.generator.name, 'handmade')
@@ -432,3 +432,15 @@ class AnalysisTests(unittest.TestCase):
             self.assertEqual(a.metadata.sut.version, '0.7')
             self.assertEqual(a.metadata.sut.release, '4.1+b1')
             self.assertFalse(hasattr(a.metadata.sut, 'buildarch'))
+
+    def test_debian_binary(self):
+        """ Test to ensure that Debian binary package Sut loading works. """
+        with open('examples/example-debian-binary.xml') as f:
+            a = Analysis.from_xml(f)
+            self.assertEqual(a.metadata.generator.name, 'handmade')
+            self.assertEqual(a.metadata.generator.version, '0.1')
+            self.assertIsInstance(a.metadata.sut, DebianBinary)
+            self.assertEqual(a.metadata.sut.name, 'python-ethtool')
+            self.assertEqual(a.metadata.sut.version, '0.7')
+            self.assertEqual(a.metadata.sut.buildarch, 'amd64')
+            self.assertEqual(a.metadata.sut.release, '1.1')
