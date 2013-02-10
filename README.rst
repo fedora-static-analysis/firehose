@@ -24,7 +24,9 @@ modification, etc)
 
 I initially considered using JSON, but went with XML because if multiple
 tools are going to emit this, it's good to be able to validate things
-against a schema (see firehose.rng, a RELAX-NG schema).
+against a schema (see
+`firehose.rng <https://github.com/fedora-static-analysis/firehose/blob/master/firehose.rng>`_,
+a RELAX-NG schema).
 
 References to source files in the format can include a hash of the source
 file itself (e.g. SHA-1) so that you can uniquely identify which source file
