@@ -10,7 +10,8 @@ The idea is a common XML format that all tools can emit that:
   * describes a warning
   * gives source-code location of the warning: filename, function,
     line number.
-  * optionally with a CWE id
+  * optionally with a `CWE <http://cwe.mitre.org/about/index.html>`_
+    identifier
   * potentially with other IDs and URLs, e.g. the ID "SIG30-C" with URL
     https://www.securecoding.cert.org/confluence/display/seccode/SIG30-C.+Call+only+asynchronous-safe+functions+within+signal+handlers
   * optionally describes code path to get there (potentially
