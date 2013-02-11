@@ -179,7 +179,7 @@ class AnalysisTests(unittest.TestCase):
                 r = Analysis.from_xml(f)
                 num_analyses += 1
         # Ensure that all of the reports were indeed parsed:
-        self.assertEqual(num_analyses, 8)
+        self.assertEqual(num_analyses, 9)
 
     def test_example_2(self):
         # Verify that the parser works:
@@ -296,6 +296,29 @@ class AnalysisTests(unittest.TestCase):
                              ' reference-count checker to fully analyze:'
                              ' not all paths were analyzed')
             self.assertEqual(w.customfields, None)
+
+    def test_non_ascii_example(self):
+        with open('examples/example-non-ascii.xml') as f:
+            a = Analysis.from_xml(f)
+            self.assertEqual(a.metadata.generator.name, u'\u2620' * 8)
+
+            self.assertEqual(len(a.results), 1)
+            w = a.results[0]
+            self.assertIsInstance(w, Issue)
+
+            # Verify the Japanese version of
+            #  "comparison between signed and unsigned integer expressions"
+            # within the message:
+            self.assertEqual(w.message.text,
+                             (u'\u7b26\u53f7\u4ed8\u304d\u3068\u7b26\u53f7'
+                              u'\u7121\u3057\u306e\u6574\u6570\u5f0f\u306e'
+                              u'\u9593\u3067\u306e\u6bd4\u8f03\u3067\u3059'))
+
+            # Verify the "mojibake" Kanji/Hiragana within the notes:
+            self.assertIn(u'\u6587\u5b57\u5316\u3051',
+                          w.notes.text)
+
+            self.assertEqual(w.location.function.name, u'oo\u025f')
 
     def test_to_xml(self):
         def validate(xmlstr):

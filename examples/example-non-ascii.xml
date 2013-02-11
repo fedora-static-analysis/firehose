@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<analysis>
+  <!-- test of an instance document containing non-ASCII characters -->
+
+  <metadata>
+    <!-- a made-up generator name consisting of 8
+     "U+2620 SKULL AND CROSSBONES" characters: -->
+    <generator name="☠☠☠☠☠☠☠☠"/>
+  </metadata>
+
+  <results>
+    <!--
+       $ gcc -Wsign-compare -c non-ascii-example.c
+       non-ascii-example.c: In function ‘foo’:
+       non-ascii-example.c:30:9: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+
+       The same, with LANG=ja_JP.UTF-8
+       $ LANG=ja_JP.UTF-8 gcc -Wsign-compare -c non-ascii-example.c
+       non-ascii-example.c: 関数 ‘foo’ 内:
+       non-ascii-example.c:30:9: 警告: 符号付きと符号無しの整数式の間での比較です [-Wsign-compare]
+    -->
+    <issue>
+      <!-- "comparison between signed and unsigned integer expressions" -->
+      <message>符号付きと符号無しの整数式の間での比較です</message>
+
+      <notes>This note embeds the substring "文字化け" (aka "mojibake")
+
+      Here are some Unicode "Box Drawing" characters:
+        first ─> n0 ─> n1 ─> ... ─> nN ┐
+          A                            │
+          └────────────────────────────┘
+      </notes>
+      <location>
+
+        <!--
+          In theory the filename could contain non-ASCII characters
+          However, doing it within our SCM repository opens us up to
+          dealing with filesystem encodings on all the different
+          filesystems that the code might be checked out on.
+          -->
+        <file given-path="examples/non-ascii-example.c"/>
+
+        <!--
+           (Python 3 supports full unicode for identifiers; can GCC do the
+           same for C?).  For now, let's turn "foo" upside-down
+           (the "f" is actually a
+             "LATIN SMALL LETTER DOTLESS J WITH STROKE (U+025F)")
+        -->
+        <function name="ooɟ"/>
+
+        <point line="30" column="9"/>
+      </location>
+    </issue>
+  </results>
+</analysis>
