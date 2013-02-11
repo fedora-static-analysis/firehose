@@ -681,6 +681,9 @@ class Stats(object):
         node.set('wall-clock-time', str(self.wallclocktime))
         return node
 
+    def __repr__(self):
+        return 'Stats(wallclocktime=%r)' % (self.wallclocktime, )
+
     def __eq__(self, other):
         if self.wallclocktime == other.wallclocktime:
             return True
