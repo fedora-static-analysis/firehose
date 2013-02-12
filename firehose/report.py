@@ -1249,6 +1249,14 @@ class CustomFields(OrderedDict):
             node.append(field_node)
         return node
 
+    def __hash__(self):
+        # dicts are usually mutable, but it would be useful to hash
+        # CustomFields instance (and assume they don't change from under us)
+        result = 0
+        for key, value in self.iteritems():
+            result ^= hash(key) ^ hash(value)
+        return result
+
 #
 # Traversal of the report structure
 #
