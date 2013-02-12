@@ -57,6 +57,8 @@ class Analysis(object):
                 results.append(Issue.from_xml(result_node))
             elif result_node.tag == 'failure':
                 results.append(Failure.from_xml(result_node))
+            elif result_node.tag == 'info':
+                results.append(Info.from_xml(result_node))
         return Analysis(metadata, results)
 
     def to_xml(self):
@@ -336,6 +338,82 @@ class Failure(Result):
 
     def accept(self, visitor):
         visitor.visit_failure(self)
+        if self.location:
+            self.location.accept(visitor)
+        if self.message:
+            self.message.accept(visitor)
+
+class Info(Result):
+    __slots__ = ('infoid', 'location', 'message', 'customfields')
+
+    def __init__(self, infoid, location, message, customfields):
+        if infoid is not None:
+            assert isinstance(infoid, _string_type)
+        if location is not None:
+            assert isinstance(location, Location)
+        if message is not None:
+            assert isinstance(message, Message)
+        if customfields is not None:
+            assert isinstance(customfields, CustomFields)
+        self.infoid = infoid
+        self.location = location
+        self.message = message
+        self.customfields = customfields
+
+    @classmethod
+    def from_xml(cls, node):
+        infoid = node.get('info-id')
+        location_node = node.find('location')
+        if location_node is not None:
+            location = Location.from_xml(location_node)
+        else:
+            location = None
+        message_node = node.find('message')
+        if message_node is not None:
+            message = Message.from_xml(message_node)
+        else:
+            message = None
+        customfields_node = node.find('custom-fields')
+        if customfields_node is not None:
+            customfields = CustomFields.from_xml(customfields_node)
+        else:
+            customfields = None
+        return Info(infoid, location, message, customfields)
+
+    def to_xml(self):
+        node = ET.Element('info')
+
+        if self.infoid is not None:
+            node.set('info-id', self.infoid)
+
+        if self.location is not None:
+            node.append(self.location.to_xml())
+
+        if self.message is not None:
+            node.append(self.message.to_xml())
+
+        if self.customfields is not None:
+            node.append(self.customfields.to_xml())
+
+        return node
+
+    def __repr__(self):
+        return ('Info(infoid=%r, location=%r, message=%r, customfields=%r)'
+                % (self.infoid, self.location, self.message, self.customfields))
+
+    def __eq__(self, other):
+        if self.infoid == other.infoid:
+            if self.location == other.location:
+                if self.message == other.message:
+                    if self.customfields == other.customfields:
+                        return True
+
+    def __hash__(self):
+        return (hash(self.infoid) ^ hash(self.location)
+                ^ hash(self.message) ^ hash(self.customfields))
+
+    def accept(self, visitor):
+        visitor.visit_info(self)
         if self.location:
             self.location.accept(visitor)
         if self.message:
@@ -1183,6 +1261,9 @@ class Visitor:
         pass
 
     def visit_failure(self, failure):
+        pass
+
+    def visit_info(self, info):
         pass
 
     def visit_metadata(self, metadata):

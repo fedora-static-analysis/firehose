@@ -24,7 +24,7 @@ import unittest
 
 from firehose.report import Analysis, Issue, Metadata, Generator, SourceRpm, \
     Location, File, Function, Point, Message, Notes, Trace, State, Stats, \
-    Failure, Range, DebianSource, DebianBinary, CustomFields
+    Failure, Range, DebianSource, DebianBinary, CustomFields, Info
 
 class AnalysisTests(unittest.TestCase):
     def make_simple_analysis(self):
@@ -101,6 +101,21 @@ class AnalysisTests(unittest.TestCase):
                               ])
         return a, a.results[0]
 
+    def make_info(self):
+        a = Analysis(metadata=Metadata(generator=Generator(name='an-invented-checker'),
+                                       sut=None,
+                                       file_=None,
+                                       stats=None),
+                     results=[Info(infoid='gimple-stats',
+                                   location=Location(file=File('bar.c', None),
+                                                     function=Function('sample_function'),
+                                                     point=Point(10, 15)),
+                                   message=Message('sample message'),
+                                   customfields=CustomFields(num_stmts=57,
+                                                             num_basic_blocks=10))
+                              ])
+        return a, a.results[0]
+
     def test_creating_simple_analysis(self):
         a, w = self.make_simple_analysis()
         self.assertEqual(a.metadata.generator.name, 'cpychecker')
@@ -171,6 +186,19 @@ class AnalysisTests(unittest.TestCase):
         self.assertEqual(f.customfields['stdout'], 'sample stdout')
         self.assertEqual(f.customfields['stderr'], 'sample stderr')
         self.assertEqual(f.customfields['returncode'], -9)
+
+    def test_making_info(self):
+        a, info = self.make_info()
+
+        self.assertIsInstance(info, Info)
+        self.assertEqual(info.infoid, 'gimple-stats')
+        self.assertEqual(info.location.file.givenpath, 'bar.c')
+        self.assertEqual(info.location.function.name, 'sample_function')
+        self.assertEqual(info.location.line, 10)
+        self.assertEqual(info.location.column, 15)
+        self.assertEqual(info.message.text, 'sample message')
+        self.assertEqual(info.customfields['num_stmts'], 57)
+        self.assertEqual(info.customfields['num_basic_blocks'], 10)
 
     def test_from_xml(self):
         num_analyses = 0
@@ -368,6 +396,13 @@ class AnalysisTests(unittest.TestCase):
         self.assertEqual(a5.results, a6.results)
         self.assertEqual(a5, a6)
 
+        a7, info = self.make_info()
+        a8 = roundtrip_through_xml(a7)
+
+        self.assertEqual(a7.metadata, a8.metadata)
+        self.assertEqual(a7.results, a8.results)
+        self.assertEqual(a7, a8)
+
     def test_repr(self):
         # Verify that the various __repr__ methods are sane:
         a, w = self.make_simple_analysis()
@@ -382,6 +417,10 @@ class AnalysisTests(unittest.TestCase):
         self.assertIn('Analysis(', repr(a))
         self.assertIn('Failure(', repr(a))
 
+        a, info = self.make_info()
+        self.assertIn('Analysis(', repr(a))
+        self.assertIn('Info(', repr(a))
+
     def test_hash(self):
         def compare_hashes(creator):
             a1, w1 = creator()
@@ -390,6 +429,7 @@ class AnalysisTests(unittest.TestCase):
         compare_hashes(self.make_simple_analysis)
         compare_hashes(self.make_complex_analysis)
         compare_hashes(self.make_failed_analysis)
+        compare_hashes(self.make_info)
 
     def test_cwe(self):
         # Verify that the CWE methods are sane:

@@ -10,6 +10,7 @@
           <choice>
             <ref name="issue-element"/>
             <ref name="failure-element"/>
+            <ref name="info-element"/>
           </choice>
         </zeroOrMore>
       </element>
@@ -79,6 +80,13 @@
 
       </element>
   </define>
+
+  <!--
+    Definitions of the various kinds of result follow:
+       <issue>
+       <failure>
+       <info>
+  -->
 
   <!-- A report about a possible problem -->
   <define name="issue-element">
@@ -218,8 +226,39 @@
   </define>
 
   <!--
+     Sometimes you may want a tool to report other kinds of information
+     about the software-under-test that isn't a problem as such, e.g.
+     code metrics, copyright/license info, cross-referencing information
+     etc, hence the <info> element:
+  -->
+  <define name="info-element">
+    <element name="info">
+      <optional>
+        <!--
+            An optional free-form indentifying the kind of information
+            being reported:
+        -->
+        <attribute name="info-id"/>
+      </optional>
+      <optional>
+        <ref name="location-element"/>
+      </optional>
+      <optional>
+        <element name="message">
+          <text/>
+        </element>
+      </optional>
+      <optional>
+        <ref name="custom-fields-element"/>
+      </optional>
+    </element>
+  </define>
+
+  <!-- ...end of result definitions.  Various supporting elements follow: -->
+
+  <!--
      Summary text aimed at a developer.  This is required for an <issue>,
-     but is also can (optionally) be provided by a <failure>.
+     but is also can (optionally) be provided by a <failure> or <info>
   -->
   <define name="message-element">
     <element name="message"><text/></element>
