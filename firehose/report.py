@@ -1152,7 +1152,7 @@ class Point(object):
         return node
 
     def __repr__(self):
-        return ('Location(line=%r, column=%r)' %
+        return ('Point(line=%r, column=%r)' %
                 (self.line, self.column))
 
     def __eq__(self, other):
