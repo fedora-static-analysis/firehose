@@ -33,16 +33,20 @@ _string_type = basestring
 
 class Analysis(object):
     __slots__ = ('metadata',
-                 'results')
+                 'results',
+                 'customfields')
 
-    def __init__(self, metadata, results):
+    def __init__(self, metadata, results, customfields=None):
         assert isinstance(metadata, Metadata)
         assert isinstance(results, list)
+        if customfields is not None:
+            assert isinstance(customfields, CustomFields)
         for result in results:
             assert isinstance(result, Result)
 
         self.metadata = metadata
         self.results = results
+        self.customfields = customfields
 
     @classmethod
     def from_xml(cls, fileobj):
@@ -59,7 +63,12 @@ class Analysis(object):
                 results.append(Failure.from_xml(result_node))
             elif result_node.tag == 'info':
                 results.append(Info.from_xml(result_node))
-        return Analysis(metadata, results)
+        customfields_node = root.find('custom-fields')
+        if customfields_node is not None:
+            customfields = CustomFields.from_xml(customfields_node)
+        else:
+            customfields = None
+        return Analysis(metadata, results, customfields)
 
     def to_xml(self):
         tree = ET.ElementTree()
@@ -70,6 +79,8 @@ class Analysis(object):
         node.append(results_node)
         for result in self.results:
             results_node.append(result.to_xml())
+        if self.customfields is not None:
+            node.append(self.customfields.to_xml())
         return tree
 
     def to_xml_str(self):
@@ -79,13 +90,14 @@ class Analysis(object):
         return output.getvalue()
 
     def __repr__(self):
-        return ('Analysis(metadata=%r, results=%r)'
-                % (self.metadata, self.results))
+        return ('Analysis(metadata=%r, results=%r, customfields=%r)'
+                % (self.metadata, self.results, self.customfields))
 
     def __eq__(self, other):
         if self.metadata == other.metadata:
             if self.results == other.results:
-                return True
+                if self.customfields == other.customfields:
+                    return True
 
     def __hash__(self):
         # (self.results is a list and is thus not hashable)

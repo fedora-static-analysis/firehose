@@ -81,7 +81,8 @@ class AnalysisTests(unittest.TestCase):
                                                        notes=Notes('then it crashes here'))
                                                  ]),
                                     severity='really bad'),
-                              ]
+                              ],
+                     customfields=CustomFields(gccinvocation='gcc -I/usr/include/python2.7 -c foo.c'),
                      )
         return a, a.results[0]
 
