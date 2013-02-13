@@ -532,3 +532,11 @@ class AnalysisTests(unittest.TestCase):
                </analysis>''')
         # Ensure that an empty <str-field> has value '', rather than None:
         self.assertEqual(a.customfields['test'], '')
+
+    def test_set_custom_field(self):
+        a, w = self.make_simple_analysis()
+        self.assertEqual(a.customfields, None)
+
+        a.set_custom_field('foo', 'bar')
+        self.assertNotEqual(a.customfields, None)
+        self.assertEqual(a.customfields['foo'], 'bar')

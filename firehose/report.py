@@ -136,6 +136,11 @@ class Analysis(object):
         visitor = FixupFiles(relativedir, hashalg)
         self.accept(visitor)
 
+    def set_custom_field(self, name, value):
+        if self.customfields is None:
+            self.customfields = CustomFields()
+        self.customfields[name] = value
+
 class Result(object):
     pass
 
