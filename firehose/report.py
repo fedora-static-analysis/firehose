@@ -1263,7 +1263,8 @@ class CustomFields(OrderedDict):
 
     def __hash__(self):
         # dicts are usually mutable, but it would be useful to hash
-        # CustomFields instance (and assume they don't change from under us)
+        # CustomFields instances (and assume they don't change from under
+        # us)
         result = 0
         for key, value in self.iteritems():
             result ^= hash(key) ^ hash(value)
