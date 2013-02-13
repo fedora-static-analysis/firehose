@@ -369,6 +369,12 @@ class AnalysisTests(unittest.TestCase):
         a, w = self.make_complex_analysis()
         validate(a.to_xml_str())
 
+        a, w = self.make_failed_analysis()
+        validate(a.to_xml_str())
+
+        a, w = self.make_info()
+        validate(a.to_xml_str())
+
     def test_xml_roundtrip(self):
         def roundtrip_through_xml(a):
             xmlstr = a.to_xml_str()
