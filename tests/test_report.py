@@ -514,3 +514,21 @@ class AnalysisTests(unittest.TestCase):
             self.assertEqual(a.metadata.sut.version, '0.7')
             self.assertEqual(a.metadata.sut.buildarch, 'amd64')
             self.assertEqual(a.metadata.sut.release, '1.1')
+
+    def parse_xml_str(self, xmlstr):
+        f = StringIO.StringIO(xmlstr)
+        a = Analysis.from_xml(f)
+        f.close()
+        return a
+
+    def test_empty_str_field(self):
+        a = self.parse_xml_str(
+            '''<analysis>
+                  <metadata><generator name='test'/></metadata>
+                  <results/>
+                  <custom-fields>
+                     <str-field name="test"/>
+                  </custom-fields>
+               </analysis>''')
+        # Ensure that an empty <str-field> has value '', rather than None:
+        self.assertEqual(a.customfields['test'], '')

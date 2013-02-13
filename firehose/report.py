@@ -1230,6 +1230,8 @@ class CustomFields(OrderedDict):
         for child_node in node:
             if child_node.tag == 'str-field':
                 value = child_node.text
+                if value is None:
+                    value = ''
             elif child_node.tag == 'int-field':
                 value = int(child_node.text)
             else:
