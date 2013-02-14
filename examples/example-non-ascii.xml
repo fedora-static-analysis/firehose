@@ -31,12 +31,12 @@
     <!--
        $ gcc -Wsign-compare -c non-ascii-example.c
        non-ascii-example.c: In function ‘foo’:
-       non-ascii-example.c:30:9: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+       non-ascii-example.c:50:9: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
 
        The same, with LANG=ja_JP.UTF-8
        $ LANG=ja_JP.UTF-8 gcc -Wsign-compare -c non-ascii-example.c
        non-ascii-example.c: 関数 ‘foo’ 内:
-       non-ascii-example.c:30:9: 警告: 符号付きと符号無しの整数式の間での比較です [-Wsign-compare]
+       non-ascii-example.c:50:9: 警告: 符号付きと符号無しの整数式の間での比較です [-Wsign-compare]
     -->
     <issue>
       <!-- "comparison between signed and unsigned integer expressions" -->
@@ -67,7 +67,7 @@
         -->
         <function name="ooɟ"/>
 
-        <point line="30" column="9"/>
+        <point line="50" column="9"/>
       </location>
     </issue>
   </results>
