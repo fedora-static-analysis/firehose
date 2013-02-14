@@ -50,6 +50,13 @@ class TestParseWarning(unittest.TestCase):
         ret = gcc.parse_warning(line, FUNC_NAME)
         self.assertIsInstance(ret, Issue)
 
+    def test_empty_col(self):
+        line = "webkit/glue/webkitclient_impl.cc:411: warning: 'current_mem_usage' may be used uninitialized in this function"
+        ret = gcc.parse_warning(line, FUNC_NAME)
+        self.assertIsInstance(ret, Issue)
+        self.assertEqual(ret.location.column, 0)
+        self.assertEqual(ret.location.line, 411)
+
     def test_values_c(self):
         line = "unix/arlib.c:299:9: warning: ignoring return value of 'fread', declared with attribute warn_unused_result [-Wunused-result]"
         issue = gcc.parse_warning(line, FUNC_NAME)
