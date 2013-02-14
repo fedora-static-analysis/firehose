@@ -234,7 +234,7 @@ class AnalysisTests(unittest.TestCase):
             self.assertEqual(w.location.file.hash_.hexdigest,
                              '6ba29daa94d64b48071e299a79f2a00dcd99eeb1')
             self.assertEqual(w.location.function.name, 'make_a_list_of_random_ints_badly')
-            self.assertEqual(w.location.line, 21)
+            self.assertEqual(w.location.line, 40)
             self.assertEqual(w.location.column, 4)
             self.assertEqual(w.message.text, "ob_refcnt of '*item' is 1 too high")
             self.assertMultiLineEqual(w.notes.text,
@@ -248,7 +248,7 @@ class AnalysisTests(unittest.TestCase):
             self.assertIsInstance(s0, State)
             self.assertEqual(s0.location.file.givenpath, 'examples/python-src-example.c')
             self.assertEqual(s0.location.function.name, 'make_a_list_of_random_ints_badly')
-            self.assertEqual(s0.location.line, 17)
+            self.assertEqual(s0.location.line, 36)
             self.assertEqual(s0.location.column, 14)
             self.assertEqual(s0.notes.text,
                 'PyLongObject allocated at:         item = PyLong_FromLong(random());')
@@ -471,7 +471,7 @@ class AnalysisTests(unittest.TestCase):
         a.fixup_files(hashalg='sha1')
         self.assertEqual(w.location.file.hash_.alg, 'sha1')
         self.assertEqual(w.location.file.hash_.hexdigest,
-                         '6ba29daa94d64b48071e299a79f2a00dcd99eeb1')
+                         'e978c45fc1779e59d5f8c6c0d534fe2d0a5a7c66')
 
     def test_gcc_output(self):
         a, w = self.make_simple_analysis()
