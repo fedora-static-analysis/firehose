@@ -680,7 +680,7 @@ class DebianBinary(Sut):
         return node
 
     def __repr__(self):
-        return ('DebianSource(name=%r, version=%r, release=%r, arch=%r)'
+        return ('DebianBinary(name=%r, version=%r, release=%r, arch=%r)'
                 % (self.name, self.version, self.release, self.buildarch))
 
     def __eq__(self, other):
