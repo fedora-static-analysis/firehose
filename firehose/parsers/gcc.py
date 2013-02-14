@@ -111,6 +111,11 @@ def parse_warning(line, func_name):
         func = Function(func_name)
         try:
             column = int(match.group('column'))
+        except ValueError:
+            if match.group('column') == '':
+                column = 0
+            else:
+                raise
         except TypeError:
             column = None
         switch_match = SWITCH_SUB_PATTERN.match(match.group('switch') or '')
