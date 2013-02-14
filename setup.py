@@ -7,7 +7,7 @@ setup(name='firehose',
     description='Library for working with output from static code analyzers',
     packages=['firehose',
               'firehose.parsers'],
-    license='GPL3',
+    license='LGPL2.1 or later',
     author='David Malcolm <dmalcolm@redhat.com>',
     url='https://github.com/fedora-static-analysis/firehose',
     classifiers=(

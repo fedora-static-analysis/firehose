@@ -1,4 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright 2013 David Malcolm <dmalcolm@redhat.com>
+    Copyright 2013 Red Hat, Inc.
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2.1 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301
+    USA
+-->
 <analysis>
   <metadata>
     <generator name="cpychecker" version="0.11"/>
@@ -23,7 +42,7 @@ but final item->ob_refcnt is N + 2</notes>
       <hash alg="sha1" hexdigest="6ba29daa94d64b48071e299a79f2a00dcd99eeb1"/>
     </file>
     <function name="make_a_list_of_random_ints_badly"/>
-    <point line="21" column="4"/>
+    <point line="40" column="4"/>
   </location>
 
   <trace>
@@ -33,7 +52,7 @@ but final item->ob_refcnt is N + 2</notes>
           <hash alg="sha1" hexdigest="6ba29daa94d64b48071e299a79f2a00dcd99eeb1"/>
         </file>
         <function name="make_a_list_of_random_ints_badly"/>
-        <point line="17" column="14"/>
+        <point line="36" column="14"/>
       </location>
       <notes>PyLongObject allocated at:         item = PyLong_FromLong(random());</notes>
     </state>
@@ -44,7 +63,7 @@ but final item->ob_refcnt is N + 2</notes>
           <hash alg="sha1" hexdigest="6ba29daa94d64b48071e299a79f2a00dcd99eeb1"/>
         </file>
         <function name="make_a_list_of_random_ints_badly"/>
-        <point line="18" column="8"/>
+        <point line="37" column="8"/>
       </location>
       <notes>when PyList_Append() succeeds</notes>
     </state>
@@ -55,7 +74,7 @@ but final item->ob_refcnt is N + 2</notes>
           <hash alg="sha1" hexdigest="6ba29daa94d64b48071e299a79f2a00dcd99eeb1"/>
         </file>
         <function name="make_a_list_of_random_ints_badly"/>
-        <point line="21" column="4"/>
+        <point line="40" column="4"/>
       </location>
     </state>
   </trace>
