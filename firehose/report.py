@@ -675,7 +675,8 @@ class DebianBinary(Sut):
         node = ET.Element('debian-source')
         node.set('name', self.name)
         node.set('version', self.version)
-        node.set('release', self.release)
+        if not self.release is None:
+            node.set('release', self.release)
         node.set('build-arch', self.buildarch)
         return node
 
@@ -741,7 +742,8 @@ class DebianSource(Sut):
         node = ET.Element('debian-source')
         node.set('name', self.name)
         node.set('version', self.version)
-        node.set('release', self.release)
+        if not self.release is None:
+            node.set('release', self.release)
         return node
 
     def __repr__(self):
