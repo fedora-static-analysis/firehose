@@ -672,10 +672,11 @@ class DebianBinary(Sut):
         Produce a DebianSource XML ET for searlizing the data back down to
         XML again.
         """
-        node = ET.Element('debian-source')
+        node = ET.Element('debian-binary')
         node.set('name', self.name)
         node.set('version', self.version)
-        node.set('release', self.release)
+        if not self.release is None:
+            node.set('release', self.release)
         node.set('build-arch', self.buildarch)
         return node
 
@@ -741,7 +742,8 @@ class DebianSource(Sut):
         node = ET.Element('debian-source')
         node.set('name', self.name)
         node.set('version', self.version)
-        node.set('release', self.release)
+        if not self.release is None:
+            node.set('release', self.release)
         return node
 
     def __repr__(self):
