@@ -266,7 +266,7 @@
     <element name="info">
       <optional>
         <!--
-            An optional free-form indentifying the kind of information
+            An optional free-form string identifying the kind of information
             being reported:
         -->
         <attribute name="info-id"/>
