@@ -182,6 +182,15 @@
           </oneOrMore>
         </element>
       </optional>
+
+      <!--
+         A given tool/testid may have additional key/value pairs that it
+         may be useful to capture:
+      -->
+      <optional>
+        <ref name="custom-fields-element"/>
+      </optional>
+
     </element>
   </define>
 

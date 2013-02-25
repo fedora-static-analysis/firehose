@@ -152,7 +152,8 @@ class Issue(Result):
                  'message',
                  'notes',
                  'trace',
-                 'severity',)
+                 'severity',
+                 'customfields')
     def __init__(self,
                  cwe,
                  testid,
@@ -160,7 +161,8 @@ class Issue(Result):
                  message,
                  notes,
                  trace,
-                 severity=None):
+                 severity=None,
+                 customfields=None):
         if cwe is not None:
             assert isinstance(cwe, int)
         if testid is not None:
@@ -173,6 +175,8 @@ class Issue(Result):
             assert isinstance(trace, Trace)
         if severity is not None:
             assert isinstance(severity, _string_type)
+        if customfields is not None:
+            assert isinstance(customfields, CustomFields)
         self.cwe = cwe
         self.testid = testid
         self.location = location
@@ -180,6 +184,7 @@ class Issue(Result):
         self.notes = notes
         self.trace = trace
         self.severity = severity
+        self.customfields = customfields
 
     @classmethod
     def from_xml(cls, node):
@@ -200,7 +205,12 @@ class Issue(Result):
         else:
             trace = None
         severity = node.get('severity')
-        return Issue(cwe, testid, location, message, notes, trace, severity)
+        customfields_node = node.find('custom-fields')
+        if customfields_node is not None:
+            customfields = CustomFields.from_xml(customfields_node)
+        else:
+            customfields = None
+        return Issue(cwe, testid, location, message, notes, trace, severity, customfields)
 
     def to_xml(self):
         node = ET.Element('issue')
@@ -216,6 +226,8 @@ class Issue(Result):
             node.append(self.trace.to_xml())
         if self.severity is not None:
             node.set('severity', str(self.severity))
+        if self.customfields is not None:
+            node.append(self.customfields.to_xml())
         return node
 
     def write_as_gcc_output(self, out):
@@ -254,8 +266,10 @@ class Issue(Result):
                            msg=notes.text if notes else '')
 
     def __repr__(self):
-        return ('Issue(cwe=%r, testid=%r, location=%r, message=%r, notes=%r, trace=%r, severity=%r)'
-                % (self.cwe, self.testid, self.location, self.message, self.notes, self.trace, self.severity))
+        return ('Issue(cwe=%r, testid=%r, location=%r, message=%r,'
+                ' notes=%r, trace=%r, severity=%r, customfields=%r)'
+                % (self.cwe, self.testid, self.location, self.message,
+                   self.notes, self.trace, self.severity, self.customfields))
 
     def __eq__(self, other):
         for slot in self.__slots__:

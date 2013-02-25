@@ -46,6 +46,15 @@
         <function name="make_a_list_of_random_ints_badly"/>
         <point line="29" column="26"/>
       </location>
+      <custom-fields>
+        <str-field name="function">PyArg_ParseTuple</str-field>
+        <str-field name="format-code">i</str-field>
+        <str-field name="full-format-string">i</str-field>
+        <str-field name="expected-type">"int *" (pointing to 32 bits)</str-field>
+        <str-field name="actual-type">"long int *" (pointing to 64 bits)</str-field>
+        <str-field name="expression">&amp;count</str-field>
+        <int-field name="argument-num">3</int-field>
+      </custom-fields>
     </issue>
   </results>
 </analysis>

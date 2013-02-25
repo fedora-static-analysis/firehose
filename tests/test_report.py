@@ -81,7 +81,8 @@ class AnalysisTests(unittest.TestCase):
                                                                                       Point(10, 25))),
                                                        notes=Notes('then it crashes here'))
                                                  ]),
-                                    severity='really bad'),
+                                    severity='really bad',
+                                    customfields=CustomFields(foo='bar')),
                               ],
                      customfields=CustomFields(gccinvocation='gcc -I/usr/include/python2.7 -c foo.c'),
                      )
