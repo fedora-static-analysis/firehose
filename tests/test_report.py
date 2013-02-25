@@ -412,6 +412,10 @@ class AnalysisTests(unittest.TestCase):
         self.assertEqual(a7.results, a8.results)
         self.assertEqual(a7, a8)
 
+        a9 = Analysis.from_xml('examples/example-non-ascii.xml')
+        a10 = roundtrip_through_xml(a9)
+        self.assertEqual(a9, a10)
+
     def test_repr(self):
         # Verify that the various __repr__ methods are sane:
         a, w = self.make_simple_analysis()
