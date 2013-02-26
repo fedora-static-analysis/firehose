@@ -416,6 +416,45 @@ class AnalysisTests(unittest.TestCase):
         a10 = roundtrip_through_xml(a9)
         self.assertEqual(a9, a10)
 
+    def test_json_roundtrip(self):
+        def roundtrip_through_json(a):
+            jsondict = a.to_json()
+            from pprint import pprint
+            pprint(jsondict)
+            return Analysis.from_json(jsondict)
+
+        a1, w = self.make_simple_analysis()
+        a2 = roundtrip_through_json(a1)
+
+        self.assertEqual(a1.metadata, a2.metadata)
+        self.assertEqual(a1.results, a2.results)
+        self.assertEqual(a1, a2)
+
+        a3, w = self.make_complex_analysis()
+        a4 = roundtrip_through_json(a3)
+
+        self.assertEqual(a3.metadata, a4.metadata)
+        self.assertEqual(a3.results, a4.results)
+        self.assertEqual(a3, a4)
+
+        a5, f = self.make_failed_analysis()
+        a6 = roundtrip_through_json(a5)
+
+        self.assertEqual(a5.metadata, a6.metadata)
+        self.assertEqual(a5.results, a6.results)
+        self.assertEqual(a5, a6)
+
+        a7, info = self.make_info()
+        a8 = roundtrip_through_json(a7)
+
+        self.assertEqual(a7.metadata, a8.metadata)
+        self.assertEqual(a7.results, a8.results)
+        self.assertEqual(a7, a8)
+
+        a9 = Analysis.from_xml('examples/example-non-ascii.xml')
+        a10 = roundtrip_through_json(a9)
+        self.assertEqual(a9, a10)
+
     def test_repr(self):
         # Verify that the various __repr__ methods are sane:
         a, w = self.make_simple_analysis()
