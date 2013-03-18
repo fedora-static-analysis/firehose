@@ -210,9 +210,9 @@ if __name__ == '__main__':
         path = sys.argv[1]
         if path.endswith('.plist'):
             analysis = parse_plist(path, analyzerversion)
-            analysis.to_xml().write(sys.stdout)
+            sys.stdout.write(str(analysis.to_xml()))
             sys.stdout.write('\n')
         else:
             for result in parse_scandir(path, analyzerversion):
-                result.to_xml().write(sys.stdout)
+                sys.stdout.write(str(result.to_xml()))
                 sys.stdout.write('\n')
