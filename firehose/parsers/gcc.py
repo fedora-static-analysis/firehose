@@ -133,8 +133,9 @@ def parse_warning(line, func_name):
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
-        print "provide a build log file path as the only argument"
+        print("provide a build log file path as the only argument")
     else:
         with open(sys.argv[1]) as data_file:
             analysis = parse_file(data_file)
-            analysis.to_xml().write(sys.stdout)
+            sys.stdout.write(str(analysis.to_xml()))
+            sys.stdout.write('\n')

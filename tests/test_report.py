@@ -18,10 +18,11 @@
 
 import glob
 import os
-import StringIO
 import subprocess
 import tempfile
 import unittest
+
+from six import u, StringIO, BytesIO
 
 from firehose.report import Analysis, Issue, Metadata, Generator, SourceRpm, \
     Location, File, Function, Point, Message, Notes, Trace, State, Stats, \
@@ -331,7 +332,7 @@ class AnalysisTests(unittest.TestCase):
     def test_non_ascii_example(self):
         with open('examples/example-non-ascii.xml') as f:
             a = Analysis.from_xml(f)
-            self.assertEqual(a.metadata.generator.name, u'\u2620' * 8)
+            self.assertEqual(a.metadata.generator.name, u('\u2620') * 8)
 
             self.assertEqual(len(a.results), 1)
             w = a.results[0]
@@ -341,22 +342,22 @@ class AnalysisTests(unittest.TestCase):
             #  "comparison between signed and unsigned integer expressions"
             # within the message:
             self.assertEqual(w.message.text,
-                             (u'\u7b26\u53f7\u4ed8\u304d\u3068\u7b26\u53f7'
-                              u'\u7121\u3057\u306e\u6574\u6570\u5f0f\u306e'
-                              u'\u9593\u3067\u306e\u6bd4\u8f03\u3067\u3059'))
+                             (u('\u7b26\u53f7\u4ed8\u304d\u3068\u7b26\u53f7'
+                                '\u7121\u3057\u306e\u6574\u6570\u5f0f\u306e'
+                                '\u9593\u3067\u306e\u6bd4\u8f03\u3067\u3059')))
 
             # Verify the "mojibake" Kanji/Hiragana within the notes:
-            self.assertIn(u'\u6587\u5b57\u5316\u3051',
+            self.assertIn(u('\u6587\u5b57\u5316\u3051'),
                           w.notes.text)
 
-            self.assertEqual(w.location.function.name, u'oo\u025f')
+            self.assertEqual(w.location.function.name, u('oo\u025f'))
 
     def test_to_xml(self):
-        def validate(xmlstr):
+        def validate(xmlbytes):
             f = tempfile.NamedTemporaryFile(delete=False)
-            f.write(xmlstr)
+            f.write(xmlbytes)
             f.flush()
-            print
+            print("")
             p = subprocess.check_output(['xmllint',
                                          '--relaxng', 'firehose.rng',
                                          '--noout',
@@ -366,22 +367,22 @@ class AnalysisTests(unittest.TestCase):
             os.unlink(f.name)
 
         a, w = self.make_simple_analysis()
-        validate(a.to_xml_str())
+        validate(a.to_xml_bytes())
 
         a, w = self.make_complex_analysis()
-        validate(a.to_xml_str())
+        validate(a.to_xml_bytes())
 
         a, w = self.make_failed_analysis()
-        validate(a.to_xml_str())
+        validate(a.to_xml_bytes())
 
         a, w = self.make_info()
-        validate(a.to_xml_str())
+        validate(a.to_xml_bytes())
 
     def test_xml_roundtrip(self):
         def roundtrip_through_xml(a):
-            xmlstr = a.to_xml_str()
+            xmlbytes = a.to_xml_bytes()
 
-            buf = StringIO.StringIO(xmlstr)
+            buf = BytesIO(xmlbytes)
             return Analysis.from_xml(buf)
 
         a1, w = self.make_simple_analysis()
@@ -520,13 +521,13 @@ class AnalysisTests(unittest.TestCase):
     def test_gcc_output(self):
         a, w = self.make_simple_analysis()
 
-        output = StringIO.StringIO()
+        output = StringIO()
         w.write_as_gcc_output(output)
         self.assertEqual(output.getvalue(),
                          'foo.c:10:15: warning: something bad involving pointers\n')
 
         a, w = self.make_complex_analysis()
-        output = StringIO.StringIO()
+        output = StringIO()
         w.write_as_gcc_output(output)
         self.assertMultiLineEqual(output.getvalue(),
             ("foo.c: In function 'bar':\n"
@@ -560,15 +561,15 @@ class AnalysisTests(unittest.TestCase):
             self.assertEqual(a.metadata.sut.buildarch, 'amd64')
             self.assertEqual(a.metadata.sut.release, '1.1')
 
-    def parse_xml_str(self, xmlstr):
-        f = StringIO.StringIO(xmlstr)
+    def parse_xml_bytes(self, xmlbytes):
+        f = BytesIO(xmlbytes)
         a = Analysis.from_xml(f)
         f.close()
         return a
 
     def test_empty_str_field(self):
-        a = self.parse_xml_str(
-            '''<analysis>
+        a = self.parse_xml_bytes(
+            b'''<analysis>
                   <metadata><generator name='test'/></metadata>
                   <results/>
                   <custom-fields>
