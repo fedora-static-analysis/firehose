@@ -89,4 +89,5 @@ if __name__ == '__main__':
     else:
         with open(sys.argv[1]) as data_file:
             analysis = parse_file(data_file)
-            analysis.to_xml().write(sys.stdout)
+            sys.stdout.write(str(analysis.to_xml()))
+            sys.stdout.write("\n")

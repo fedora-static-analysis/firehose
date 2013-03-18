@@ -19,17 +19,18 @@
 # Python module for working with Firehose XML files, also, potentially,
 # a command-line tool
 
-import glob
-import os
 from collections import OrderedDict, namedtuple
-import hashlib
-import StringIO
 from subprocess import Popen, PIPE
-import sys
 import xml.etree.ElementTree as ET
+import hashlib
+import glob
+import sys
+import os
 
+from six import BytesIO, string_types, integer_types, iteritems
 
-_string_type = basestring
+_string_type = string_types[0]
+
 
 class Attribute(namedtuple('Attribute', ('name', 'type', 'nullable'))):
     """
@@ -160,10 +161,10 @@ class Analysis(JsonMixin):
             node.append(self.customfields.to_xml())
         return tree
 
-    def to_xml_str(self):
+    def to_xml_bytes(self):
         xml = self.to_xml()
-        output = StringIO.StringIO()
-        xml.write(output)
+        output = BytesIO()
+        xml.write(output, encoding='utf-8')
         return output.getvalue()
 
     def __repr__(self):
@@ -205,7 +206,7 @@ class Analysis(JsonMixin):
                     bestpath = file_.abspath \
                         if file_.abspath else file_.givenpath
 
-                    with open(bestpath) as f:
+                    with open(bestpath, 'rb') as f:
                         h = hashlib.new(hashalg)
                         h.update(f.read())
                         file_.hash_ = Hash(alg=hashalg, hexdigest=h.hexdigest())
@@ -1051,6 +1052,9 @@ class Trace(JsonMixin):
         return 'Trace(states=%r)' % (self.states, )
 
     def __eq__(self, other):
+        if not isinstance(other, Trace):
+            return False
+
         if self.states == other.states:
             return True
 
@@ -1439,11 +1443,11 @@ class CustomFields(OrderedDict):
 
     def to_xml(self):
         node = ET.Element('custom-fields')
-        for key, value in self.iteritems():
+        for key, value in iteritems(self):
             if isinstance(value, _string_type):
                 tag = 'str-field'
                 text = value
-            elif isinstance(value, (int, long)):
+            elif isinstance(value, integer_types):
                 tag = 'int-field'
                 text = str(value)
             else:
@@ -1533,7 +1537,7 @@ def main():
             for w in r.results:
                 if isinstance(w, Issue):
                     w.write_as_gcc_output(sys.stderr)
-            sys.stderr.write('  XML: %s\n' % r.to_xml_str())
+            sys.stderr.write(str(r.to_xml()))
 
 if __name__ == '__main__':
     main()
