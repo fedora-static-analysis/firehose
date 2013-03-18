@@ -1465,7 +1465,7 @@ class CustomFields(OrderedDict):
         return cls(jsonobj)
 
     def to_json(self):
-        return dict(self)
+        return OrderedDict(self)
 
     def __hash__(self):
         # dicts are usually mutable, but it would be useful to hash
