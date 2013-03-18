@@ -53,3 +53,7 @@ Projects using Firehose:
     `cpychecker <https://gcc-python-plugin.readthedocs.org/en/latest/cpychecker.html>`_
     can natively emit Firehose XML reports
   * https://github.com/paultag/storz/blob/master/wrappers/storz-lintian
+
+Firehose supports Python 2.7 and 3.2 onwards.
+
+The APIs and serialization formats (XML and JSON) are not yet set in stone.
