@@ -85,7 +85,7 @@ def parse_file(fileobj, sut=None, file_=None, stats=None):
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
-        print "provide a build log file path as the only argument"
+        print("provide a build log file path as the only argument")
     else:
         with open(sys.argv[1]) as data_file:
             analysis = parse_file(data_file)
