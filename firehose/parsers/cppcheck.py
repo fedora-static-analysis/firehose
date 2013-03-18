@@ -21,7 +21,7 @@
 import sys
 import xml.etree.ElementTree as ET
 
-from firehose.report import Message, Function, Point, \
+from firehose.model import Message, Function, Point, \
     File, Location, Generator, Metadata, Analysis, Issue, Notes, Failure, \
     CustomFields
 

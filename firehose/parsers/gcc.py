@@ -20,7 +20,7 @@
 import re
 import sys
 
-from firehose.report import Message, Function, Point, \
+from firehose.model import Message, Function, Point, \
     File, Location, Metadata, Generator, Issue, Analysis
 
 # Parser for warnings emitted by GCC

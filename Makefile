@@ -22,7 +22,7 @@ validate:
 	xmllint --relaxng firehose.rng --noout examples/example-*.xml
 
 dump:
-	python firehose/report.py
+	python firehose/model.py
 
 unittests:
 	python -m unittest discover -v

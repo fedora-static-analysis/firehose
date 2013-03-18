@@ -27,7 +27,7 @@ import plistlib
 from pprint import pprint
 import sys
 
-from firehose.report import Message, Function, Point, Range, \
+from firehose.model import Message, Function, Point, Range, \
     File, Location, Generator, Metadata, Analysis, Issue, Sut, Trace, \
     State, Notes
 

@@ -18,7 +18,7 @@
 import os
 import unittest
 
-from firehose.report import Issue, Failure
+from firehose.model import Issue, Failure
 
 from firehose.parsers.cppcheck import parse_file
 

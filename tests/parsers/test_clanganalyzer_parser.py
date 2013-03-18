@@ -19,7 +19,7 @@ import os
 import unittest
 
 from firehose.parsers.clanganalyzer import parse_plist
-from firehose.report import Analysis, Issue, Sut, Trace
+from firehose.model import Analysis, Issue, Sut, Trace
 
 FAKE_ANALYZER_VERSION = 'clang-3.0-14.fc17.x86_64'
 FAKE_SUT = Sut()

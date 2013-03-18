@@ -20,7 +20,7 @@ import unittest
 import mock
 
 from firehose.parsers import gcc # import parse_warning, parse_file
-from firehose.report import Analysis, Issue, Location, File, Point, \
+from firehose.model import Analysis, Issue, Location, File, Point, \
     Function, Message, Sut, Metadata, Generator
 
 FUNC_NAME = 'I am a func name'

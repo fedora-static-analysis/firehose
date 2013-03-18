@@ -24,7 +24,7 @@ import unittest
 
 from six import u, StringIO, BytesIO
 
-from firehose.report import Analysis, Issue, Metadata, Generator, SourceRpm, \
+from firehose.model import Analysis, Issue, Metadata, Generator, SourceRpm, \
     Location, File, Function, Point, Message, Notes, Trace, State, Stats, \
     Failure, Range, DebianSource, DebianBinary, CustomFields, Info
 
