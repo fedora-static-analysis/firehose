@@ -1,0 +1,6 @@
+include firehose.rng
+include lgpl-2.1.txt
+include Makefile
+include README.rst
+recursive-include examples *.xml *.c
+recursive-include tests *.py *.plist *.xml
