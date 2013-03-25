@@ -1,6 +1,33 @@
-Motivation: http://lists.fedoraproject.org/pipermail/devel/2012-December/175232.html
+"firehose" is a Python package intended for managing the results from
+code analysis tools (e.g. compiler warnings, static analysis, linters,
+etc).
 
-Mailing list: https://admin.fedoraproject.org/mailman/listinfo/firehose-devel
+It currently provides parsers for the output of gcc, clang-analyzer and
+cppcheck.  These parsers convert the results into a common data model of
+Python objects, with methods for lossless roundtrips through a provided
+XML format.  There is also a JSON equivalent.
+
+It is available on pypi here:
+  https://pypi.python.org/pypi/firehose
+
+and via git from:
+  https://github.com/fedora-static-analysis/firehose
+
+The mailing list is:
+  https://admin.fedoraproject.org/mailman/listinfo/firehose-devel
+
+Firehose is Free Software, licensed under the LGPLv2.1 or (at your
+option) any later version.
+
+It requires Python 2.7 or 3.2 onwards, and has been successfully tested
+with PyPy.
+
+It is currently of alpha quality.
+
+The API and serialization formats are not yet set in stone (and we're
+keen on hearing feedback before we lock things down more).
+
+Motivation: http://lists.fedoraproject.org/pipermail/devel/2012-December/175232.html
 
 I want to slurp the results from static code analysis into a database,
 which means coercing all of the results into some common interchange format,
@@ -43,7 +70,7 @@ e.g.:
 
 Projects using Firehose:
 
-  * `mock-with-analysis <https://github.com/fedora-  static-analysis/mock-with-analysis>`_
+  * `mock-with-analysis <https://github.com/fedora-static-analysis/mock-with-analysis>`_
     can rebuild a source RPM, capturing the results of 4 different code
     analysis tools in Firehose format (along with all source files that
     were mentioned in any report).
@@ -53,7 +80,3 @@ Projects using Firehose:
     `cpychecker <https://gcc-python-plugin.readthedocs.org/en/latest/cpychecker.html>`_
     can natively emit Firehose XML reports
   * https://github.com/paultag/storz/blob/master/wrappers/storz-lintian
-
-Firehose supports Python 2.7 and 3.2 onwards.
-
-The APIs and serialization formats (XML and JSON) are not yet set in stone.
