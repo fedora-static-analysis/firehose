@@ -37,8 +37,7 @@ def parse_scandir(resultdir, analyzerversion=None, sut=None):
     yield Analysis instances
     """
     for filename in glob.glob(os.path.join(resultdir, 'report-*.plist')):
-        for analysis in parse_plist(filename, analyzerversion, sut):
-            yield analysis
+        yield parse_plist(filename, analyzerversion, sut)
 
 def parse_plist(pathOrFile, analyzerversion=None, sut=None, file_=None, stats=None):
     """
@@ -213,6 +212,6 @@ if __name__ == '__main__':
             sys.stdout.write(str(analysis.to_xml()))
             sys.stdout.write('\n')
         else:
-            for result in parse_scandir(path, analyzerversion):
-                sys.stdout.write(str(result.to_xml()))
+            for analysis in parse_scandir(path, analyzerversion):
+                sys.stdout.write(str(analysis.to_xml()))
                 sys.stdout.write('\n')
