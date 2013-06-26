@@ -235,9 +235,7 @@
       </optional>
       <optional>
         <!-- summary of the failure -->
-        <element name="message">
-          <text/>
-        </element>
+        <ref name="message-element"/>
       </optional>
 
       <!--
@@ -275,9 +273,7 @@
         <ref name="location-element"/>
       </optional>
       <optional>
-        <element name="message">
-          <text/>
-        </element>
+        <ref name="message-element"/>
       </optional>
       <optional>
         <ref name="custom-fields-element"/>
