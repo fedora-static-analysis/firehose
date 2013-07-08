@@ -70,9 +70,6 @@ class Attribute(namedtuple('Attribute', ('name', 'type', 'nullable'))):
             return jsonobj
         return self.resolve_type().from_json(jsonobj)
 
-def make_slots(attrs):
-    return tuple([attr.name for attr in attrs])
-
 def to_json(obj):
     if hasattr(obj, 'to_json'):
         return obj.to_json()
@@ -111,8 +108,6 @@ class Analysis(JsonMixin):
     attrs = [Attribute('metadata', 'Metadata'),
              Attribute('results', ['Result']),
              Attribute('customfields', 'CustomFields', nullable=True)]
-
-    __slots__ = make_slots(attrs)
 
     def __init__(self, metadata, results, customfields=None):
         assert isinstance(metadata, Metadata)
@@ -239,7 +234,6 @@ class Issue(Result):
              Attribute('trace', 'Trace', nullable=True),
              Attribute('severity', _string_type, nullable=True),
              Attribute('customfields', 'CustomFields', nullable=True)]
-    __slots__ = make_slots(attrs)
 
     def __init__(self,
                  cwe,
@@ -364,10 +358,16 @@ class Issue(Result):
                    self.notes, self.trace, self.severity, self.customfields))
 
     def __eq__(self, other):
-        for slot in self.__slots__:
-            if not (getattr(self, slot) == getattr(other, slot)):
-                return False
-        return True
+        if self.cwe == other.cwe:
+            if self.testid == other.testid:
+                if self.location == other.location:
+                    if self.message == other.message:
+                        if self.notes == other.notes:
+                            if self.trace == other.trace:
+                                if self.severity == other.severity:
+                                    if self.customfields == other.customfields:
+                                        return True
+        return False
 
     def __hash__(self):
         return (hash(self.cwe) ^ hash(self.testid)
@@ -396,7 +396,6 @@ class Failure(Result):
              Attribute('location', 'Location'),
              Attribute('message', 'Message'),
              Attribute('customfields', 'CustomFields', nullable=True)]
-    __slots__ = make_slots(attrs)
 
     def __init__(self, failureid, location, message, customfields):
         if failureid is not None:
@@ -481,7 +480,6 @@ class Info(Result):
              Attribute('location', 'Location', nullable=True),
              Attribute('message', 'Message', nullable=True),
              Attribute('customfields', 'CustomFields', nullable=True)]
-    __slots__ = make_slots(attrs)
 
     def __init__(self, infoid, location, message, customfields):
         if infoid is not None:
@@ -566,7 +564,6 @@ class Metadata(JsonMixin):
              Attribute('sut', 'Sut', nullable=True),
              Attribute('file_', 'File', nullable=True),
              Attribute('stats', 'Stats', nullable=True)]
-    __slots__ = make_slots(attrs)
 
     def __init__(self, generator, sut, file_, stats):
         assert isinstance(generator, Generator)
@@ -642,7 +639,6 @@ class Generator(JsonMixin):
     attrs = [Attribute('name', _string_type),
              Attribute('version', _string_type, nullable=True),
              ]
-    __slots__ = make_slots(attrs)
 
     def __init__(self, name, version=None):
         assert isinstance(name, _string_type)
@@ -722,7 +718,6 @@ class SourceRpm(Sut):
              Attribute('release', _string_type),
              Attribute('buildarch', _string_type),
              ]
-    __slots__ = make_slots(attrs)
 
     def __init__(self, name, version, release, buildarch):
         assert isinstance(name, _string_type)
@@ -780,7 +775,6 @@ class DebianBinary(Sut):
              Attribute('version', _string_type),
              Attribute('release', _string_type, nullable=True),
              Attribute('buildarch', _string_type)]
-    __slots__ = make_slots(attrs)
 
     def __init__(self, name, version, release, buildarch):
         """
@@ -861,7 +855,6 @@ class DebianSource(Sut):
     attrs = [Attribute('name', _string_type),
              Attribute('version', _string_type),
              Attribute('release', _string_type, nullable=True)]
-    __slots__ = make_slots(attrs)
 
     def __init__(self, name, version, release):
         """
@@ -927,7 +920,6 @@ class DebianSource(Sut):
 
 class Stats(JsonMixin):
     attrs = [Attribute('wallclocktime', float)]
-    __slots__ = make_slots(attrs)
 
     def __init__(self, wallclocktime):
         assert isinstance(wallclocktime, float)
@@ -959,7 +951,6 @@ class Stats(JsonMixin):
 
 class Message(JsonMixin):
     attrs = [Attribute('text', _string_type)]
-    __slots__ = make_slots(attrs)
 
     def __init__(self, text):
         assert isinstance(text, _string_type)
@@ -992,7 +983,6 @@ class Message(JsonMixin):
 
 class Notes(JsonMixin):
     attrs = [Attribute('text', _string_type)]
-    __slots__ = make_slots(attrs)
 
     def __init__(self, text):
         assert isinstance(text, _string_type)
@@ -1025,7 +1015,6 @@ class Notes(JsonMixin):
 
 class Trace(JsonMixin):
     attrs = [Attribute('states', ['State'])]
-    __slots__ = make_slots(attrs)
 
     def __init__(self, states):
         assert isinstance(states, list)
@@ -1072,7 +1061,6 @@ class Trace(JsonMixin):
 class State(JsonMixin):
     attrs = [Attribute('location', 'Location'),
              Attribute('notes', 'Notes', nullable=True)]
-    __slots__ = make_slots(attrs)
 
     def __init__(self, location, notes):
         assert isinstance(location, Location)
@@ -1120,7 +1108,6 @@ class Location(JsonMixin):
              Attribute('function', 'Function', nullable=True),
              Attribute('point', 'Point', nullable=True),
              Attribute('range_', 'Range', nullable=True)]
-    __slots__ = make_slots(attrs)
 
     def __init__(self, file, function, point=None, range_=None):
         assert isinstance(file, File)
@@ -1213,7 +1200,6 @@ class File(JsonMixin):
     attrs = [Attribute('givenpath', _string_type),
              Attribute('abspath',  _string_type, nullable=True),
              Attribute('hash_',  'Hash', nullable=True)]
-    __slots__ = make_slots(attrs)
 
     def __init__(self, givenpath, abspath, hash_=None):
         assert isinstance(givenpath, _string_type)
@@ -1266,7 +1252,6 @@ class File(JsonMixin):
 class Hash(JsonMixin):
     attrs = [Attribute('alg', _string_type),
              Attribute('hexdigest',  _string_type)]
-    __slots__ = make_slots(attrs)
 
     def __init__(self, alg, hexdigest):
         assert isinstance(alg, _string_type)
@@ -1301,7 +1286,6 @@ class Hash(JsonMixin):
 
 class Function(JsonMixin):
     attrs = [Attribute('name', _string_type)]
-    __slots__ = make_slots(attrs)
 
     def __init__(self, name):
         self.name = name
@@ -1335,7 +1319,6 @@ class Function(JsonMixin):
 class Point(JsonMixin):
     attrs = [Attribute('line', int),
              Attribute('column', int)]
-    __slots__ = make_slots(attrs)
 
     def __init__(self, line, column):
         assert isinstance(line, int)
@@ -1378,7 +1361,6 @@ class Point(JsonMixin):
 class Range(JsonMixin):
     attrs = [Attribute('start', 'Point'),
              Attribute('end', 'Point')]
-    __slots__ = make_slots(attrs)
 
     def __init__(self, start, end):
         assert isinstance(start, Point)
