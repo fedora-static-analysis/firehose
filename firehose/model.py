@@ -104,6 +104,19 @@ class JsonMixin(object):
     def from_json(cls, jsonobj):
         return from_json_using_attrs(cls, jsonobj)
 
+    def __eq__(self, other):
+        for attr in self.attrs:
+            try:
+                if getattr(self, attr.name) != getattr(other, attr.name):
+                    return False
+            except AttributeError:
+                return False
+
+        return True
+
+    def __ne__(self, other):
+        return not (self == other)
+
 class Analysis(JsonMixin):
     attrs = [Attribute('metadata', 'Metadata'),
              Attribute('results', ['Result']),
@@ -165,12 +178,6 @@ class Analysis(JsonMixin):
     def __repr__(self):
         return ('Analysis(metadata=%r, results=%r, customfields=%r)'
                 % (self.metadata, self.results, self.customfields))
-
-    def __eq__(self, other):
-        if self.metadata == other.metadata:
-            if self.results == other.results:
-                if self.customfields == other.customfields:
-                    return True
 
     def __hash__(self):
         # (self.results is a list and is thus not hashable)
@@ -357,18 +364,6 @@ class Issue(Result):
                 % (self.cwe, self.testid, self.location, self.message,
                    self.notes, self.trace, self.severity, self.customfields))
 
-    def __eq__(self, other):
-        if self.cwe == other.cwe:
-            if self.testid == other.testid:
-                if self.location == other.location:
-                    if self.message == other.message:
-                        if self.notes == other.notes:
-                            if self.trace == other.trace:
-                                if self.severity == other.severity:
-                                    if self.customfields == other.customfields:
-                                        return True
-        return False
-
     def __hash__(self):
         return (hash(self.cwe) ^ hash(self.testid)
                 ^ hash(self.location) ^ hash(self.message)
@@ -457,13 +452,6 @@ class Failure(Result):
         return ('Failure(failureid=%r, location=%r, message=%r, customfields=%r)'
                 % (self.failureid, self.location, self.message, self.customfields))
 
-    def __eq__(self, other):
-        if self.failureid == other.failureid:
-            if self.location == other.location:
-                if self.message == other.message:
-                    if self.customfields == other.customfields:
-                        return True
-
     def __hash__(self):
         return (hash(self.failureid) ^ hash(self.location)
                 ^ hash(self.message) ^ hash(self.customfields))
@@ -541,13 +529,6 @@ class Info(Result):
         return ('Info(infoid=%r, location=%r, message=%r, customfields=%r)'
                 % (self.infoid, self.location, self.message, self.customfields))
 
-    def __eq__(self, other):
-        if self.infoid == other.infoid:
-            if self.location == other.location:
-                if self.message == other.message:
-                    if self.customfields == other.customfields:
-                        return True
-
     def __hash__(self):
         return (hash(self.infoid) ^ hash(self.location)
                 ^ hash(self.message) ^ hash(self.customfields))
@@ -614,13 +595,6 @@ class Metadata(JsonMixin):
         return ('Metadata(generator=%r, sut=%r, file_=%r, stats=%r)'
                 % (self.generator, self.sut, self.file_, self.stats))
 
-    def __eq__(self, other):
-        if self.generator == other.generator:
-            if self.sut == other.sut:
-                if self.file_ == other.file_:
-                    if self.stats == other.stats:
-                        return True
-
     def __hash__(self):
         return (hash(self.generator) ^ hash(self.sut)
                 ^ hash(self.file_) ^ hash(self.stats))
@@ -663,11 +637,6 @@ class Generator(JsonMixin):
     def __repr__(self):
         return ('Generator(name=%r, version=%r)'
                 % (self.name, self.version))
-
-    def __eq__(self, other):
-        if self.name == other.name:
-            if self.version == other.version:
-                return True
 
     def __hash__(self):
         return hash(self.name) ^ hash(self.version)
@@ -754,13 +723,6 @@ class SourceRpm(Sut):
         return ('SourceRpm(name=%r, version=%r, release=%r, buildarch=%r)'
                 % (self.name, self.version, self.release, self.buildarch))
 
-    def __eq__(self, other):
-        if self.name == other.name:
-            if self.version == other.version:
-                if self.release == other.release:
-                    if self.buildarch == other.buildarch:
-                        return True
-
     def __hash__(self):
         return (hash(self.name) ^ hash(self.version)
                 ^ hash(self.release) ^ hash(self.buildarch))
@@ -834,13 +796,6 @@ class DebianBinary(Sut):
         return ('DebianBinary(name=%r, version=%r, release=%r, arch=%r)'
                 % (self.name, self.version, self.release, self.buildarch))
 
-    def __eq__(self, other):
-        if self.name == other.name:
-            if self.version == other.version:
-                if self.release == other.release:
-                    if self.buildarch == other.buildarch:
-                        return True
-
     def __hash__(self):
         return (hash(self.name) ^ hash(self.version)
                 ^ hash(self.release) ^ hash(self.buildarch))
@@ -907,12 +862,6 @@ class DebianSource(Sut):
         return ('DebianSource(name=%r, version=%r, release=%r)'
                 % (self.name, self.version, self.release))
 
-    def __eq__(self, other):
-        if self.name == other.name:
-            if self.version == other.version:
-                if self.release == other.release:
-                    return True
-
     def __hash__(self):
         return (hash(self.name) ^ hash(self.version)
                 ^ hash(self.release))
@@ -938,10 +887,6 @@ class Stats(JsonMixin):
 
     def __repr__(self):
         return 'Stats(wallclocktime=%r)' % (self.wallclocktime, )
-
-    def __eq__(self, other):
-        if self.wallclocktime == other.wallclocktime:
-            return True
 
     def __hash__(self):
         return hash(self.wallclocktime)
@@ -969,12 +914,6 @@ class Message(JsonMixin):
     def __repr__(self):
         return 'Message(text=%r)' % (self.text, )
 
-    def __eq__(self, other):
-        return self.text == other.text
-
-    def __ne__(self, other):
-        return self.text != other.text
-
     def __hash__(self):
         return hash(self.text)
 
@@ -1001,11 +940,6 @@ class Notes(JsonMixin):
 
     def __repr__(self):
         return 'Notes(text=%r)' % (self.text, )
-
-    def __eq__(self, other):
-        if isinstance(other, Notes):
-            if self.text == other.text:
-                return True
 
     def __hash__(self):
         return hash(self.text)
@@ -1039,13 +973,6 @@ class Trace(JsonMixin):
 
     def __repr__(self):
         return 'Trace(states=%r)' % (self.states, )
-
-    def __eq__(self, other):
-        if not isinstance(other, Trace):
-            return False
-
-        if self.states == other.states:
-            return True
 
     def __hash__(self):
         result = 0
@@ -1088,11 +1015,6 @@ class State(JsonMixin):
 
     def __repr__(self):
         return 'State(location=%r, notes=%r)' % (self.location, self.notes)
-
-    def __eq__(self, other):
-        if self.location == other.location:
-            if self.notes == other.notes:
-                return True
 
     def __hash__(self):
         return hash(self.location) ^ hash(self.notes)
@@ -1156,17 +1078,6 @@ class Location(JsonMixin):
     def __repr__(self):
         return ('Location(file=%r, function=%r, point=%r, range_=%r)' %
                 (self.file, self.function, self.point, self.range_))
-
-    def __eq__(self, other):
-        if isinstance(other, Location):
-            if self.file == other.file:
-                if self.function == other.function:
-                    if self.point == other.point:
-                        if self.range_ == other.range_:
-                            return True
-
-    def __ne__(self, other):
-        return not (self == other)
 
     def __hash__(self):
         return (hash(self.file) ^ hash(self.function)
@@ -1237,12 +1148,6 @@ class File(JsonMixin):
         return ('File(givenpath=%r, abspath=%r, hash_=%r)' %
                 (self.givenpath, self.abspath, self.hash_))
 
-    def __eq__(self, other):
-        if self.givenpath == other.givenpath:
-            if self.abspath == other.abspath:
-                if self.hash_ == other.hash_:
-                    return True
-
     def __hash__(self):
         return hash(self.givenpath) ^ hash(self.abspath) ^ hash(self.hash_)
 
@@ -1276,11 +1181,6 @@ class Hash(JsonMixin):
         return ('Hash(alg=%r, hexdigest=%r)' %
                 (self.alg, self.hexdigest))
 
-    def __eq__(self, other):
-        if self.alg == other.alg:
-            if self.hexdigest == other.hexdigest:
-                return True
-
     def __hash__(self):
         return hash(self.alg) ^ hash(self.hexdigest)
 
@@ -1303,12 +1203,6 @@ class Function(JsonMixin):
 
     def __repr__(self):
         return 'Function(name=%r)' % self.name
-
-    def __eq__(self, other):
-        return self.name == other.name
-
-    def __ne__(self, other):
-        return self.name != other.name
 
     def __hash__(self):
         return hash(self.name)
@@ -1343,15 +1237,6 @@ class Point(JsonMixin):
         return ('Point(line=%r, column=%r)' %
                 (self.line, self.column))
 
-    def __eq__(self, other):
-        if isinstance(other, Point):
-            if self.line == other.line:
-                if self.column == other.column:
-                    return True
-
-    def __ne__(self, other):
-        return not self == other
-
     def __hash__(self):
         return hash(self.line) ^ hash(self.column)
 
@@ -1385,12 +1270,6 @@ class Range(JsonMixin):
     def __repr__(self):
         return ('Range(start=%r, end=%r)' %
                 (self.start, self.end))
-
-    def __eq__(self, other):
-        if isinstance(other, Range):
-            if self.start == other.start:
-                if self.end == other.end:
-                    return True
 
     def __hash__(self):
         return hash(self.start) ^ hash(self.end)
