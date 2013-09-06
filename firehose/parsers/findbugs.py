@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-#   Copyright 2013 ShuxiongYe, yeshuxiong@gmail.com 
+#   Copyright 2013 Shuxiong Ye <yeshuxiong@gmail.com>
 #
 #   This library is free software; you can redistribute it and/or
 #   modify it under the terms of the GNU Lesser General Public
@@ -27,7 +27,33 @@ from firehose.model import Message, Function, Point, \
 # Example of findbugs' warnings:
 # M C RV: return value of String.format(String, Object[]) ignored in edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest.testFormatDateWithY()  At FormatterRuntimeTest.java:[line 52]
 
+# You can find bugs descriptions of findbugs here:
+# http://findbugs.sourceforge.net/bugDescriptions.html
+
 DEBUG=False
+
+def parse_file(data_file, findbugs_version=None, sut=None, file_=None, stats=None):
+    """
+    :param data_file:           file object containing findbugs scan result
+    :type  data_file:           file
+    :param findbugs_version:    version of findbugs
+    :type  findbugs_version:    str
+
+    :return:    Analysis instance
+    """
+    generator = Generator(name="findbugs", version=findbugs_version)
+    metadata = Metadata(generator, sut, file_, stats)
+    analysis = Analysis(metadata, [])
+    for line in data_file.readlines():
+        issue = parse_line(line)
+        if issue:
+            analysis.results.append(issue)
+        else:
+            sys.stderr.write("fail to pass line=[%s]"%line)
+    return analysis
+
+FINDBUGS_PATTERN=re.compile(r"^(?P<bug_message>[A-Z]* +[A-Z]* +[A-Z]*: *.*) +in +(?P<bug_path_and_function>[^\.\(\)]+(?:\.[^\.\(\)]+)*\([^\)]*\))[^\[]* +(?P<bug_file_name>[^\[ ]+):\[line +(?P<bug_line_number>\d+)\]")
+PATH_AND_FUNCTION_PATTERN=re.compile(r"^(?:(?P<bug_class_path>[^\.]+(?:\.[^\.]+)*)\.){0,1}(?P<bug_class_name>[^\.]+)\.(?P<bug_function_name>[^.]+\([^\.]*\))$")
 
 def parse_line(line):
     """
@@ -36,9 +62,6 @@ def parse_line(line):
 
     :return:    Issue if match, else None
     """
-    FINDBUGS_PATTERN=re.compile(r"^(?P<bug_message>[A-Z]* +[A-Z]* +[A-Z]*: *.*) +in +(?P<bug_path_and_function>[^\.\(\)]+(?:\.[^\.\(\)]+)*\([^\)]*\))[^\[]* +(?P<bug_file_name>[^\[ ]+):\[line +(?P<bug_line_number>\d+)\]")
-    PATH_AND_FUNCTION_PATTERN=re.compile(r"^(?:(?P<bug_class_path>[^\.]+(?:\.[^\.]+)*)\.){0,1}(?P<bug_class_name>[^\.]+)\.(?P<bug_function_name>[^.]+\([^\.]*\))$")
-
     match = FINDBUGS_PATTERN.match(line)
     if match:
         if DEBUG:
@@ -65,19 +88,10 @@ def parse_line(line):
 
  
 if __name__ == '__main__':
-    f=open(sys.argv[1],"r")
-    for line in f:
-        print '------------------------'
-        line=line[:-1]
-        print line
-        print parse_line(line)
-
-    """
     if len(sys.argv) != 2:
-        print("provide a build log file path as the only argument")
+        print "Usage: %s [findbugs result files]"
     else:
         with open(sys.argv[1]) as data_file:
             analysis = parse_file(data_file)
             sys.stdout.write(str(analysis.to_xml()))
             sys.stdout.write('\n')
-    """
