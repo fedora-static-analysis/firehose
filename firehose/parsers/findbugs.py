@@ -32,15 +32,16 @@ from firehose.model import Message, Function, Point, \
 
 DEBUG=False
 
-def parse_file(data_file, findbugs_version=None, sut=None, file_=None, stats=None):
+def parse_file(data_file_name, findbugs_version=None, sut=None, file_=None, stats=None):
     """
-    :param data_file:           file object containing findbugs scan result
-    :type  data_file:           file
+    :param data_file:           str object containing findbugs scan result
+    :type  data_file:           str
     :param findbugs_version:    version of findbugs
     :type  findbugs_version:    str
 
     :return:    Analysis instance
     """
+    data_file=open(data_file_name)
     generator = Generator(name="findbugs", version=findbugs_version)
     metadata = Metadata(generator, sut, file_, stats)
     analysis = Analysis(metadata, [])
@@ -50,9 +51,10 @@ def parse_file(data_file, findbugs_version=None, sut=None, file_=None, stats=Non
             analysis.results.append(issue)
         else:
             sys.stderr.write("fail to pass line=[%s]"%line)
+    data_file.close()
     return analysis
 
-FINDBUGS_PATTERN=re.compile(r"^(?P<bug_message>[A-Z]* +[A-Z]* +[A-Z]*: *.*) +in +(?P<bug_path_and_function>[^\.\(\)]+(?:\.[^\.\(\)]+)*\([^\)]*\))[^\[]* +(?P<bug_file_name>[^\[ ]+):\[line +(?P<bug_line_number>\d+)\]")
+FINDBUGS_PATTERN=re.compile(r"^(?P<bug_message>[^ ]* +[^ ]* +[^ ]*: *.*) +in +(?P<bug_path_and_function>[^\.\(\)]+(?:\.[^\.\(\)]+)*\([^\)]*\))[^\[]* +(?P<bug_file_name>[^\[ ]+):\[line +(?P<bug_line_number>\d+)\]")
 PATH_AND_FUNCTION_PATTERN=re.compile(r"^(?:(?P<bug_class_path>[^\.]+(?:\.[^\.]+)*)\.){0,1}(?P<bug_class_name>[^\.]+)\.(?P<bug_function_name>[^.]+\([^\.]*\))$")
 
 def parse_line(line):
@@ -91,7 +93,6 @@ if __name__ == '__main__':
     if len(sys.argv) != 2:
         print "Usage: %s [findbugs result files]"
     else:
-        with open(sys.argv[1]) as data_file:
-            analysis = parse_file(data_file)
-            sys.stdout.write(str(analysis.to_xml()))
-            sys.stdout.write('\n')
+        analysis = parse_file(sys.argv[1])
+        sys.stdout.write(str(analysis.to_xml()))
+        sys.stdout.write('\n')
