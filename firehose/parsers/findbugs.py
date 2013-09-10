@@ -15,8 +15,6 @@ from firehose.model import Message, Function, Point, \
 # You can find bugs descriptions of findbugs here:
 # http://findbugs.sourceforge.net/bugDescriptions.html
 
-DEBUG=False
-
 def parse_file(data_file_name, findbugs_version=None, sut=None, file_=None, stats=None):
     """
     :param data_file:           str object containing findbugs scan result
@@ -51,16 +49,8 @@ def parse_line(line):
     """
     match = FINDBUGS_PATTERN.match(line)
     if match:
-        if DEBUG:
-            print match.groupdict()
-            print match.groups()
-
         match2 = PATH_AND_FUNCTION_PATTERN.match(match.group("bug_path_and_function"))
         if match2:
-            if DEBUG:
-                print match2.groupdict()
-                print match2.groups()
-
             message = Message(match.group("bug_message"))
             # findbugs has no column information
             point = Point(int(match.group("bug_line_number")), 0)
@@ -76,7 +66,7 @@ def parse_line(line):
  
 if __name__ == '__main__':
     if len(sys.argv) != 2:
-        print "Usage: %s [findbugs result files]"
+        sys.stdout.write("Usage: %s [findbugs result files]\n", sys.argv[0])
     else:
         analysis = parse_file(sys.argv[1])
         sys.stdout.write(str(analysis.to_xml()))
