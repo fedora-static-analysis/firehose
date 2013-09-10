@@ -118,5 +118,28 @@ class TestParseFile(unittest.TestCase):
     def test_testdata_jformatstring(self):
         path=os.path.join(os.path.dirname(__file__),'example-output','findbugs','findbugs_jformatstring.txt')
         analysis=findbugs.parse_file(path)
-        print analysis
+        self.assertIsInstance(analysis, Analysis)
+        self.assertNotEqual(analysis.results, None)
+        self.assertEqual(len(analysis.results), len(testdata_jformatstring_answer))
+        for i in range(0,len(analysis.results)):
+            ret = analysis.results[i] 
+            #print testdata_jformatstring_array[i]
+            #print ret
+            self.assertIsInstance(ret, Issue)
+
+            self.assertIsInstance(ret.location, Location)
+            #print ret.location.line, testdata_jformatstring_answer[i][0]
+            self.assertEqual(ret.location.line, testdata_jformatstring_answer[i][0])
+
+            self.assertIsInstance(ret.location.function, Function)
+            #print ret.location.function.name, testdata_jformatstring_answer[i][1]
+            self.assertEqual(ret.location.function.name, testdata_jformatstring_answer[i][1])
+
+            self.assertIsInstance(ret.location.file, File)
+            #print ret.location.file.givenpath, testdata_jformatstring_answer[i][2]
+            self.assertEqual(ret.location.file.givenpath, testdata_jformatstring_answer[i][2])
+
+            self.assertIsInstance(ret.message, Message)
+            #print ret.message.text, testdata_jformatstring_answer[i][3]
+            self.assertEqual(ret.message.text, testdata_jformatstring_answer[i][3])
 
