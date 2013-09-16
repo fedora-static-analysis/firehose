@@ -2,8 +2,8 @@
 code analysis tools (e.g. compiler warnings, static analysis, linters,
 etc).
 
-It currently provides parsers for the output of gcc, clang-analyzer and
-cppcheck.  These parsers convert the results into a common data model of
+It currently provides parsers for the output of gcc, clang-analyzer, cppcheck,
+and findbugs.  These parsers convert the results into a common data model of
 Python objects, with methods for lossless roundtrips through a provided
 XML format.  There is also a JSON equivalent.
 
