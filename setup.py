@@ -20,7 +20,7 @@
 from distutils.core import setup
 
 setup(name='firehose',
-    version='0.2',
+    version='0.3',
     description='Library for working with output from static code analyzers',
     packages=['firehose',
               'firehose.parsers'],
