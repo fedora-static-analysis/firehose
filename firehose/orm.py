@@ -38,7 +38,8 @@ metadata = MetaData()
 
 t_analysis = \
     Table('analysis', metadata,
-          Column('id', String, primary_key=True, autoincrement=False),
+          Column('id', Integer, primary_key=True, autoincrement=True),
+          Column('hash', String, index=True),
           Column('metadata_id', String,
                  ForeignKey('metadata.id'), nullable=False),
           Column('customfields_id', String,
@@ -48,7 +49,8 @@ Index('ix_analysis_metadata_id', t_analysis.c.metadata_id)
 
 t_generator = \
     Table('generator', metadata,
-          Column('id', String, primary_key=True, autoincrement=False),
+          Column('id', Integer, primary_key=True, autoincrement=True),
+          Column('hash', String, index=True),
           Column('name', String),
           Column('version', String), # optional in RNG
           )
@@ -56,7 +58,8 @@ Index('ix_generator_name_version', t_generator.c.name, t_generator.c.version)
 
 t_metadata = \
     Table('metadata', metadata,
-          Column('id', String, primary_key=True, autoincrement=False),
+          Column('id', Integer, primary_key=True, autoincrement=True),
+          Column('hash', String, index=True),
           Column('generator_id', String,
                  ForeignKey('generator.id'), nullable=False),
           Column('sut_id', String, ForeignKey('sut.id')),
@@ -68,7 +71,8 @@ Index('ix_metadata_sut_id', t_metadata.c.sut_id)
 
 t_stats = \
     Table('stats', metadata,
-          Column('id', String, primary_key=True, autoincrement=False),
+          Column('id', Integer, primary_key=True, autoincrement=True),
+          Column('hash', String, index=True),
           Column('wallclocktime', Float, nullable=False),
           )
 Index('ix_metadata_wallclocktime', t_stats.c.wallclocktime)
@@ -76,7 +80,8 @@ Index('ix_metadata_wallclocktime', t_stats.c.wallclocktime)
 # For the Sut hierarchy we use joined-table inheritance
 t_sut = \
     Table('sut', metadata,
-          Column('id', String, primary_key=True, autoincrement=False),
+          Column('id', Integer, primary_key=True, autoincrement=True),
+          Column('hash', String, index=True),
           Column('type', String(20), nullable=False),
           Column('name', String, nullable=False),
           Column('version', String, nullable=False),
@@ -91,7 +96,8 @@ Index('ix_sut_name_version_release_buildarch',
 
 t_result = \
     Table('result', metadata,
-          Column('id', String, primary_key=True, autoincrement=False),
+          Column('id', Integer, primary_key=True, autoincrement=True),
+          Column('hash', String, index=True),
           Column('type', String(10), nullable=False),
           Column('analysis_id', String,
                  ForeignKey('analysis.id'), nullable=False),
@@ -112,26 +118,30 @@ Index('ix_result_location_id', t_result.c.location_id)
 
 t_message = \
     Table('message', metadata,
-          Column('id', String, primary_key=True, autoincrement=False),
+          Column('id', Integer, primary_key=True, autoincrement=True),
+          Column('hash', String, index=True),
           Column('text', String),
           )
 Index('ix_message_text', t_message.c.text)
 
 t_notes = \
     Table('notes', metadata,
-          Column('id', String, primary_key=True, autoincrement=False),
+          Column('id', Integer, primary_key=True, autoincrement=True),
+          Column('hash', String, index=True),
           Column('text', String),
           )
 Index('ix_notes_text', t_notes.c.text)
 
 t_trace = \
     Table('trace', metadata,
-          Column('id', String, primary_key=True, autoincrement=False)
+          Column('id', Integer, primary_key=True, autoincrement=True),
+          Column('hash', String, index=True),
           )
 
 t_state = \
     Table('state', metadata,
-          Column('id', String, primary_key=True, autoincrement=False),
+          Column('id', Integer, primary_key=True, autoincrement=True),
+          Column('hash', String, index=True),
           Column('trace_id', String, ForeignKey('trace.id')),
           Column('location_id', String,
                  ForeignKey('location.id'), nullable=False),
@@ -141,7 +151,8 @@ Index('ix_state_trace_id', t_state.c.trace_id)
 
 t_location = \
     Table('location', metadata,
-          Column('id', String, primary_key=True, autoincrement=False),
+          Column('id', Integer, primary_key=True, autoincrement=True),
+          Column('hash', String, index=True),
           Column('file_id', String, ForeignKey('file.id'), nullable=False),
           Column('function_id', String, ForeignKey('function.id')),
           # either a point or a range:
@@ -154,7 +165,8 @@ Index('ix_location_file_id_function_id',
 
 t_file = \
     Table('file', metadata,
-          Column('id', String, primary_key=True, autoincrement=False),
+          Column('id', Integer, primary_key=True, autoincrement=True),
+          Column('hash', String, index=True),
           Column('givenpath', String, nullable=False),
           Column('abspath', String),
           Column('hash_id', String, ForeignKey('hash.id')),
@@ -163,7 +175,8 @@ Index('ix_file_givenpath', t_file.c.givenpath)
 
 t_hash = \
     Table('hash', metadata,
-          Column('id', String, primary_key=True, autoincrement=False),
+          Column('id', Integer, primary_key=True, autoincrement=True),
+          Column('hash', String, index=True),
           Column('alg', String, nullable=False),
           Column('hexdigest', String, nullable=False),
           )
@@ -171,14 +184,16 @@ Index('ix_hash_hexdigest', t_hash.c.hexdigest)
 
 t_function = \
     Table('function', metadata,
-          Column('id', String, primary_key=True, autoincrement=False),
+          Column('id', Integer, primary_key=True, autoincrement=True),
+          Column('hash', String, index=True),
           Column('name', String, nullable=False),
           )
 Index('ix_function_name', t_function.c.name)
 
 t_point = \
     Table('point', metadata,
-          Column('id', String, primary_key=True, autoincrement=False),
+          Column('id', Integer, primary_key=True, autoincrement=True),
+          Column('hash', String, index=True),
           Column('line', Integer, nullable=False),
           Column('column', Integer, nullable=False),
           )
@@ -186,7 +201,8 @@ Index('ix_point_line_column', t_point.c.line, t_point.c.column)
 
 t_range = \
     Table('range', metadata,
-          Column('id', String, primary_key=True, autoincrement=False),
+          Column('id', Integer, primary_key=True, autoincrement=True),
+          Column('hash', String, index=True),
           Column('start_id', String,
                  ForeignKey('point.id'), nullable=False),
           Column('end_id', String,
@@ -196,11 +212,14 @@ Index('ix_range_start_id_end_id', t_range.c.start_id, t_range.c.end_id)
 
 t_customfields = \
     Table('customfields', metadata,
-          Column('id', String, primary_key=True, autoincrement=False))
+          Column('id', Integer, primary_key=True, autoincrement=True),
+          Column('hash', String, index=True),
+          )
 
 t_intfield = \
     Table('intfield', metadata,
-          Column('id', String, primary_key=True, autoincrement=False),
+          Column('id', Integer, primary_key=True, autoincrement=True),
+          Column('hash', String, index=True),
           Column('customfields_id', String,
                  ForeignKey('customfields.id'), nullable=False),
           Column('name', String, nullable=False),
@@ -210,7 +229,8 @@ Index('ix_intfield_name', t_intfield.c.name)
 
 t_strfield = \
     Table('strfield', metadata,
-          Column('id', String, primary_key=True, autoincrement=False),
+          Column('id', Integer, primary_key=True, autoincrement=True),
+          Column('hash', String, index=True),
           Column('customfields_id', String,
                  ForeignKey('customfields.id'), nullable=False),
           Column('name', String, nullable=False),
