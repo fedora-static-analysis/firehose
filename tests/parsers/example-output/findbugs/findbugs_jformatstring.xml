@@ -1,0 +1,652 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<BugCollection version="2.0.2" sequence="0" timestamp="1378419462000" analysisTimestamp="1390922739745" release="">
+  <Project projectName="">
+    <Jar>/usr/share/java/jFormatString.jar</Jar>
+  </Project>
+  <BugInstance type="DLS_DEAD_LOCAL_STORE" priority="1" abbrev="DLS" category="STYLE" instanceHash="ee56b5edf7bf95d301c15a9220695a93" instanceOccurrenceNum="0" instanceOccurrenceMax="0" rank="15">
+    <ShortMessage>Dead store to local variable</ShortMessage>
+    <LongMessage>Dead store to c in edu.umd.cs.findbugs.formatStringChecker.FormatterCompileTimeTest.testBug1874856FalsePositive()</LongMessage>
+    <Class classname="edu.umd.cs.findbugs.formatStringChecker.FormatterCompileTimeTest" primary="true">
+      <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterCompileTimeTest" start="13" end="102" sourcefile="FormatterCompileTimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterCompileTimeTest.java">
+        <Message>At FormatterCompileTimeTest.java:[lines 13-102]</Message>
+      </SourceLine>
+      <Message>In class edu.umd.cs.findbugs.formatStringChecker.FormatterCompileTimeTest</Message>
+    </Class>
+    <Method classname="edu.umd.cs.findbugs.formatStringChecker.FormatterCompileTimeTest" name="testBug1874856FalsePositive" signature="()V" isStatic="false" primary="true">
+      <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterCompileTimeTest" start="66" end="86" startBytecode="0" endBytecode="83" sourcefile="FormatterCompileTimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterCompileTimeTest.java"/>
+      <Message>In method edu.umd.cs.findbugs.formatStringChecker.FormatterCompileTimeTest.testBug1874856FalsePositive()</Message>
+    </Method>
+    <LocalVariable name="c" register="1" pc="14" role="LOCAL_VARIABLE_NAMED">
+      <Message>Local variable named c</Message>
+    </LocalVariable>
+    <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterCompileTimeTest" primary="true" start="66" end="66" startBytecode="13" endBytecode="13" sourcefile="FormatterCompileTimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterCompileTimeTest.java">
+      <Message>At FormatterCompileTimeTest.java:[line 66]</Message>
+    </SourceLine>
+    <Property name="edu.umd.cs.findbugs.detect.DeadLocalStoreProperty.DEAD_OBJECT_STORE" value="true"/>
+    <Property name="edu.umd.cs.findbugs.detect.DeadLocalStoreProperty.METHOD_RESULT" value="true"/>
+    <Property name="edu.umd.cs.findbugs.detect.DeadLocalStoreProperty.LOCAL_NAME" value="c"/>
+  </BugInstance>
+  <BugInstance type="DLS_DEAD_LOCAL_STORE" priority="1" abbrev="DLS" category="STYLE" instanceHash="5cfd363d764d9ab5b1b2678ae3384a6e" instanceOccurrenceNum="0" instanceOccurrenceMax="0" rank="15">
+    <ShortMessage>Dead store to local variable</ShortMessage>
+    <LongMessage>Dead store to c in edu.umd.cs.findbugs.formatStringChecker.FormatterCompileTimeTest.testBug1874856TruePositive()</LongMessage>
+    <Class classname="edu.umd.cs.findbugs.formatStringChecker.FormatterCompileTimeTest" primary="true">
+      <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterCompileTimeTest" start="13" end="102" sourcefile="FormatterCompileTimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterCompileTimeTest.java">
+        <Message>At FormatterCompileTimeTest.java:[lines 13-102]</Message>
+      </SourceLine>
+      <Message>In class edu.umd.cs.findbugs.formatStringChecker.FormatterCompileTimeTest</Message>
+    </Class>
+    <Method classname="edu.umd.cs.findbugs.formatStringChecker.FormatterCompileTimeTest" name="testBug1874856TruePositive" signature="()V" isStatic="false" primary="true">
+      <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterCompileTimeTest" start="89" end="102" startBytecode="0" endBytecode="69" sourcefile="FormatterCompileTimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterCompileTimeTest.java"/>
+      <Message>In method edu.umd.cs.findbugs.formatStringChecker.FormatterCompileTimeTest.testBug1874856TruePositive()</Message>
+    </Method>
+    <LocalVariable name="c" register="1" pc="14" role="LOCAL_VARIABLE_NAMED">
+      <Message>Local variable named c</Message>
+    </LocalVariable>
+    <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterCompileTimeTest" primary="true" start="89" end="89" startBytecode="13" endBytecode="13" sourcefile="FormatterCompileTimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterCompileTimeTest.java">
+      <Message>At FormatterCompileTimeTest.java:[line 89]</Message>
+    </SourceLine>
+    <Property name="edu.umd.cs.findbugs.detect.DeadLocalStoreProperty.DEAD_OBJECT_STORE" value="true"/>
+    <Property name="edu.umd.cs.findbugs.detect.DeadLocalStoreProperty.METHOD_RESULT" value="true"/>
+    <Property name="edu.umd.cs.findbugs.detect.DeadLocalStoreProperty.LOCAL_NAME" value="c"/>
+  </BugInstance>
+  <BugInstance type="RV_RETURN_VALUE_IGNORED" priority="1" abbrev="RV" category="CORRECTNESS" instanceHash="c63d31dfa75951d8489bc92255150390" instanceOccurrenceNum="0" instanceOccurrenceMax="0" rank="3">
+    <ShortMessage>Method ignores return value</ShortMessage>
+    <LongMessage>return value of String.format(String, Object[]) ignored in edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest.testShouldWork()</LongMessage>
+    <Class classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" primary="true">
+      <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" start="16" end="92" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java">
+        <Message>At FormatterRuntimeTest.java:[lines 16-92]</Message>
+      </SourceLine>
+      <Message>In class edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest</Message>
+    </Class>
+    <Method classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" name="testShouldWork" signature="()V" isStatic="false" primary="true">
+      <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" start="19" end="24" startBytecode="0" endBytecode="124" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java"/>
+      <Message>In method edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest.testShouldWork()</Message>
+    </Method>
+    <Method classname="java.lang.String" name="format" signature="(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;" isStatic="true" role="METHOD_CALLED">
+      <SourceLine classname="java.lang.String" start="2781" end="2781" startBytecode="0" endBytecode="67" sourcefile="String.java" sourcepath="java/lang/String.java"/>
+      <Message>Called method String.format(String, Object[])</Message>
+    </Method>
+    <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" primary="true" start="19" end="19" startBytecode="22" endBytecode="22" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java">
+      <Message>At FormatterRuntimeTest.java:[line 19]</Message>
+    </SourceLine>
+    <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" start="21" end="21" startBytecode="44" endBytecode="44" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java" role="SOURCE_LINE_ANOTHER_INSTANCE">
+      <Message>Another occurrence at FormatterRuntimeTest.java:[line 21]</Message>
+    </SourceLine>
+    <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" start="22" end="22" startBytecode="66" endBytecode="66" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java" role="SOURCE_LINE_ANOTHER_INSTANCE">
+      <Message>Another occurrence at FormatterRuntimeTest.java:[line 22]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance type="RV_RETURN_VALUE_IGNORED" priority="2" abbrev="RV" category="CORRECTNESS" instanceHash="a957e45c805a349df470240c89ce126d" instanceOccurrenceNum="0" instanceOccurrenceMax="0" rank="5">
+    <ShortMessage>Method ignores return value</ShortMessage>
+    <LongMessage>return value of String.format(String, Object[]) ignored in edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest.testFormatDateWithY()</LongMessage>
+    <Class classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" primary="true">
+      <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" start="16" end="92" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java">
+        <Message>At FormatterRuntimeTest.java:[lines 16-92]</Message>
+      </SourceLine>
+      <Message>In class edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest</Message>
+    </Class>
+    <Method classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" name="testFormatDateWithY" signature="()V" isStatic="false" primary="true">
+      <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" start="52" end="56" startBytecode="0" endBytecode="118" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java"/>
+      <Message>In method edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest.testFormatDateWithY()</Message>
+    </Method>
+    <Method classname="java.lang.String" name="format" signature="(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;" isStatic="true" role="METHOD_CALLED">
+      <SourceLine classname="java.lang.String" start="2781" end="2781" startBytecode="0" endBytecode="67" sourcefile="String.java" sourcepath="java/lang/String.java"/>
+      <Message>Called method String.format(String, Object[])</Message>
+    </Method>
+    <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" primary="true" start="52" end="52" startBytecode="16" endBytecode="16" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java">
+      <Message>At FormatterRuntimeTest.java:[line 52]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance type="RV_RETURN_VALUE_IGNORED" priority="2" abbrev="RV" category="CORRECTNESS" instanceHash="2c74649fe245b59ec61b3914e249e300" instanceOccurrenceNum="0" instanceOccurrenceMax="0" rank="5">
+    <ShortMessage>Method ignores return value</ShortMessage>
+    <LongMessage>return value of String.format(String, Object[]) ignored in edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest.testNotEnoughParameters()</LongMessage>
+    <Class classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" primary="true">
+      <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" start="16" end="92" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java">
+        <Message>At FormatterRuntimeTest.java:[lines 16-92]</Message>
+      </SourceLine>
+      <Message>In class edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest</Message>
+    </Class>
+    <Method classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" name="testNotEnoughParameters" signature="()V" isStatic="false" primary="true">
+      <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" start="36" end="40" startBytecode="0" endBytecode="113" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java"/>
+      <Message>In method edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest.testNotEnoughParameters()</Message>
+    </Method>
+    <Method classname="java.lang.String" name="format" signature="(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;" isStatic="true" role="METHOD_CALLED">
+      <SourceLine classname="java.lang.String" start="2781" end="2781" startBytecode="0" endBytecode="67" sourcefile="String.java" sourcepath="java/lang/String.java"/>
+      <Message>Called method String.format(String, Object[])</Message>
+    </Method>
+    <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" primary="true" start="36" end="36" startBytecode="11" endBytecode="11" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java">
+      <Message>At FormatterRuntimeTest.java:[line 36]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance type="RV_RETURN_VALUE_IGNORED" priority="2" abbrev="RV" category="CORRECTNESS" instanceHash="4ee254369d475e76b178b18cb2e89b81" instanceOccurrenceNum="0" instanceOccurrenceMax="0" rank="5">
+    <ShortMessage>Method ignores return value</ShortMessage>
+    <LongMessage>return value of String.format(String, Object[]) ignored in edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest.testStringWhereIntegerExpected()</LongMessage>
+    <Class classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" primary="true">
+      <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" start="16" end="92" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java">
+        <Message>At FormatterRuntimeTest.java:[lines 16-92]</Message>
+      </SourceLine>
+      <Message>In class edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest</Message>
+    </Class>
+    <Method classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" name="testStringWhereIntegerExpected" signature="()V" isStatic="false" primary="true">
+      <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" start="28" end="32" startBytecode="0" endBytecode="113" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java"/>
+      <Message>In method edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest.testStringWhereIntegerExpected()</Message>
+    </Method>
+    <Method classname="java.lang.String" name="format" signature="(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;" isStatic="true" role="METHOD_CALLED">
+      <SourceLine classname="java.lang.String" start="2781" end="2781" startBytecode="0" endBytecode="67" sourcefile="String.java" sourcepath="java/lang/String.java"/>
+      <Message>Called method String.format(String, Object[])</Message>
+    </Method>
+    <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" primary="true" start="28" end="28" startBytecode="11" endBytecode="11" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java">
+      <Message>At FormatterRuntimeTest.java:[line 28]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance type="VA_FORMAT_STRING_BAD_CONVERSION" priority="1" abbrev="FS" category="CORRECTNESS" instanceHash="93f1d9e0964015f7fe73330ad377e466" instanceOccurrenceNum="0" instanceOccurrenceMax="0" rank="7">
+    <ShortMessage>The type of a supplied argument doesn&apos;t match format specifier</ShortMessage>
+    <LongMessage>Argument of type String can&apos;t be handled by format specifier %tY in edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest.testDateMismatch()</LongMessage>
+    <Class classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" primary="true">
+      <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" start="16" end="92" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java">
+        <Message>At FormatterRuntimeTest.java:[lines 16-92]</Message>
+      </SourceLine>
+      <Message>In class edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest</Message>
+    </Class>
+    <Method classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" name="testDateMismatch" signature="()V" isStatic="false" primary="true">
+      <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" start="88" end="92" startBytecode="0" endBytecode="116" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java"/>
+      <Message>In method edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest.testDateMismatch()</Message>
+    </Method>
+    <Method classname="java.io.PrintStream" name="printf" signature="(Ljava/lang/String;[Ljava/lang/Object;)Ljava/io/PrintStream;" isStatic="false" role="METHOD_CALLED">
+      <SourceLine classname="java.io.PrintStream" start="838" end="838" startBytecode="0" endBytecode="68" sourcefile="PrintStream.java" sourcepath="java/io/PrintStream.java"/>
+      <Message>Called method java.io.PrintStream.printf(String, Object[])</Message>
+    </Method>
+    <Type descriptor="Ljava/lang/String;" role="TYPE_FOUND">
+      <SourceLine classname="java.lang.String" start="109" end="2985" sourcefile="String.java" sourcepath="java/lang/String.java">
+        <Message>At String.java:[lines 109-2985]</Message>
+      </SourceLine>
+      <Message>Actual type String</Message>
+    </Type>
+    <String value="%tY" role="STRING_FORMAT_SPECIFIER">
+      <Message>Format specifier &quot;%tY&quot;</Message>
+    </String>
+    <String value="%tY\n" role="STRING_FORMAT_STRING">
+      <Message>Format string &quot;%tY\n&quot;</Message>
+    </String>
+    <String value="2008" role="STRING_CONSTANT">
+      <Message>String constant &quot;2008&quot;</Message>
+    </String>
+    <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" primary="true" start="88" end="88" startBytecode="14" endBytecode="14" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java">
+      <Message>At FormatterRuntimeTest.java:[line 88]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance type="VA_FORMAT_STRING_BAD_CONVERSION" priority="1" abbrev="FS" category="CORRECTNESS" instanceHash="1e58c8532a6f2d8e8f9e71962729aa57" instanceOccurrenceNum="0" instanceOccurrenceMax="0" rank="7">
+    <ShortMessage>The type of a supplied argument doesn&apos;t match format specifier</ShortMessage>
+    <LongMessage>Argument of type String can&apos;t be handled by format specifier %d in edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest.testStringWhereIntegerExpected()</LongMessage>
+    <Class classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" primary="true">
+      <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" start="16" end="92" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java">
+        <Message>At FormatterRuntimeTest.java:[lines 16-92]</Message>
+      </SourceLine>
+      <Message>In class edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest</Message>
+    </Class>
+    <Method classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" name="testStringWhereIntegerExpected" signature="()V" isStatic="false" primary="true">
+      <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" start="28" end="32" startBytecode="0" endBytecode="113" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java"/>
+      <Message>In method edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest.testStringWhereIntegerExpected()</Message>
+    </Method>
+    <Method classname="java.lang.String" name="format" signature="(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;" isStatic="true" role="METHOD_CALLED">
+      <SourceLine classname="java.lang.String" start="2781" end="2781" startBytecode="0" endBytecode="67" sourcefile="String.java" sourcepath="java/lang/String.java"/>
+      <Message>Called method String.format(String, Object[])</Message>
+    </Method>
+    <Type descriptor="Ljava/lang/String;" role="TYPE_FOUND">
+      <SourceLine classname="java.lang.String" start="109" end="2985" sourcefile="String.java" sourcepath="java/lang/String.java">
+        <Message>At String.java:[lines 109-2985]</Message>
+      </SourceLine>
+      <Message>Actual type String</Message>
+    </Type>
+    <String value="%d" role="STRING_FORMAT_SPECIFIER">
+      <Message>Format specifier &quot;%d&quot;</Message>
+    </String>
+    <String value="%d" role="STRING_FORMAT_STRING">
+      <Message>Format string &quot;%d&quot;</Message>
+    </String>
+    <String value="test" role="STRING_CONSTANT">
+      <Message>String constant &quot;test&quot;</Message>
+    </String>
+    <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" primary="true" start="28" end="28" startBytecode="11" endBytecode="11" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java">
+      <Message>At FormatterRuntimeTest.java:[line 28]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance type="VA_FORMAT_STRING_BAD_CONVERSION_FROM_ARRAY" priority="1" abbrev="USELESS_STRING" category="CORRECTNESS" instanceHash="74723a2ec007b7e0cf3244632894f94f" instanceOccurrenceNum="0" instanceOccurrenceMax="0" rank="7">
+    <ShortMessage>Array formatted in useless way using format string</ShortMessage>
+    <LongMessage>Argument of type int[] formatted in useless way in edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest.testPassingAnArray()</LongMessage>
+    <Class classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" primary="true">
+      <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" start="16" end="92" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java">
+        <Message>At FormatterRuntimeTest.java:[lines 16-92]</Message>
+      </SourceLine>
+      <Message>In class edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest</Message>
+    </Class>
+    <Method classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" name="testPassingAnArray" signature="()V" isStatic="false" primary="true">
+      <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" start="43" end="44" startBytecode="0" endBytecode="75" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java"/>
+      <Message>In method edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest.testPassingAnArray()</Message>
+    </Method>
+    <Method classname="java.io.PrintStream" name="printf" signature="(Ljava/lang/String;[Ljava/lang/Object;)Ljava/io/PrintStream;" isStatic="false" role="METHOD_CALLED">
+      <SourceLine classname="java.io.PrintStream" start="838" end="838" startBytecode="0" endBytecode="68" sourcefile="PrintStream.java" sourcepath="java/io/PrintStream.java"/>
+      <Message>Called method java.io.PrintStream.printf(String, Object[])</Message>
+    </Method>
+    <Type descriptor="[I" role="TYPE_FOUND">
+      <Message>Actual type int[]</Message>
+    </Type>
+    <String value="%s" role="STRING_FORMAT_SPECIFIER">
+      <Message>Format specifier &quot;%s&quot;</Message>
+    </String>
+    <String value="%s" role="STRING_FORMAT_STRING">
+      <Message>Format string &quot;%s&quot;</Message>
+    </String>
+    <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" primary="true" start="43" end="43" startBytecode="25" endBytecode="25" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java">
+      <Message>At FormatterRuntimeTest.java:[line 43]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance type="VA_FORMAT_STRING_BAD_CONVERSION_TO_BOOLEAN" priority="1" abbrev="FS" category="STYLE" instanceHash="4d045e8399e96a8da505ea634eee5829" instanceOccurrenceNum="0" instanceOccurrenceMax="0" rank="15">
+    <ShortMessage>Non-Boolean argument formatted using %b format specifier</ShortMessage>
+    <LongMessage>Non-Boolean argument formatted using %b format specifier in edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest.testPassingAnIntToABoolean()</LongMessage>
+    <Class classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" primary="true">
+      <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" start="16" end="92" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java">
+        <Message>At FormatterRuntimeTest.java:[lines 16-92]</Message>
+      </SourceLine>
+      <Message>In class edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest</Message>
+    </Class>
+    <Method classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" name="testPassingAnIntToABoolean" signature="()V" isStatic="false" primary="true">
+      <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" start="47" end="48" startBytecode="0" endBytecode="66" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java"/>
+      <Message>In method edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest.testPassingAnIntToABoolean()</Message>
+    </Method>
+    <Method classname="java.io.PrintStream" name="printf" signature="(Ljava/lang/String;[Ljava/lang/Object;)Ljava/io/PrintStream;" isStatic="false" role="METHOD_CALLED">
+      <SourceLine classname="java.io.PrintStream" start="838" end="838" startBytecode="0" endBytecode="68" sourcefile="PrintStream.java" sourcepath="java/io/PrintStream.java"/>
+      <Message>Called method java.io.PrintStream.printf(String, Object[])</Message>
+    </Method>
+    <Type descriptor="Ljava/lang/Integer;" role="TYPE_FOUND">
+      <SourceLine classname="java.lang.Integer" start="50" end="1177" sourcefile="Integer.java" sourcepath="java/lang/Integer.java">
+        <Message>At Integer.java:[lines 50-1177]</Message>
+      </SourceLine>
+      <Message>Actual type Integer</Message>
+    </Type>
+    <String value="%b" role="STRING_FORMAT_SPECIFIER">
+      <Message>Format specifier &quot;%b&quot;</Message>
+    </String>
+    <String value="%b" role="STRING_FORMAT_STRING">
+      <Message>Format string &quot;%b&quot;</Message>
+    </String>
+    <Method classname="java.lang.Integer" name="valueOf" signature="(I)Ljava/lang/Integer;" isStatic="true" role="METHOD_RETURN_VALUE_OF">
+      <SourceLine classname="java.lang.Integer" start="597" end="601" startBytecode="0" endBytecode="98" sourcefile="Integer.java" sourcepath="java/lang/Integer.java"/>
+      <Message>Return value of Integer.valueOf(int)</Message>
+    </Method>
+    <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" primary="true" start="47" end="47" startBytecode="16" endBytecode="16" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java">
+      <Message>At FormatterRuntimeTest.java:[line 47]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance type="VA_FORMAT_STRING_ILLEGAL" priority="1" abbrev="FS" category="CORRECTNESS" instanceHash="2d3ad4573d1c3a114d0c24934c6b036b" instanceOccurrenceNum="0" instanceOccurrenceMax="0" rank="9">
+    <ShortMessage>Illegal format string</ShortMessage>
+    <LongMessage>Illegal format string &quot;%Y&quot; in edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest.testFormatDateWithY()</LongMessage>
+    <Class classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" primary="true">
+      <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" start="16" end="92" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java">
+        <Message>At FormatterRuntimeTest.java:[lines 16-92]</Message>
+      </SourceLine>
+      <Message>In class edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest</Message>
+    </Class>
+    <Method classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" name="testFormatDateWithY" signature="()V" isStatic="false" primary="true">
+      <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" start="52" end="56" startBytecode="0" endBytecode="118" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java"/>
+      <Message>In method edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest.testFormatDateWithY()</Message>
+    </Method>
+    <Method classname="java.lang.String" name="format" signature="(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;" isStatic="true" role="METHOD_CALLED">
+      <SourceLine classname="java.lang.String" start="2781" end="2781" startBytecode="0" endBytecode="67" sourcefile="String.java" sourcepath="java/lang/String.java"/>
+      <Message>Called method String.format(String, Object[])</Message>
+    </Method>
+    <String value="%Y" role="STRING_FORMAT_STRING">
+      <Message>Format string &quot;%Y&quot;</Message>
+    </String>
+    <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" primary="true" start="52" end="52" startBytecode="16" endBytecode="16" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java">
+      <Message>At FormatterRuntimeTest.java:[line 52]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance type="VA_FORMAT_STRING_MISSING_ARGUMENT" priority="1" abbrev="FS" category="CORRECTNESS" instanceHash="3ce581db76a852fe30f57d89a9b69e4e" instanceOccurrenceNum="0" instanceOccurrenceMax="0" rank="9">
+    <ShortMessage>Format string references missing argument</ShortMessage>
+    <LongMessage>format string &quot;%s&quot; needs argument 2 but only 1 are provided in edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest.testNotEnoughParameters()</LongMessage>
+    <Class classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" primary="true">
+      <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" start="16" end="92" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java">
+        <Message>At FormatterRuntimeTest.java:[lines 16-92]</Message>
+      </SourceLine>
+      <Message>In class edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest</Message>
+    </Class>
+    <Method classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" name="testNotEnoughParameters" signature="()V" isStatic="false" primary="true">
+      <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" start="36" end="40" startBytecode="0" endBytecode="113" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java"/>
+      <Message>In method edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest.testNotEnoughParameters()</Message>
+    </Method>
+    <Method classname="java.lang.String" name="format" signature="(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;" isStatic="true" role="METHOD_CALLED">
+      <SourceLine classname="java.lang.String" start="2781" end="2781" startBytecode="0" endBytecode="67" sourcefile="String.java" sourcepath="java/lang/String.java"/>
+      <Message>Called method String.format(String, Object[])</Message>
+    </Method>
+    <String value="%s" role="STRING_FORMAT_SPECIFIER">
+      <Message>Format specifier &quot;%s&quot;</Message>
+    </String>
+    <String value="%s%s" role="STRING_FORMAT_STRING">
+      <Message>Format string &quot;%s%s&quot;</Message>
+    </String>
+    <Int value="2" role="INT_EXPECTED_ARGUMENTS">
+      <Message>Expected 2 arguments</Message>
+    </Int>
+    <Int value="1" role="INT_ACTUAL_ARGUMENTS">
+      <Message>Found 1 arguments</Message>
+    </Int>
+    <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" primary="true" start="36" end="36" startBytecode="11" endBytecode="11" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java">
+      <Message>At FormatterRuntimeTest.java:[line 36]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance type="VA_FORMAT_STRING_NO_PREVIOUS_ARGUMENT" priority="1" abbrev="FS" category="CORRECTNESS" instanceHash="2648fd6a49330e4e7bf5ea58a138f98" instanceOccurrenceNum="0" instanceOccurrenceMax="0" rank="5">
+    <ShortMessage>No previous argument for format string</ShortMessage>
+    <LongMessage>No previous argument for format string argument to String.format(String, Object[]) in edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest.testBug1874856TruePositive()</LongMessage>
+    <Class classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" primary="true">
+      <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" start="16" end="92" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java">
+        <Message>At FormatterRuntimeTest.java:[lines 16-92]</Message>
+      </SourceLine>
+      <Message>In class edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest</Message>
+    </Class>
+    <Method classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" name="testBug1874856TruePositive" signature="()V" isStatic="false" primary="true">
+      <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" start="76" end="84" startBytecode="0" endBytecode="212" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java"/>
+      <Message>In method edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest.testBug1874856TruePositive()</Message>
+    </Method>
+    <Method classname="java.lang.String" name="format" signature="(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;" isStatic="true" role="METHOD_CALLED">
+      <SourceLine classname="java.lang.String" start="2781" end="2781" startBytecode="0" endBytecode="67" sourcefile="String.java" sourcepath="java/lang/String.java"/>
+      <Message>Called method String.format(String, Object[])</Message>
+    </Method>
+    <String value="%&lt;te" role="STRING_FORMAT_SPECIFIER">
+      <Message>Format specifier &quot;%&lt;te&quot;</Message>
+    </String>
+    <String value="s5 Duke&apos;s Birthday: %&lt;te, %te %&lt;tY %te %12$tm " role="STRING_FORMAT_STRING">
+      <Message>Format string &quot;s5 Duke&apos;s Birthday: %&lt;te, %te %&lt;tY %te %12$tm &quot;</Message>
+    </String>
+    <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" primary="true" start="78" end="78" startBytecode="75" endBytecode="75" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java">
+      <Message>At FormatterRuntimeTest.java:[line 78]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance type="VA_FORMAT_STRING_USES_NEWLINE" priority="2" abbrev="FS" category="BAD_PRACTICE" instanceHash="cf053b4561bf3a435165e2aa13a8211a" instanceOccurrenceNum="0" instanceOccurrenceMax="0" rank="20">
+    <ShortMessage>Format string should use %n rather than \n</ShortMessage>
+    <LongMessage>Format string should use %n rather than \n in edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest.testDateMismatch()</LongMessage>
+    <Class classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" primary="true">
+      <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" start="16" end="92" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java">
+        <Message>At FormatterRuntimeTest.java:[lines 16-92]</Message>
+      </SourceLine>
+      <Message>In class edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest</Message>
+    </Class>
+    <Method classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" name="testDateMismatch" signature="()V" isStatic="false" primary="true">
+      <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" start="88" end="92" startBytecode="0" endBytecode="116" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java"/>
+      <Message>In method edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest.testDateMismatch()</Message>
+    </Method>
+    <Method classname="java.io.PrintStream" name="printf" signature="(Ljava/lang/String;[Ljava/lang/Object;)Ljava/io/PrintStream;" isStatic="false" role="METHOD_CALLED">
+      <SourceLine classname="java.io.PrintStream" start="838" end="838" startBytecode="0" endBytecode="68" sourcefile="PrintStream.java" sourcepath="java/io/PrintStream.java"/>
+      <Message>Called method java.io.PrintStream.printf(String, Object[])</Message>
+    </Method>
+    <String value="%tY\n" role="STRING_FORMAT_STRING">
+      <Message>Format string &quot;%tY\n&quot;</Message>
+    </String>
+    <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" primary="true" start="88" end="88" startBytecode="14" endBytecode="14" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java">
+      <Message>At FormatterRuntimeTest.java:[line 88]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance type="VA_FORMAT_STRING_USES_NEWLINE" priority="2" abbrev="FS" category="BAD_PRACTICE" instanceHash="c72074fac9b3ee6b70f539cea3fe61c8" instanceOccurrenceNum="0" instanceOccurrenceMax="0" rank="20">
+    <ShortMessage>Format string should use %n rather than \n</ShortMessage>
+    <LongMessage>Format string should use %n rather than \n in edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest.testShouldWork()</LongMessage>
+    <Class classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" primary="true">
+      <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" start="16" end="92" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java">
+        <Message>At FormatterRuntimeTest.java:[lines 16-92]</Message>
+      </SourceLine>
+      <Message>In class edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest</Message>
+    </Class>
+    <Method classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" name="testShouldWork" signature="()V" isStatic="false" primary="true">
+      <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" start="19" end="24" startBytecode="0" endBytecode="124" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java"/>
+      <Message>In method edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest.testShouldWork()</Message>
+    </Method>
+    <Method classname="java.lang.String" name="format" signature="(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;" isStatic="true" role="METHOD_CALLED">
+      <SourceLine classname="java.lang.String" start="2781" end="2781" startBytecode="0" endBytecode="67" sourcefile="String.java" sourcepath="java/lang/String.java"/>
+      <Message>Called method String.format(String, Object[])</Message>
+    </Method>
+    <String value="%d\n" role="STRING_FORMAT_STRING">
+      <Message>Format string &quot;%d\n&quot;</Message>
+    </String>
+    <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" primary="true" start="21" end="21" startBytecode="44" endBytecode="44" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java">
+      <Message>At FormatterRuntimeTest.java:[line 21]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance type="VA_FORMAT_STRING_USES_NEWLINE" priority="2" abbrev="FS" category="BAD_PRACTICE" instanceHash="50f3d3a539c3a9b1a703b51bb7bd6120" instanceOccurrenceNum="0" instanceOccurrenceMax="0" rank="20">
+    <ShortMessage>Format string should use %n rather than \n</ShortMessage>
+    <LongMessage>Format string should use %n rather than \n in edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest.testShouldWork()</LongMessage>
+    <Class classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" primary="true">
+      <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" start="16" end="92" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java">
+        <Message>At FormatterRuntimeTest.java:[lines 16-92]</Message>
+      </SourceLine>
+      <Message>In class edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest</Message>
+    </Class>
+    <Method classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" name="testShouldWork" signature="()V" isStatic="false" primary="true">
+      <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" start="19" end="24" startBytecode="0" endBytecode="124" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java"/>
+      <Message>In method edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest.testShouldWork()</Message>
+    </Method>
+    <Method classname="java.lang.String" name="format" signature="(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;" isStatic="true" role="METHOD_CALLED">
+      <SourceLine classname="java.lang.String" start="2781" end="2781" startBytecode="0" endBytecode="67" sourcefile="String.java" sourcepath="java/lang/String.java"/>
+      <Message>Called method String.format(String, Object[])</Message>
+    </Method>
+    <String value="%f\n" role="STRING_FORMAT_STRING">
+      <Message>Format string &quot;%f\n&quot;</Message>
+    </String>
+    <SourceLine classname="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" primary="true" start="22" end="22" startBytecode="66" endBytecode="66" sourcefile="FormatterRuntimeTest.java" sourcepath="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java">
+      <Message>At FormatterRuntimeTest.java:[line 22]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugCategory category="STYLE">
+    <Description>Dodgy code</Description>
+  </BugCategory>
+  <BugCategory category="BAD_PRACTICE">
+    <Description>Bad practice</Description>
+  </BugCategory>
+  <BugCategory category="CORRECTNESS">
+    <Description>Correctness</Description>
+  </BugCategory>
+  <BugPattern type="VA_FORMAT_STRING_NO_PREVIOUS_ARGUMENT" abbrev="FS" category="CORRECTNESS">
+    <ShortDescription>No previous argument for format string</ShortDescription>
+    <Details><![CDATA[
+
+<p>
+The format string specifies a relative index to request that the argument for the previous format specifier
+be reused. However, there is no previous argument.
+For example,
+</p>
+<p><code>formatter.format("%&lt;s %s", "a", "b")</code>
+</p>
+<p>would throw a MissingFormatArgumentException when executed.
+</p>
+
+     ]]></Details>
+  </BugPattern>
+  <BugPattern type="VA_FORMAT_STRING_BAD_CONVERSION_FROM_ARRAY" abbrev="USELESS_STRING" category="CORRECTNESS">
+    <ShortDescription>Array formatted in useless way using format string</ShortDescription>
+    <Details><![CDATA[
+
+<p>
+One of the arguments being formatted with a format string is an array. This will be formatted
+using a fairly useless format, such as [I@304282, which doesn't actually show the contents
+of the array.
+Consider wrapping the array using <code>Arrays.asList(...)</code> before handling it off to a formatted.
+</p>
+
+     ]]></Details>
+  </BugPattern>
+  <BugPattern type="VA_FORMAT_STRING_BAD_CONVERSION_TO_BOOLEAN" abbrev="FS" category="STYLE">
+    <ShortDescription>Non-Boolean argument formatted using %b format specifier</ShortDescription>
+    <Details><![CDATA[
+
+<p>
+An argument not of type Boolean is being formatted with a %b format specifier. This won't throw an
+exception; instead, it will print true for any nonnull value, and false for null.
+This feature of format strings is strange, and may not be what you intended.
+</p>
+
+     ]]></Details>
+  </BugPattern>
+  <BugPattern type="VA_FORMAT_STRING_BAD_CONVERSION" abbrev="FS" category="CORRECTNESS">
+    <ShortDescription>The type of a supplied argument doesn&apos;t match format specifier</ShortDescription>
+    <Details><![CDATA[
+
+<p>
+One of the arguments is uncompatible with the corresponding format string specifier.
+As a result, this will generate a runtime exception when executed.
+For example, <code>String.format("%d", "1")</code> will generate an exception, since
+the String "1" is incompatible with the format specifier %d.
+</p>
+
+     ]]></Details>
+  </BugPattern>
+  <BugPattern type="VA_FORMAT_STRING_USES_NEWLINE" abbrev="FS" category="BAD_PRACTICE">
+    <ShortDescription>Format string should use %n rather than \n</ShortDescription>
+    <Details><![CDATA[
+
+<p>
+This format string include a newline character (\n). In format strings, it is generally
+ preferable better to use %n, which will produce the platform-specific line separator.
+</p>
+
+     ]]></Details>
+  </BugPattern>
+  <BugPattern type="VA_FORMAT_STRING_MISSING_ARGUMENT" abbrev="FS" category="CORRECTNESS">
+    <ShortDescription>Format string references missing argument</ShortDescription>
+    <Details><![CDATA[
+
+<p>
+Not enough arguments are passed to satisfy a placeholder in the format string.
+A runtime exception will occur when
+this statement is executed.
+</p>
+
+     ]]></Details>
+  </BugPattern>
+  <BugPattern type="VA_FORMAT_STRING_ILLEGAL" abbrev="FS" category="CORRECTNESS">
+    <ShortDescription>Illegal format string</ShortDescription>
+    <Details><![CDATA[
+
+<p>
+The format string is syntactically invalid,
+and a runtime exception will occur when
+this statement is executed.
+</p>
+
+     ]]></Details>
+  </BugPattern>
+  <BugPattern type="RV_RETURN_VALUE_IGNORED" abbrev="RV" category="CORRECTNESS">
+    <ShortDescription>Method ignores return value</ShortDescription>
+    <Details><![CDATA[
+
+   <p> The return value of this method should be checked. One common
+cause of this warning is to invoke a method on an immutable object,
+thinking that it updates the object. For example, in the following code
+fragment,</p>
+<blockquote>
+<pre>
+String dateString = getHeaderField(name);
+dateString.trim();
+</pre>
+</blockquote>
+<p>the programmer seems to be thinking that the trim() method will update
+the String referenced by dateString. But since Strings are immutable, the trim()
+function returns a new String value, which is being ignored here. The code
+should be corrected to: </p>
+<blockquote>
+<pre>
+String dateString = getHeaderField(name);
+dateString = dateString.trim();
+</pre>
+</blockquote>
+
+    ]]></Details>
+  </BugPattern>
+  <BugPattern type="DLS_DEAD_LOCAL_STORE" abbrev="DLS" category="STYLE">
+    <ShortDescription>Dead store to local variable</ShortDescription>
+    <Details><![CDATA[
+
+<p>
+This instruction assigns a value to a local variable,
+but the value is not read or used in any subsequent instruction.
+Often, this indicates an error, because the value computed is never
+used.
+</p>
+<p>
+Note that Sun's javac compiler often generates dead stores for
+final local variables.  Because FindBugs is a bytecode-based tool,
+there is no easy way to eliminate these false positives.
+</p>
+
+    ]]></Details>
+  </BugPattern>
+  <BugCode abbrev="FS">
+    <Description>Format string problem</Description>
+  </BugCode>
+  <BugCode abbrev="RV" cweid="440">
+    <Description>Bad use of return value from method</Description>
+  </BugCode>
+  <BugCode abbrev="USELESS_STRING">
+    <Description>Useless/non-informative string generated</Description>
+  </BugCode>
+  <BugCode abbrev="DLS" cweid="563">
+    <Description>Dead local store</Description>
+  </BugCode>
+  <Errors errors="0" missingClasses="2">
+    <MissingClass>junit.framework.Assert</MissingClass>
+    <MissingClass>junit.framework.TestCase</MissingClass>
+  </Errors>
+  <FindBugsSummary timestamp="Fri, 6 Sep 2013 06:17:42 +0800" total_classes="12" referenced_classes="67" total_bugs="16" total_size="659" num_packages="1" vm_version="20.0-b12" cpu_seconds="4.78" clock_seconds="3.36" peak_mbytes="54.23" alloc_mbytes="742.44" gc_seconds="0.35" priority_2="6" priority_1="10">
+    <FileStats path="edu/umd/cs/findbugs/formatStringChecker/Conversion.java" bugCount="0" size="48"/>
+    <FileStats path="edu/umd/cs/findbugs/formatStringChecker/DateTime.java" bugCount="0" size="38"/>
+    <FileStats path="edu/umd/cs/findbugs/formatStringChecker/ExtraFormatArgumentsException.java" bugCount="0" size="9"/>
+    <FileStats path="edu/umd/cs/findbugs/formatStringChecker/Flags.java" bugCount="0" size="82"/>
+    <FileStats path="edu/umd/cs/findbugs/formatStringChecker/FormatSpecifier.java" bugCount="0" size="245"/>
+    <FileStats path="edu/umd/cs/findbugs/formatStringChecker/Formatter.java" bugCount="0" size="57"/>
+    <FileStats path="edu/umd/cs/findbugs/formatStringChecker/FormatterCompileTimeTest.java" bugCount="2" size="66" bugHash="943703618dac0650109c5436fc135eaf"/>
+    <FileStats path="edu/umd/cs/findbugs/formatStringChecker/FormatterException.java" bugCount="0" size="4"/>
+    <FileStats path="edu/umd/cs/findbugs/formatStringChecker/FormatterNumberFormatException.java" bugCount="0" size="13"/>
+    <FileStats path="edu/umd/cs/findbugs/formatStringChecker/FormatterRuntimeTest.java" bugCount="14" size="59" bugHash="13c41581fb6b05d165f192a11a4cf2c8"/>
+    <FileStats path="edu/umd/cs/findbugs/formatStringChecker/IllegalFormatConversionException.java" bugCount="0" size="29"/>
+    <FileStats path="edu/umd/cs/findbugs/formatStringChecker/MissingFormatArgumentException.java" bugCount="0" size="9"/>
+    <PackageStats package="edu.umd.cs.findbugs.formatStringChecker" total_bugs="16" total_types="12" total_size="659" priority_2="6" priority_1="10">
+      <ClassStats class="edu.umd.cs.findbugs.formatStringChecker.Conversion" sourceFile="Conversion.java" interface="false" size="48" bugs="0"/>
+      <ClassStats class="edu.umd.cs.findbugs.formatStringChecker.DateTime" sourceFile="DateTime.java" interface="false" size="38" bugs="0"/>
+      <ClassStats class="edu.umd.cs.findbugs.formatStringChecker.ExtraFormatArgumentsException" sourceFile="ExtraFormatArgumentsException.java" interface="false" size="9" bugs="0"/>
+      <ClassStats class="edu.umd.cs.findbugs.formatStringChecker.Flags" sourceFile="Flags.java" interface="false" size="82" bugs="0"/>
+      <ClassStats class="edu.umd.cs.findbugs.formatStringChecker.FormatSpecifier" sourceFile="FormatSpecifier.java" interface="false" size="245" bugs="0"/>
+      <ClassStats class="edu.umd.cs.findbugs.formatStringChecker.Formatter" sourceFile="Formatter.java" interface="false" size="57" bugs="0"/>
+      <ClassStats class="edu.umd.cs.findbugs.formatStringChecker.FormatterCompileTimeTest" sourceFile="FormatterCompileTimeTest.java" interface="false" size="66" bugs="2" priority_1="2"/>
+      <ClassStats class="edu.umd.cs.findbugs.formatStringChecker.FormatterException" sourceFile="FormatterException.java" interface="false" size="4" bugs="0"/>
+      <ClassStats class="edu.umd.cs.findbugs.formatStringChecker.FormatterNumberFormatException" sourceFile="FormatterNumberFormatException.java" interface="false" size="13" bugs="0"/>
+      <ClassStats class="edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest" sourceFile="FormatterRuntimeTest.java" interface="false" size="59" bugs="14" priority_2="6" priority_1="8"/>
+      <ClassStats class="edu.umd.cs.findbugs.formatStringChecker.IllegalFormatConversionException" sourceFile="IllegalFormatConversionException.java" interface="false" size="29" bugs="0"/>
+      <ClassStats class="edu.umd.cs.findbugs.formatStringChecker.MissingFormatArgumentException" sourceFile="MissingFormatArgumentException.java" interface="false" size="9" bugs="0"/>
+    </PackageStats>
+    <FindBugsProfile>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassInfoAnalysisEngine" totalMilliseconds="388" invocations="503" avgMicrosecondsPerInvocation="772" maxMicrosecondsPerInvocation="24371" standardDeviationMircosecondsPerInvocation="2006"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FieldItemSummary" totalMilliseconds="247" invocations="67" avgMicrosecondsPerInvocation="3694" maxMicrosecondsPerInvocation="88682" standardDeviationMircosecondsPerInvocation="11182"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.MethodGenFactory" totalMilliseconds="186" invocations="88" avgMicrosecondsPerInvocation="2113" maxMicrosecondsPerInvocation="165896" standardDeviationMircosecondsPerInvocation="17561"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.TypeDataflowFactory" totalMilliseconds="117" invocations="101" avgMicrosecondsPerInvocation="1167" maxMicrosecondsPerInvocation="19571" standardDeviationMircosecondsPerInvocation="2719"/>
+      <ClassProfile name="edu.umd.cs.findbugs.ba.npe.NullDerefAndRedundantComparisonFinder" totalMilliseconds="102" invocations="88" avgMicrosecondsPerInvocation="1161" maxMicrosecondsPerInvocation="13969" standardDeviationMircosecondsPerInvocation="1748"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.IsNullValueDataflowFactory" totalMilliseconds="97" invocations="88" avgMicrosecondsPerInvocation="1112" maxMicrosecondsPerInvocation="11562" standardDeviationMircosecondsPerInvocation="1826"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.NoteDirectlyRelevantTypeQualifiers" totalMilliseconds="89" invocations="67" avgMicrosecondsPerInvocation="1334" maxMicrosecondsPerInvocation="9862" standardDeviationMircosecondsPerInvocation="2098"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.UnconditionalValueDerefDataflowFactory" totalMilliseconds="87" invocations="88" avgMicrosecondsPerInvocation="997" maxMicrosecondsPerInvocation="8936" standardDeviationMircosecondsPerInvocation="1477"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.ValueNumberDataflowFactory" totalMilliseconds="86" invocations="101" avgMicrosecondsPerInvocation="855" maxMicrosecondsPerInvocation="16112" standardDeviationMircosecondsPerInvocation="1765"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.CFGFactory" totalMilliseconds="84" invocations="88" avgMicrosecondsPerInvocation="961" maxMicrosecondsPerInvocation="18069" standardDeviationMircosecondsPerInvocation="2179"/>
+      <ClassProfile name="edu.umd.cs.findbugs.OpcodeStack$JumpInfoFactory" totalMilliseconds="73" invocations="283" avgMicrosecondsPerInvocation="261" maxMicrosecondsPerInvocation="6672" standardDeviationMircosecondsPerInvocation="571"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.JavaClassAnalysisEngine" totalMilliseconds="68" invocations="79" avgMicrosecondsPerInvocation="862" maxMicrosecondsPerInvocation="26469" standardDeviationMircosecondsPerInvocation="3016"/>
+      <ClassProfile name="edu.umd.cs.findbugs.util.TopologicalSort" totalMilliseconds="61" invocations="459" avgMicrosecondsPerInvocation="133" maxMicrosecondsPerInvocation="4837" standardDeviationMircosecondsPerInvocation="319"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.impl.ZipCodeBaseFactory" totalMilliseconds="55" invocations="14" avgMicrosecondsPerInvocation="3936" maxMicrosecondsPerInvocation="53657" standardDeviationMircosecondsPerInvocation="13790"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FindRefComparison$SpecialTypeAnalysis" totalMilliseconds="54" invocations="71" avgMicrosecondsPerInvocation="772" maxMicrosecondsPerInvocation="9461" standardDeviationMircosecondsPerInvocation="1266"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FunctionsThatMightBeMistakenForProcedures" totalMilliseconds="51" invocations="67" avgMicrosecondsPerInvocation="769" maxMicrosecondsPerInvocation="7171" standardDeviationMircosecondsPerInvocation="1570"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.OverridingEqualsNotSymmetrical" totalMilliseconds="42" invocations="67" avgMicrosecondsPerInvocation="637" maxMicrosecondsPerInvocation="11413" standardDeviationMircosecondsPerInvocation="1485"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.BuildObligationPolicyDatabase" totalMilliseconds="34" invocations="67" avgMicrosecondsPerInvocation="518" maxMicrosecondsPerInvocation="10587" standardDeviationMircosecondsPerInvocation="1343"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassDataAnalysisEngine" totalMilliseconds="33" invocations="506" avgMicrosecondsPerInvocation="67" maxMicrosecondsPerInvocation="5235" standardDeviationMircosecondsPerInvocation="266"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.ExplicitSerialization" totalMilliseconds="32" invocations="67" avgMicrosecondsPerInvocation="489" maxMicrosecondsPerInvocation="15156" standardDeviationMircosecondsPerInvocation="2202"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.CalledMethods" totalMilliseconds="31" invocations="67" avgMicrosecondsPerInvocation="465" maxMicrosecondsPerInvocation="3331" standardDeviationMircosecondsPerInvocation="711"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.RuntimeExceptionCapture" totalMilliseconds="26" invocations="12" avgMicrosecondsPerInvocation="2185" maxMicrosecondsPerInvocation="11983" standardDeviationMircosecondsPerInvocation="3672"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.EqualsOperandShouldHaveClassCompatibleWithThis" totalMilliseconds="25" invocations="67" avgMicrosecondsPerInvocation="377" maxMicrosecondsPerInvocation="4590" standardDeviationMircosecondsPerInvocation="711"/>
+    </FindBugsProfile>
+  </FindBugsSummary>
+  <ClassFeatures></ClassFeatures>
+  <History></History>
+</BugCollection>
