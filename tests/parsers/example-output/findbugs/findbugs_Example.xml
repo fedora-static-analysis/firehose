@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<BugCollection version="2.0.2" sequence="0" timestamp="1391193406000" analysisTimestamp="1391193470699" release="">
+  <Project projectName="">
+    <Jar>/home/yesx/source/Sample/bin</Jar>
+  </Project>
+  <BugInstance type="NP_ALWAYS_NULL" priority="1" abbrev="NP" category="CORRECTNESS" instanceHash="9f85761350d23eead633aadb655ac79c" instanceOccurrenceNum="0" instanceOccurrenceMax="0" rank="5">
+    <ShortMessage>Null pointer dereference</ShortMessage>
+    <LongMessage>Null pointer dereference of o in O0.&lt;static initializer for O0&gt;()</LongMessage>
+    <Class classname="O0" primary="true">
+      <SourceLine classname="O0" start="3" end="24" sourcefile="O0.java" sourcepath="O0.java">
+        <Message>At O0.java:[lines 3-24]</Message>
+      </SourceLine>
+      <Message>In class O0</Message>
+    </Class>
+    <Method classname="O0" name="&lt;clinit&gt;" signature="()V" isStatic="true" primary="true">
+      <SourceLine classname="O0" start="5" end="3" startBytecode="0" endBytecode="70" sourcefile="O0.java" sourcepath="O0.java"/>
+      <Message>In method O0.&lt;static initializer for O0&gt;()</Message>
+    </Method>
+    <LocalVariable name="o" register="0" pc="9" role="LOCAL_VARIABLE_VALUE_OF">
+      <Message>Value loaded from o</Message>
+    </LocalVariable>
+    <SourceLine classname="O0" primary="true" start="8" end="8" startBytecode="10" endBytecode="10" sourcefile="O0.java" sourcepath="O0.java" role="SOURCE_LINE_DEREF">
+      <Message>Dereferenced at O0.java:[line 8]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance type="NP_ALWAYS_NULL" priority="1" abbrev="NP" category="CORRECTNESS" instanceHash="13a852ffc239446ad04ec32acdebe4ab" instanceOccurrenceNum="0" instanceOccurrenceMax="0" rank="5">
+    <ShortMessage>Null pointer dereference</ShortMessage>
+    <LongMessage>Null pointer dereference of o in new O0()</LongMessage>
+    <Class classname="O0" primary="true">
+      <SourceLine classname="O0" start="3" end="24" sourcefile="O0.java" sourcepath="O0.java">
+        <Message>At O0.java:[lines 3-24]</Message>
+      </SourceLine>
+      <Message>In class O0</Message>
+    </Class>
+    <Method classname="O0" name="&lt;init&gt;" signature="()V" isStatic="false" primary="true">
+      <SourceLine classname="O0" start="11" end="14" startBytecode="0" endBytecode="80" sourcefile="O0.java" sourcepath="O0.java"/>
+      <Message>In method new O0()</Message>
+    </Method>
+    <LocalVariable name="o" register="1" pc="9" role="LOCAL_VARIABLE_VALUE_OF">
+      <Message>Value loaded from o</Message>
+    </LocalVariable>
+    <SourceLine classname="O0" primary="true" start="13" end="13" startBytecode="10" endBytecode="10" sourcefile="O0.java" sourcepath="O0.java" role="SOURCE_LINE_DEREF">
+      <Message>Dereferenced at O0.java:[line 13]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance type="NP_ALWAYS_NULL" priority="1" abbrev="NP" category="CORRECTNESS" instanceHash="7399eb2d927dc56659dd0d6c22f742f7" instanceOccurrenceNum="0" instanceOccurrenceMax="0" rank="5">
+    <ShortMessage>Null pointer dereference</ShortMessage>
+    <LongMessage>Null pointer dereference of o in O0.bugs()</LongMessage>
+    <Class classname="O0" primary="true">
+      <SourceLine classname="O0" start="3" end="24" sourcefile="O0.java" sourcepath="O0.java">
+        <Message>At O0.java:[lines 3-24]</Message>
+      </SourceLine>
+      <Message>In class O0</Message>
+    </Class>
+    <Method classname="O0" name="bugs" signature="()V" isStatic="false" primary="true">
+      <SourceLine classname="O0" start="17" end="19" startBytecode="0" endBytecode="72" sourcefile="O0.java" sourcepath="O0.java"/>
+      <Message>In method O0.bugs()</Message>
+    </Method>
+    <LocalVariable name="o" register="1" pc="5" role="LOCAL_VARIABLE_VALUE_OF">
+      <Message>Value loaded from o</Message>
+    </LocalVariable>
+    <SourceLine classname="O0" primary="true" start="18" end="18" startBytecode="6" endBytecode="6" sourcefile="O0.java" sourcepath="O0.java" role="SOURCE_LINE_DEREF">
+      <Message>Dereferenced at O0.java:[line 18]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance type="NP_ALWAYS_NULL" priority="1" abbrev="NP" category="CORRECTNESS" instanceHash="86b2267dc912b310fae8ba3541c5d335" instanceOccurrenceNum="0" instanceOccurrenceMax="0" rank="5">
+    <ShortMessage>Null pointer dereference</ShortMessage>
+    <LongMessage>Null pointer dereference of o in O0.main(String[])</LongMessage>
+    <Class classname="O0" primary="true">
+      <SourceLine classname="O0" start="3" end="24" sourcefile="O0.java" sourcepath="O0.java">
+        <Message>At O0.java:[lines 3-24]</Message>
+      </SourceLine>
+      <Message>In class O0</Message>
+    </Class>
+    <Method classname="O0" name="main" signature="([Ljava/lang/String;)V" isStatic="true" primary="true">
+      <SourceLine classname="O0" start="22" end="24" startBytecode="0" endBytecode="72" sourcefile="O0.java" sourcepath="O0.java"/>
+      <Message>In method O0.main(String[])</Message>
+    </Method>
+    <LocalVariable name="o" register="1" pc="5" role="LOCAL_VARIABLE_VALUE_OF">
+      <Message>Value loaded from o</Message>
+    </LocalVariable>
+    <SourceLine classname="O0" primary="true" start="23" end="23" startBytecode="6" endBytecode="6" sourcefile="O0.java" sourcepath="O0.java" role="SOURCE_LINE_DEREF">
+      <Message>Dereferenced at O0.java:[line 23]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance type="NP_ALWAYS_NULL" priority="1" abbrev="NP" category="CORRECTNESS" instanceHash="ab90cb9499cbd353520b1f3c13c3c4db" instanceOccurrenceNum="0" instanceOccurrenceMax="0" rank="5">
+    <ShortMessage>Null pointer dereference</ShortMessage>
+    <LongMessage>Null pointer dereference of o in l1.O1.&lt;static initializer for O1&gt;()</LongMessage>
+    <Class classname="l1.O1" primary="true">
+      <SourceLine classname="l1.O1" start="4" end="25" sourcefile="O1.java" sourcepath="l1/O1.java">
+        <Message>At O1.java:[lines 4-25]</Message>
+      </SourceLine>
+      <Message>In class l1.O1</Message>
+    </Class>
+    <Method classname="l1.O1" name="&lt;clinit&gt;" signature="()V" isStatic="true" primary="true">
+      <SourceLine classname="l1.O1" start="6" end="4" startBytecode="0" endBytecode="70" sourcefile="O1.java" sourcepath="l1/O1.java"/>
+      <Message>In method l1.O1.&lt;static initializer for O1&gt;()</Message>
+    </Method>
+    <LocalVariable name="o" register="0" pc="9" role="LOCAL_VARIABLE_VALUE_OF">
+      <Message>Value loaded from o</Message>
+    </LocalVariable>
+    <SourceLine classname="l1.O1" primary="true" start="9" end="9" startBytecode="10" endBytecode="10" sourcefile="O1.java" sourcepath="l1/O1.java" role="SOURCE_LINE_DEREF">
+      <Message>Dereferenced at O1.java:[line 9]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance type="NP_ALWAYS_NULL" priority="1" abbrev="NP" category="CORRECTNESS" instanceHash="6430413734344473f590fff476ad4fe8" instanceOccurrenceNum="0" instanceOccurrenceMax="0" rank="5">
+    <ShortMessage>Null pointer dereference</ShortMessage>
+    <LongMessage>Null pointer dereference of o in new l1.O1()</LongMessage>
+    <Class classname="l1.O1" primary="true">
+      <SourceLine classname="l1.O1" start="4" end="25" sourcefile="O1.java" sourcepath="l1/O1.java">
+        <Message>At O1.java:[lines 4-25]</Message>
+      </SourceLine>
+      <Message>In class l1.O1</Message>
+    </Class>
+    <Method classname="l1.O1" name="&lt;init&gt;" signature="()V" isStatic="false" primary="true">
+      <SourceLine classname="l1.O1" start="12" end="15" startBytecode="0" endBytecode="80" sourcefile="O1.java" sourcepath="l1/O1.java"/>
+      <Message>In method new l1.O1()</Message>
+    </Method>
+    <LocalVariable name="o" register="1" pc="9" role="LOCAL_VARIABLE_VALUE_OF">
+      <Message>Value loaded from o</Message>
+    </LocalVariable>
+    <SourceLine classname="l1.O1" primary="true" start="14" end="14" startBytecode="10" endBytecode="10" sourcefile="O1.java" sourcepath="l1/O1.java" role="SOURCE_LINE_DEREF">
+      <Message>Dereferenced at O1.java:[line 14]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance type="NP_ALWAYS_NULL" priority="1" abbrev="NP" category="CORRECTNESS" instanceHash="fbef9c13a066fd910711dffb6d57e2e4" instanceOccurrenceNum="0" instanceOccurrenceMax="0" rank="5">
+    <ShortMessage>Null pointer dereference</ShortMessage>
+    <LongMessage>Null pointer dereference of o in l1.O1.bugs()</LongMessage>
+    <Class classname="l1.O1" primary="true">
+      <SourceLine classname="l1.O1" start="4" end="25" sourcefile="O1.java" sourcepath="l1/O1.java">
+        <Message>At O1.java:[lines 4-25]</Message>
+      </SourceLine>
+      <Message>In class l1.O1</Message>
+    </Class>
+    <Method classname="l1.O1" name="bugs" signature="()V" isStatic="false" primary="true">
+      <SourceLine classname="l1.O1" start="18" end="20" startBytecode="0" endBytecode="72" sourcefile="O1.java" sourcepath="l1/O1.java"/>
+      <Message>In method l1.O1.bugs()</Message>
+    </Method>
+    <LocalVariable name="o" register="1" pc="5" role="LOCAL_VARIABLE_VALUE_OF">
+      <Message>Value loaded from o</Message>
+    </LocalVariable>
+    <SourceLine classname="l1.O1" primary="true" start="19" end="19" startBytecode="6" endBytecode="6" sourcefile="O1.java" sourcepath="l1/O1.java" role="SOURCE_LINE_DEREF">
+      <Message>Dereferenced at O1.java:[line 19]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance type="NP_ALWAYS_NULL" priority="1" abbrev="NP" category="CORRECTNESS" instanceHash="be36ef0dfda2000681afc7fd6009af4a" instanceOccurrenceNum="0" instanceOccurrenceMax="0" rank="5">
+    <ShortMessage>Null pointer dereference</ShortMessage>
+    <LongMessage>Null pointer dereference of o in l1.O1.main(String[])</LongMessage>
+    <Class classname="l1.O1" primary="true">
+      <SourceLine classname="l1.O1" start="4" end="25" sourcefile="O1.java" sourcepath="l1/O1.java">
+        <Message>At O1.java:[lines 4-25]</Message>
+      </SourceLine>
+      <Message>In class l1.O1</Message>
+    </Class>
+    <Method classname="l1.O1" name="main" signature="([Ljava/lang/String;)V" isStatic="true" primary="true">
+      <SourceLine classname="l1.O1" start="23" end="25" startBytecode="0" endBytecode="72" sourcefile="O1.java" sourcepath="l1/O1.java"/>
+      <Message>In method l1.O1.main(String[])</Message>
+    </Method>
+    <LocalVariable name="o" register="1" pc="5" role="LOCAL_VARIABLE_VALUE_OF">
+      <Message>Value loaded from o</Message>
+    </LocalVariable>
+    <SourceLine classname="l1.O1" primary="true" start="24" end="24" startBytecode="6" endBytecode="6" sourcefile="O1.java" sourcepath="l1/O1.java" role="SOURCE_LINE_DEREF">
+      <Message>Dereferenced at O1.java:[line 24]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance type="NP_ALWAYS_NULL" priority="1" abbrev="NP" category="CORRECTNESS" instanceHash="6355974d01d8cb1ef30b9c6c18e63fa8" instanceOccurrenceNum="0" instanceOccurrenceMax="0" rank="5">
+    <ShortMessage>Null pointer dereference</ShortMessage>
+    <LongMessage>Null pointer dereference of o in l1.l2.O2.&lt;static initializer for O2&gt;()</LongMessage>
+    <Class classname="l1.l2.O2" primary="true">
+      <SourceLine classname="l1.l2.O2" start="4" end="25" sourcefile="O2.java" sourcepath="l1/l2/O2.java">
+        <Message>At O2.java:[lines 4-25]</Message>
+      </SourceLine>
+      <Message>In class l1.l2.O2</Message>
+    </Class>
+    <Method classname="l1.l2.O2" name="&lt;clinit&gt;" signature="()V" isStatic="true" primary="true">
+      <SourceLine classname="l1.l2.O2" start="6" end="4" startBytecode="0" endBytecode="70" sourcefile="O2.java" sourcepath="l1/l2/O2.java"/>
+      <Message>In method l1.l2.O2.&lt;static initializer for O2&gt;()</Message>
+    </Method>
+    <LocalVariable name="o" register="0" pc="9" role="LOCAL_VARIABLE_VALUE_OF">
+      <Message>Value loaded from o</Message>
+    </LocalVariable>
+    <SourceLine classname="l1.l2.O2" primary="true" start="9" end="9" startBytecode="10" endBytecode="10" sourcefile="O2.java" sourcepath="l1/l2/O2.java" role="SOURCE_LINE_DEREF">
+      <Message>Dereferenced at O2.java:[line 9]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance type="NP_ALWAYS_NULL" priority="1" abbrev="NP" category="CORRECTNESS" instanceHash="de88d1f94dc7e7d479312d16a7fe0575" instanceOccurrenceNum="0" instanceOccurrenceMax="0" rank="5">
+    <ShortMessage>Null pointer dereference</ShortMessage>
+    <LongMessage>Null pointer dereference of o in new l1.l2.O2()</LongMessage>
+    <Class classname="l1.l2.O2" primary="true">
+      <SourceLine classname="l1.l2.O2" start="4" end="25" sourcefile="O2.java" sourcepath="l1/l2/O2.java">
+        <Message>At O2.java:[lines 4-25]</Message>
+      </SourceLine>
+      <Message>In class l1.l2.O2</Message>
+    </Class>
+    <Method classname="l1.l2.O2" name="&lt;init&gt;" signature="()V" isStatic="false" primary="true">
+      <SourceLine classname="l1.l2.O2" start="12" end="15" startBytecode="0" endBytecode="80" sourcefile="O2.java" sourcepath="l1/l2/O2.java"/>
+      <Message>In method new l1.l2.O2()</Message>
+    </Method>
+    <LocalVariable name="o" register="1" pc="9" role="LOCAL_VARIABLE_VALUE_OF">
+      <Message>Value loaded from o</Message>
+    </LocalVariable>
+    <SourceLine classname="l1.l2.O2" primary="true" start="14" end="14" startBytecode="10" endBytecode="10" sourcefile="O2.java" sourcepath="l1/l2/O2.java" role="SOURCE_LINE_DEREF">
+      <Message>Dereferenced at O2.java:[line 14]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance type="NP_ALWAYS_NULL" priority="1" abbrev="NP" category="CORRECTNESS" instanceHash="2878751ae73a2fc45b79191f2786ccef" instanceOccurrenceNum="0" instanceOccurrenceMax="0" rank="5">
+    <ShortMessage>Null pointer dereference</ShortMessage>
+    <LongMessage>Null pointer dereference of o in l1.l2.O2.bugs()</LongMessage>
+    <Class classname="l1.l2.O2" primary="true">
+      <SourceLine classname="l1.l2.O2" start="4" end="25" sourcefile="O2.java" sourcepath="l1/l2/O2.java">
+        <Message>At O2.java:[lines 4-25]</Message>
+      </SourceLine>
+      <Message>In class l1.l2.O2</Message>
+    </Class>
+    <Method classname="l1.l2.O2" name="bugs" signature="()V" isStatic="false" primary="true">
+      <SourceLine classname="l1.l2.O2" start="18" end="20" startBytecode="0" endBytecode="72" sourcefile="O2.java" sourcepath="l1/l2/O2.java"/>
+      <Message>In method l1.l2.O2.bugs()</Message>
+    </Method>
+    <LocalVariable name="o" register="1" pc="5" role="LOCAL_VARIABLE_VALUE_OF">
+      <Message>Value loaded from o</Message>
+    </LocalVariable>
+    <SourceLine classname="l1.l2.O2" primary="true" start="19" end="19" startBytecode="6" endBytecode="6" sourcefile="O2.java" sourcepath="l1/l2/O2.java" role="SOURCE_LINE_DEREF">
+      <Message>Dereferenced at O2.java:[line 19]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance type="NP_ALWAYS_NULL" priority="1" abbrev="NP" category="CORRECTNESS" instanceHash="da61eff80c8c5487f8bcb0c617b2d3fc" instanceOccurrenceNum="0" instanceOccurrenceMax="0" rank="5">
+    <ShortMessage>Null pointer dereference</ShortMessage>
+    <LongMessage>Null pointer dereference of o in l1.l2.O2.main(String[])</LongMessage>
+    <Class classname="l1.l2.O2" primary="true">
+      <SourceLine classname="l1.l2.O2" start="4" end="25" sourcefile="O2.java" sourcepath="l1/l2/O2.java">
+        <Message>At O2.java:[lines 4-25]</Message>
+      </SourceLine>
+      <Message>In class l1.l2.O2</Message>
+    </Class>
+    <Method classname="l1.l2.O2" name="main" signature="([Ljava/lang/String;)V" isStatic="true" primary="true">
+      <SourceLine classname="l1.l2.O2" start="23" end="25" startBytecode="0" endBytecode="72" sourcefile="O2.java" sourcepath="l1/l2/O2.java"/>
+      <Message>In method l1.l2.O2.main(String[])</Message>
+    </Method>
+    <LocalVariable name="o" register="1" pc="5" role="LOCAL_VARIABLE_VALUE_OF">
+      <Message>Value loaded from o</Message>
+    </LocalVariable>
+    <SourceLine classname="l1.l2.O2" primary="true" start="24" end="24" startBytecode="6" endBytecode="6" sourcefile="O2.java" sourcepath="l1/l2/O2.java" role="SOURCE_LINE_DEREF">
+      <Message>Dereferenced at O2.java:[line 24]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugCategory category="CORRECTNESS">
+    <Description>Correctness</Description>
+  </BugCategory>
+  <BugPattern type="NP_ALWAYS_NULL" abbrev="NP" category="CORRECTNESS">
+    <ShortDescription>Null pointer dereference</ShortDescription>
+    <Details><![CDATA[
+
+<p> A null pointer is dereferenced here.&nbsp; This will lead to a
+<code>NullPointerException</code> when the code is executed.</p>
+
+    ]]></Details>
+  </BugPattern>
+  <BugCode abbrev="NP" cweid="476">
+    <Description>Null pointer dereference</Description>
+  </BugCode>
+  <Errors errors="0" missingClasses="0"></Errors>
+  <FindBugsSummary timestamp="Sat, 1 Feb 2014 02:36:46 +0800" total_classes="3" referenced_classes="14" total_bugs="12" total_size="60" num_packages="3" vm_version="20.0-b12" cpu_seconds="2.31" clock_seconds="1.79" peak_mbytes="41.55" alloc_mbytes="742.44" gc_seconds="0.17" priority_1="12">
+    <FileStats path="O0.java" bugCount="4" size="20" bugHash="b490a7a74e2b3fe3e4ed9101d738a5eb"/>
+    <FileStats path="l1/O1.java" bugCount="4" size="20" bugHash="d181491ad635855d2bd91137adef1214"/>
+    <FileStats path="l1/l2/O2.java" bugCount="4" size="20" bugHash="341bee6b519dc58108631b45642a5677"/>
+    <PackageStats package="" total_bugs="4" total_types="1" total_size="20" priority_1="4">
+      <ClassStats class="O0" sourceFile="O0.java" interface="false" size="20" bugs="4" priority_1="4"/>
+    </PackageStats>
+    <PackageStats package="l1" total_bugs="4" total_types="1" total_size="20" priority_1="4">
+      <ClassStats class="l1.O1" sourceFile="O1.java" interface="false" size="20" bugs="4" priority_1="4"/>
+    </PackageStats>
+    <PackageStats package="l1.l2" total_bugs="4" total_types="1" total_size="20" priority_1="4">
+      <ClassStats class="l1.l2.O2" sourceFile="O2.java" interface="false" size="20" bugs="4" priority_1="4"/>
+    </PackageStats>
+    <FindBugsProfile>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassInfoAnalysisEngine" totalMilliseconds="353" invocations="323" avgMicrosecondsPerInvocation="1093" maxMicrosecondsPerInvocation="74154" standardDeviationMircosecondsPerInvocation="4668"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.MethodGenFactory" totalMilliseconds="95" invocations="12" avgMicrosecondsPerInvocation="7986" maxMicrosecondsPerInvocation="94655" standardDeviationMircosecondsPerInvocation="26131"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FieldItemSummary" totalMilliseconds="72" invocations="14" avgMicrosecondsPerInvocation="5158" maxMicrosecondsPerInvocation="17938" standardDeviationMircosecondsPerInvocation="5641"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.JavaClassAnalysisEngine" totalMilliseconds="59" invocations="20" avgMicrosecondsPerInvocation="2995" maxMicrosecondsPerInvocation="37677" standardDeviationMircosecondsPerInvocation="8193"/>
+      <ClassProfile name="edu.umd.cs.findbugs.util.TopologicalSort" totalMilliseconds="58" invocations="283" avgMicrosecondsPerInvocation="205" maxMicrosecondsPerInvocation="5387" standardDeviationMircosecondsPerInvocation="541"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassDataAnalysisEngine" totalMilliseconds="50" invocations="324" avgMicrosecondsPerInvocation="157" maxMicrosecondsPerInvocation="743" standardDeviationMircosecondsPerInvocation="69"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.NoteDirectlyRelevantTypeQualifiers" totalMilliseconds="44" invocations="14" avgMicrosecondsPerInvocation="3186" maxMicrosecondsPerInvocation="12887" standardDeviationMircosecondsPerInvocation="3544"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.impl.ZipCodeBaseFactory" totalMilliseconds="39" invocations="13" avgMicrosecondsPerInvocation="3045" maxMicrosecondsPerInvocation="38352" standardDeviationMircosecondsPerInvocation="10192"/>
+      <ClassProfile name="edu.umd.cs.findbugs.OpcodeStack$JumpInfoFactory" totalMilliseconds="34" invocations="61" avgMicrosecondsPerInvocation="560" maxMicrosecondsPerInvocation="6809" standardDeviationMircosecondsPerInvocation="942"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FunctionsThatMightBeMistakenForProcedures" totalMilliseconds="30" invocations="14" avgMicrosecondsPerInvocation="2170" maxMicrosecondsPerInvocation="7966" standardDeviationMircosecondsPerInvocation="2554"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.CFGFactory" totalMilliseconds="28" invocations="12" avgMicrosecondsPerInvocation="2399" maxMicrosecondsPerInvocation="23334" standardDeviationMircosecondsPerInvocation="6312"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.TypeDataflowFactory" totalMilliseconds="25" invocations="12" avgMicrosecondsPerInvocation="2109" maxMicrosecondsPerInvocation="20383" standardDeviationMircosecondsPerInvocation="5510"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.OverridingEqualsNotSymmetrical" totalMilliseconds="25" invocations="14" avgMicrosecondsPerInvocation="1805" maxMicrosecondsPerInvocation="12416" standardDeviationMircosecondsPerInvocation="3129"/>
+    </FindBugsProfile>
+  </FindBugsSummary>
+  <ClassFeatures></ClassFeatures>
+  <History></History>
+</BugCollection>

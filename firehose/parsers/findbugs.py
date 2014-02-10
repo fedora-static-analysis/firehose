@@ -14,83 +14,69 @@
 #
 #   You should have received a copy of the GNU Lesser General Public
 #   License along with this library; if not, write to the Free Software
-#   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301
-#   USA
+#   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+#   02110-1301 USA
 
 import re
 import sys
+import xml.etree.ElementTree as ET
 
 from firehose.model import Message, Function, Point, \
     File, Location, Metadata, Generator, Issue, Analysis
 
-# Parser for result emitted by findbugs
-# Example of findbugs' warnings:
-# M C RV: return value of String.format(String, Object[]) ignored in edu.umd.cs.findbugs.formatStringChecker.FormatterRuntimeTest.testFormatDateWithY()  At FormatterRuntimeTest.java:[line 52]
-
-# You can find bugs descriptions of findbugs here:
-# http://findbugs.sourceforge.net/bugDescriptions.html
-
 DEBUG=False
 
-def parse_file(data_file_name, findbugs_version=None, sut=None, file_=None, stats=None):
+# Parser for xml output from findbugs
+
+def parse_file(data_file_obj, findbugs_version=None, sut=None, file_=None,
+        stats=None):
     """
-    :param data_file:           str object containing findbugs scan result
-    :type  data_file:           str
+    :param data_file_obj:       file object containing findbugs scan result
+                                in xml format, it can be generated using 
+                                command:
+                                fb analyze -xml:withMessages [jar_file]
+    :type  data_file_obj:       file object
     :param findbugs_version:    version of findbugs
     :type  findbugs_version:    str
 
     :return:    Analysis instance
     """
-    data_file=open(data_file_name)
-    generator = Generator(name="findbugs", version=findbugs_version)
+    generator = Generator(name = "findbugs",
+            version = findbugs_version)
     metadata = Metadata(generator, sut, file_, stats)
     analysis = Analysis(metadata, [])
-    for line in data_file.readlines():
-        issue = parse_line(line)
+
+    def parse_BugInstance(bugInstance):
+        message = Message(bugInstance.find("LongMessage").text)
+        # findbugs has no column information
+        sourceLine = bugInstance.find("SourceLine")
+        point = Point(int(sourceLine.get("start")), 0)
+        function = bugInstance.find("Method").find("Message").text
+        tmpIndex = function.rfind("In method ") + len("In method ") - 1
+        function = Function(function[tmpIndex+1:])
+        path = sourceLine.get("sourcepath")
+        path = File(path, None)
+        location = Location(path, function, point)
+        if DEBUG:
+            print(str(location)+" "+str(message))
+        return Issue(None, None, location, message, None, None)
+
+    tree = ET.parse(data_file_obj)
+    root = tree.getroot()
+    for bugInstance in root.findall("BugInstance"):
+        issue=parse_BugInstance(bugInstance)
         if issue:
             analysis.results.append(issue)
         else:
-            sys.stderr.write("fail to pass line=[%s]"%line)
-    data_file.close()
+            sys.stderr.write("fail to pass bugInstance=[%s]\n" %
+                    str(bugInstance))
     return analysis
-
-FINDBUGS_PATTERN=re.compile(r"^(?P<bug_message>[^ ]* +[^ ]* +[^ ]*: *.*) +in +(?P<bug_path_and_function>[^\.\(\)]+(?:\.[^\.\(\)]+)*\([^\)]*\))[^\[]* +(?P<bug_file_name>[^\[ ]+):\[line +(?P<bug_line_number>\d+)\]")
-PATH_AND_FUNCTION_PATTERN=re.compile(r"^(?:(?P<bug_class_path>[^\.]+(?:\.[^\.]+)*)\.){0,1}(?P<bug_class_name>[^\.]+)\.(?P<bug_function_name>[^.]+\([^\.]*\))$")
-
-def parse_line(line):
-    """
-    :param line:        current line read from file
-    :type  line:        str 
-
-    :return:    Issue if match, else None
-    """
-    match = FINDBUGS_PATTERN.match(line)
-    if match:
-        if DEBUG:
-            print(match.groupdict())
-            print(match.groups())
-        match2 = PATH_AND_FUNCTION_PATTERN.match(match.group("bug_path_and_function"))
-        if match2:
-            if DEBUG:
-                print(match.groupdict())
-                print(match.groups())
-            message = Message(match.group("bug_message"))
-            # findbugs has no column information
-            point = Point(int(match.group("bug_line_number")), 0)
-            function = Function(match2.group("bug_function_name"))
-            path=match.group("bug_file_name")
-            if match2.group("bug_class_path"):
-                path=match2.group("bug_class_path").replace(".","/")+"/"+path
-            path = File(path, None)
-            location = Location(path, function, point)
-
-            return Issue(None, None, location, message, None, None)
-
  
 if __name__ == '__main__':
     if len(sys.argv) != 2:
-        sys.stdout.write("Usage: %s [findbugs result files]\n", sys.argv[0])
+        sys.stdout.write("Usage: %s [findbugs result files]\n" % 
+                sys.argv[0])
     else:
-        analysis = parse_file(sys.argv[1])
+        analysis = parse_file(open(sys.argv[1],"r"))
         sys.stdout.write(str(analysis.to_xml()))
         sys.stdout.write('\n')
