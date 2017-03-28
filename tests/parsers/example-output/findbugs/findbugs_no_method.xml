@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<BugCollection version="2.0.2" sequence="0" timestamp="1391193406000" analysisTimestamp="1391193470699" release="">
+  <BugInstance category="STYLE" instanceHash="a9b4baf62fa5da95b73d622cae4d281a" rank="18" instanceOccurrenceNum="0" priority="2" abbrev="UrF" type="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD" instanceOccurrenceMax="0">
+    <ShortMessage>Unread public/protected field</ShortMessage>
+    <LongMessage>Unread public/protected field: com.clearspring.ircbot.trac.TracRpc$TicketGet.method</LongMessage>
+    <Class classname="com.clearspring.ircbot.trac.TracRpc$TicketGet" primary="true">
+      <SourceLine start="77" classname="com.clearspring.ircbot.trac.TracRpc$TicketGet" sourcepath="com/clearspring/ircbot/trac/TracRpc.java" sourcefile="TracRpc.java" end="88">
+        <Message>At TracRpc.java:[lines 77-88]</Message>
+      </SourceLine>
+      <Message>In class com.clearspring.ircbot.trac.TracRpc$TicketGet</Message>
+    </Class>
+    <Field isStatic="false" classname="com.clearspring.ircbot.trac.TracRpc$TicketGet" name="method" primary="true" signature="Ljava/lang/String;">
+      <SourceLine classname="com.clearspring.ircbot.trac.TracRpc$TicketGet" sourcepath="com/clearspring/ircbot/trac/TracRpc.java" sourcefile="TracRpc.java">
+        <Message>In TracRpc.java</Message>
+      </SourceLine>
+      <Message>Field com.clearspring.ircbot.trac.TracRpc$TicketGet.method</Message>
+    </Field>
+    <SourceLine endBytecode="7" startBytecode="7" start="77" classname="com.clearspring.ircbot.trac.TracRpc$TicketGet" primary="true" sourcepath="com/clearspring/ircbot/trac/TracRpc.java" sourcefile="TracRpc.java" end="77">
+      <Message>At TracRpc.java:[line 77]</Message>
+    </SourceLine>
+  </BugInstance>
+</BugCollection>
