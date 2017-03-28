@@ -51,11 +51,15 @@ def parse_file(data_file_obj, findbugs_version=None, sut=None, file_=None,
         # findbugs has no column information
         sourceLine = bugInstance.find("SourceLine")
         point = Point(int(sourceLine.get("start")), 0)
-        function = bugInstance.find("Method").find("Message").text
-        tmpIndex = function.rfind("In method ") + len("In method ") - 1
-        function = Function(function[tmpIndex+1:])
         path = sourceLine.get("sourcepath")
         path = File(path, None)
+        method = bugInstance.find("Method")
+        if method:
+            function = method.find("Message").text
+            tmpIndex = function.rfind("In method ") + len("In method ") - 1
+            function = Function(function[tmpIndex+1:])
+        else:
+            function = None
         location = Location(path, function, point)
         if DEBUG:
             print(str(location)+" "+str(message))

@@ -45,8 +45,11 @@ class TestParseFile(unittest.TestCase):
             self.assertIsInstance(ret, Issue)
             self.assertIsInstance(ret.location, Location)
             self.assertEqual(ret.location.line, answer[i][0])
-            self.assertIsInstance(ret.location.function, Function)
-            self.assertEqual(ret.location.function.name, answer[i][1])
+            if answer[i][1]:
+                self.assertIsInstance(ret.location.function, Function)
+                self.assertEqual(ret.location.function.name, answer[i][1])
+            else:
+                self.assertEqual(ret.location.function, None)
             self.assertIsInstance(ret.location.file, File)
             self.assertEqual(ret.location.file.givenpath, answer[i][2])
 
@@ -137,3 +140,8 @@ class TestParseFile(unittest.TestCase):
                 ]
         self.run_testdata("findbugs_Example.xml", answer)
 
+    def test_testdata_no_method(self):
+        answer = [
+                [77, None, "com/clearspring/ircbot/trac/TracRpc.java"],
+                ]
+        self.run_testdata("findbugs_no_method.xml", answer, isDebug=True)
