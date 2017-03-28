@@ -1,0 +1,1523 @@
+[kernel] Parsing FRAMAC_SHARE/libc/__fc_builtin_for_normalization.i (no preprocessing)
+[kernel] Parsing attack.c (with preprocessing)
+[kernel] Parsing bitboards.c (with preprocessing)
+[kernel] Parsing board.c (with preprocessing)
+[kernel] Parsing data.c (with preprocessing)
+[kernel] Parsing hashkeys.c (with preprocessing)
+[kernel] Parsing init.c (with preprocessing)
+[kernel] Parsing io.c (with preprocessing)
+[kernel] Parsing main.c (with preprocessing)
+[kernel] Parsing makemove.c (with preprocessing)
+[kernel] Parsing misc.c (with preprocessing)
+[kernel] Parsing movegen.c (with preprocessing)
+[kernel] Parsing new.c (with preprocessing)
+new.c:13:[kernel] warning: Body of function foo falls-through. Adding a return statement
+[kernel] Parsing perft.c (with preprocessing)
+[kernel] Parsing pvtable.c (with preprocessing)
+[kernel] Parsing search.c (with preprocessing)
+[kernel] Parsing validate.c (with preprocessing)
+new.c:3:[kernel] warning: def'n of func main at new.c:3 (sum 1081) conflicts with the one at main.c:10 (sum 1879968716785197); keeping the one at main.c:10.
+[sparecode] remove unused code...
+[value] Analyzing a complete application starting at main
+[value] Computing initial state
+[value] Initial state computed
+[value] Values of globals at initialization
+  __FC_errno ∈ [--..--]
+  __fc_stdin ∈ {{ NULL ; &S___fc_stdin[0] }}
+  __fc_stdout ∈ {{ NULL ; &S___fc_stdout[0] }}
+  __fc_fopen[0..511] ∈ {0}
+  __p_fc_fopen ∈ {{ &__fc_fopen[0] }}
+  __fc_random_counter ∈ {0}
+  __fc_rand_max ∈ {32767}
+  __fc_heap_status ∈ [--..--]
+  PieceCol[0] ∈ {2}
+          [1..6] ∈ {0}
+          [7..12] ∈ {1}
+  PieceKnight[0..1] ∈ {0}
+             [2] ∈ {1}
+             [3..7] ∈ {0}
+             [8] ∈ {1}
+             [9..12] ∈ {0}
+  PieceKing[0..5] ∈ {0}
+           [6] ∈ {1}
+           [7..11] ∈ {0}
+           [12] ∈ {1}
+  PieceRookQueen[0..3] ∈ {0}
+                [4..5] ∈ {1}
+                [6..9] ∈ {0}
+                [10..11] ∈ {1}
+                [12] ∈ {0}
+  PieceBishopQueen[0..2] ∈ {0}
+                  [3] ∈ {1}
+                  [4] ∈ {0}
+                  [5] ∈ {1}
+                  [6..8] ∈ {0}
+                  [9] ∈ {1}
+                  [10] ∈ {0}
+                  [11] ∈ {1}
+                  [12] ∈ {0}
+  KnDir[0] ∈ {-8}
+       [1] ∈ {-19}
+       [2] ∈ {-21}
+       [3] ∈ {-12}
+       [4] ∈ {8}
+       [5] ∈ {19}
+       [6] ∈ {21}
+       [7] ∈ {12}
+  RkDir[0] ∈ {-1}
+       [1] ∈ {-10}
+       [2] ∈ {1}
+       [3] ∈ {10}
+  BiDir[0] ∈ {-9}
+       [1] ∈ {-11}
+       [2] ∈ {11}
+       [3] ∈ {9}
+  KiDir[0] ∈ {-1}
+       [1] ∈ {-10}
+       [2] ∈ {1}
+       [3] ∈ {10}
+       [4] ∈ {-9}
+       [5] ∈ {-11}
+       [6] ∈ {11}
+       [7] ∈ {9}
+  Sq120ToSq64[0..119] ∈ {0}
+  BitTable[0] ∈ {63}
+          [1] ∈ {30}
+          [2] ∈ {3}
+          [3] ∈ {32}
+          [4] ∈ {25}
+          [5] ∈ {41}
+          [6] ∈ {22}
+          [7] ∈ {33}
+          [8] ∈ {15}
+          [9] ∈ {50}
+          [10] ∈ {42}
+          [11] ∈ {13}
+          [12] ∈ {11}
+          [13] ∈ {53}
+          [14] ∈ {19}
+          [15] ∈ {34}
+          [16] ∈ {61}
+          [17] ∈ {29}
+          [18] ∈ {2}
+          [19] ∈ {51}
+          [20] ∈ {21}
+          [21] ∈ {43}
+          [22] ∈ {45}
+          [23] ∈ {10}
+          [24] ∈ {18}
+          [25] ∈ {47}
+          [26] ∈ {1}
+          [27] ∈ {54}
+          [28] ∈ {9}
+          [29] ∈ {57}
+          [30] ∈ {0}
+          [31] ∈ {35}
+          [32] ∈ {62}
+          [33] ∈ {31}
+          [34] ∈ {40}
+          [35] ∈ {4}
+          [36] ∈ {49}
+          [37] ∈ {5}
+          [38] ∈ {52}
+          [39] ∈ {26}
+          [40] ∈ {60}
+          [41] ∈ {6}
+          [42] ∈ {23}
+          [43] ∈ {44}
+          [44] ∈ {46}
+          [45] ∈ {27}
+          [46] ∈ {56}
+          [47] ∈ {16}
+          [48] ∈ {7}
+          [49] ∈ {39}
+          [50] ∈ {48}
+          [51] ∈ {24}
+          [52] ∈ {59}
+          [53] ∈ {14}
+          [54] ∈ {12}
+          [55] ∈ {55}
+          [56] ∈ {38}
+          [57] ∈ {28}
+          [58] ∈ {58}
+          [59] ∈ {20}
+          [60] ∈ {37}
+          [61] ∈ {17}
+          [62] ∈ {36}
+          [63] ∈ {8}
+  Sq64ToSq120[0..63] ∈ {0}
+  SetMask[0..63] ∈ {0}
+  PceChar[0] ∈ {46}
+         [1] ∈ {80}
+         [2] ∈ {78}
+         [3] ∈ {66}
+         [4] ∈ {82}
+         [5] ∈ {81}
+         [6] ∈ {75}
+         [7] ∈ {112}
+         [8] ∈ {110}
+         [9] ∈ {98}
+         [10] ∈ {114}
+         [11] ∈ {113}
+         [12] ∈ {107}
+         [13] ∈ {0}
+  SideChar[0] ∈ {119}
+          [1] ∈ {98}
+          [2] ∈ {45}
+          [3] ∈ {0}
+  PieceBig[0..1] ∈ {0}
+          [2..6] ∈ {1}
+          [7] ∈ {0}
+          [8..12] ∈ {1}
+  PieceMaj[0..3] ∈ {0}
+          [4..6] ∈ {1}
+          [7..9] ∈ {0}
+          [10..12] ∈ {1}
+  PieceMin[0..1] ∈ {0}
+          [2..3] ∈ {1}
+          [4..7] ∈ {0}
+          [8..9] ∈ {1}
+          [10..12] ∈ {0}
+  PieceVal[0] ∈ {0}
+          [1] ∈ {100}
+          [2..3] ∈ {325}
+          [4] ∈ {550}
+          [5] ∈ {1000}
+          [6] ∈ {50000}
+          [7] ∈ {100}
+          [8..9] ∈ {325}
+          [10] ∈ {550}
+          [11] ∈ {1000}
+          [12] ∈ {50000}
+  RanksBrd[0..119] ∈ {0}
+  RankChar[0] ∈ {49}
+          [1] ∈ {50}
+          [2] ∈ {51}
+          [3] ∈ {52}
+          [4] ∈ {53}
+          [5] ∈ {54}
+          [6] ∈ {55}
+          [7] ∈ {56}
+          [8] ∈ {0}
+  FileChar[0] ∈ {97}
+          [1] ∈ {98}
+          [2] ∈ {99}
+          [3] ∈ {100}
+          [4] ∈ {101}
+          [5] ∈ {102}
+          [6] ∈ {103}
+          [7] ∈ {104}
+          [8] ∈ {0}
+  PiecePawn[0] ∈ {0}
+           [1] ∈ {1}
+           [2..6] ∈ {0}
+           [7] ∈ {1}
+           [8..12] ∈ {0}
+  PieceSlides[0..2] ∈ {0}
+             [3..5] ∈ {1}
+             [6..8] ∈ {0}
+             [9..11] ∈ {1}
+             [12] ∈ {0}
+  PieceKeys[0..12][0..119] ∈ {0}
+  SideKey ∈ {0}
+  CastleKeys[0..15] ∈ {0}
+  ClearMask[0..63] ∈ {0}
+  FilesBrd[0..119] ∈ {0}
+  CastlePerm[0..20] ∈ {15}
+            [21] ∈ {13}
+            [22..24] ∈ {15}
+            [25] ∈ {12}
+            [26..27] ∈ {15}
+            [28] ∈ {14}
+            [29..90] ∈ {15}
+            [91] ∈ {7}
+            [92..94] ∈ {15}
+            [95] ∈ {3}
+            [96..97] ∈ {15}
+            [98] ∈ {11}
+            [99..119] ∈ {15}
+  __fc_time ∈ [--..--]
+  __fc_tz ∈ [--..--]
+  LoopSlidePce[0] ∈ {3}
+              [1] ∈ {4}
+              [2] ∈ {5}
+              [3] ∈ {0}
+              [4] ∈ {9}
+              [5] ∈ {10}
+              [6] ∈ {11}
+              [7] ∈ {0}
+  LoopNonSlidePce[0] ∈ {2}
+                 [1] ∈ {6}
+                 [2] ∈ {0}
+                 [3] ∈ {8}
+                 [4] ∈ {12}
+                 [5] ∈ {0}
+  LoopSlideIndex[0] ∈ {0}
+                [1] ∈ {4}
+  LoopNonSlideIndex[0] ∈ {0}
+                   [1] ∈ {3}
+  PceDir[0..1][0..7] ∈ {0}
+        [2][0] ∈ {-8}
+        [2][1] ∈ {-19}
+        [2][2] ∈ {-21}
+        [2][3] ∈ {-12}
+        [2][4] ∈ {8}
+        [2][5] ∈ {19}
+        [2][6] ∈ {21}
+        [2][7] ∈ {12}
+        [3][0] ∈ {-9}
+        [3][1] ∈ {-11}
+        [3][2] ∈ {11}
+        [3][3] ∈ {9}
+        [3][4..7] ∈ {0}
+        [4][0] ∈ {-1}
+        [4][1] ∈ {-10}
+        [4][2] ∈ {1}
+        [4][3] ∈ {10}
+        [4][4..7] ∈ {0}
+        [5][0] ∈ {-1}
+        [5][1] ∈ {-10}
+        [5][2] ∈ {1}
+        [5][3] ∈ {10}
+        [5][4] ∈ {-9}
+        [5][5] ∈ {-11}
+        [5][6] ∈ {11}
+        [5][7] ∈ {9}
+        [6][0] ∈ {-1}
+        [6][1] ∈ {-10}
+        [6][2] ∈ {1}
+        [6][3] ∈ {10}
+        [6][4] ∈ {-9}
+        [6][5] ∈ {-11}
+        [6][6] ∈ {11}
+        [6][7] ∈ {9}
+        [7][0..7] ∈ {0}
+        [8][0] ∈ {-8}
+        [8][1] ∈ {-19}
+        [8][2] ∈ {-21}
+        [8][3] ∈ {-12}
+        [8][4] ∈ {8}
+        [8][5] ∈ {19}
+        [8][6] ∈ {21}
+        [8][7] ∈ {12}
+        [9][0] ∈ {-9}
+        [9][1] ∈ {-11}
+        [9][2] ∈ {11}
+        [9][3] ∈ {9}
+        [9][4..7] ∈ {0}
+        [10][0] ∈ {-1}
+        [10][1] ∈ {-10}
+        [10][2] ∈ {1}
+        [10][3] ∈ {10}
+        [10][4..7] ∈ {0}
+        [11][0] ∈ {-1}
+        [11][1] ∈ {-10}
+        [11][2] ∈ {1}
+        [11][3] ∈ {10}
+        [11][4] ∈ {-9}
+        [11][5] ∈ {-11}
+        [11][6] ∈ {11}
+        [11][7] ∈ {9}
+        [12][0] ∈ {-1}
+        [12][1] ∈ {-10}
+        [12][2] ∈ {1}
+        [12][3] ∈ {10}
+        [12][4] ∈ {-9}
+        [12][5] ∈ {-11}
+        [12][6] ∈ {11}
+        [12][7] ∈ {9}
+  NumDir[0..1] ∈ {0}
+        [2] ∈ {8}
+        [3..4] ∈ {4}
+        [5..6] ∈ {8}
+        [7] ∈ {0}
+        [8] ∈ {8}
+        [9..10] ∈ {4}
+        [11..12] ∈ {8}
+  leafNodes ∈ {0}
+  PvSize ∈ {2097152}
+  SqStr[0..2] ∈ {0}
+  MvStr[0..5] ∈ {0}
+  S___fc_stdin[0]{.__fc_stdio_id; .__fc_position; .__fc_error; .__fc_eof} ∈
+              [--..--]
+              [0].[bits 80 to 95] ∈ UNINITIALIZED
+              [0].__fc_flags ∈ [--..--]
+              [0].__fc_inode ∈ {{ NULL ; &S___fc_inode_0_S___fc_stdin[0] }}
+              [0].__fc_real_data ∈
+              {{ NULL ; &S___fc_real_data_0_S___fc_stdin[0] }}
+              {[0].__fc_real_data_max_size; [1]{.__fc_stdio_id; .__fc_position; .__fc_error; .__fc_eof}} ∈
+              [--..--]
+              [1].[bits 80 to 95] ∈ UNINITIALIZED
+              [1].__fc_flags ∈ [--..--]
+              [1].__fc_inode ∈ {{ NULL ; &S___fc_inode_1_S___fc_stdin[0] }}
+              [1].__fc_real_data ∈
+              {{ NULL ; &S___fc_real_data_1_S___fc_stdin[0] }}
+              [1].__fc_real_data_max_size ∈ [--..--]
+  S___fc_inode_0_S___fc_stdin[0..1] ∈ [--..--]
+  S___fc_real_data_0_S___fc_stdin[0..1] ∈ [--..--]
+  S___fc_inode_1_S___fc_stdin[0..1] ∈ [--..--]
+  S___fc_real_data_1_S___fc_stdin[0..1] ∈ [--..--]
+  S___fc_stdout[0]{.__fc_stdio_id; .__fc_position; .__fc_error; .__fc_eof} ∈
+               [--..--]
+               [0].[bits 80 to 95] ∈ UNINITIALIZED
+               [0].__fc_flags ∈ [--..--]
+               [0].__fc_inode ∈
+               {{ NULL ; &S___fc_inode_0_S___fc_stdout[0] }}
+               [0].__fc_real_data ∈
+               {{ NULL ; &S___fc_real_data_0_S___fc_stdout[0] }}
+               {[0].__fc_real_data_max_size; [1]{.__fc_stdio_id; .__fc_position; .__fc_error; .__fc_eof}} ∈
+               [--..--]
+               [1].[bits 80 to 95] ∈ UNINITIALIZED
+               [1].__fc_flags ∈ [--..--]
+               [1].__fc_inode ∈
+               {{ NULL ; &S___fc_inode_1_S___fc_stdout[0] }}
+               [1].__fc_real_data ∈
+               {{ NULL ; &S___fc_real_data_1_S___fc_stdout[0] }}
+               [1].__fc_real_data_max_size ∈ [--..--]
+  S___fc_inode_0_S___fc_stdout[0..1] ∈ [--..--]
+  S___fc_real_data_0_S___fc_stdout[0..1] ∈ [--..--]
+  S___fc_inode_1_S___fc_stdout[0..1] ∈ [--..--]
+  S___fc_real_data_1_S___fc_stdout[0..1] ∈ [--..--]
+[value] computing for function AllInit <- main.
+        Called from main.c:12.
+[value] computing for function InitSq120To64 <- AllInit <- main.
+        Called from init.c:104.
+init.c:85:[value] entering loop for the first time
+init.c:89:[value] entering loop for the first time
+init.c:93:[value] entering loop for the first time
+init.c:94:[value] entering loop for the first time
+init.c:96:[kernel] warning: accessing out of bounds index [0..64]. assert sq64 < 64;
+[value] Recording results for InitSq120To64
+[value] Done for function InitSq120To64
+[value] computing for function InitBitMasks <- AllInit <- main.
+        Called from init.c:105.
+init.c:67:[value] entering loop for the first time
+init.c:72:[value] entering loop for the first time
+[value] Recording results for InitBitMasks
+[value] Done for function InitBitMasks
+[value] computing for function InitHashKeys <- AllInit <- main.
+        Called from init.c:106.
+init.c:52:[value] entering loop for the first time
+init.c:53:[value] entering loop for the first time
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] using specification for function rand
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:54.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:57.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:57.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:57.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:57.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:57.
+[value] Done for function rand
+init.c:58:[value] entering loop for the first time
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] computing for function rand <- InitHashKeys <- AllInit <- main.
+        Called from init.c:59.
+[value] Done for function rand
+[value] Recording results for InitHashKeys
+[value] Done for function InitHashKeys
+[value] computing for function InitFilesRanksBrd <- AllInit <- main.
+        Called from init.c:107.
+init.c:34:[value] entering loop for the first time
+init.c:39:[value] entering loop for the first time
+init.c:40:[value] entering loop for the first time
+[value] Recording results for InitFilesRanksBrd
+[value] Done for function InitFilesRanksBrd
+[value] Recording results for AllInit
+[value] Done for function AllInit
+[value] computing for function ParseFen <- main.
+        Called from main.c:17.
+[value] computing for function ResetBoard <- ParseFen <- main.
+        Called from board.c:134.
+board.c:230:[value] entering loop for the first time
+board.c:234:[value] entering loop for the first time
+board.c:235:[kernel] warning: accessing out of bounds index [0..120]. assert Sq64ToSq120[index] < 120;
+board.c:238:[value] entering loop for the first time
+board.c:245:[value] entering loop for the first time
+board.c:249:[value] entering loop for the first time
+[value] computing for function InitPvTable <- ResetBoard <- ParseFen <- main.
+        Called from board.c:266.
+pvtable.c:50:[kernel] warning: accessing uninitialized left-value: assert \initialized(&table->pTable);
+pvtable.c:50:[kernel] warning: completely indeterminate value in board with offsets {402400}.
+[value] Recording results for InitPvTable
+[value] Done for function InitPvTable
+[value] Recording results for ResetBoard
+[value] Done for function ResetBoard
+[value] Recording results for ParseFen
+[value] Done for function ParseFen
+[value] Recording results for main
+[value] done for function main
+pvtable.c:50:[value] Assertion 'Value,initialisation' got final status invalid.
+[pdg] computing for function main
+[from] Computing for function AllInit
+[from] Computing for function InitSq120To64 <-AllInit
+[from] Done for function InitSq120To64
+[from] Computing for function InitBitMasks <-AllInit
+[from] Done for function InitBitMasks
+[from] Computing for function InitHashKeys <-AllInit
+[from] Computing for function rand <-InitHashKeys <-AllInit
+[from] Done for function rand
+[from] Done for function InitHashKeys
+[from] Computing for function InitFilesRanksBrd <-AllInit
+[from] Done for function InitFilesRanksBrd
+[from] Done for function AllInit
+[from] Computing for function ParseFen
+[from] Computing for function ResetBoard <-ParseFen
+[from] Computing for function InitPvTable <-ResetBoard <-ParseFen
+[from] Non-terminating function InitPvTable (no dependencies)
+[from] Done for function InitPvTable
+[from] Non-terminating function ResetBoard (no dependencies)
+[from] Done for function ResetBoard
+[from] Non-terminating function ParseFen (no dependencies)
+[from] Done for function ParseFen
+main.c:54:[pdg] warning: no final state. Probably unreachable...
+[pdg] done for function main
+[pdg] computing for function AddBlackPawnCapMove
+[pdg] warning: unreachable entry point (sid:1869, function AddBlackPawnCapMove)
+[pdg] Bottom for function AddBlackPawnCapMove
+[pdg] computing for function AddBlackPawnMove
+[pdg] warning: unreachable entry point (sid:1908, function AddBlackPawnMove)
+[pdg] Bottom for function AddBlackPawnMove
+[pdg] computing for function AddCaptureMove
+[pdg] warning: unreachable entry point (sid:1791, function AddCaptureMove)
+[pdg] Bottom for function AddCaptureMove
+[pdg] computing for function AddEnPassantMove
+[pdg] warning: unreachable entry point (sid:1796, function AddEnPassantMove)
+[pdg] Bottom for function AddEnPassantMove
+[pdg] computing for function AddPiece
+[pdg] warning: unreachable entry point (sid:1328, function AddPiece)
+[pdg] Bottom for function AddPiece
+[pdg] computing for function AddQuietMove
+[pdg] warning: unreachable entry point (sid:1786, function AddQuietMove)
+[pdg] Bottom for function AddQuietMove
+[pdg] computing for function AddWhitePawnCapMove
+[pdg] warning: unreachable entry point (sid:1801, function AddWhitePawnCapMove)
+[pdg] Bottom for function AddWhitePawnCapMove
+[pdg] computing for function AddWhitePawnMove
+[pdg] warning: unreachable entry point (sid:1840, function AddWhitePawnMove)
+[pdg] Bottom for function AddWhitePawnMove
+[pdg] computing for function AllInit
+[pdg] done for function AllInit
+[pdg] computing for function CheckBoard
+[pdg] warning: unreachable entry point (sid:192, function CheckBoard)
+[pdg] Bottom for function CheckBoard
+[pdg] computing for function ClearPiece
+[pdg] warning: unreachable entry point (sid:1265, function ClearPiece)
+[pdg] Bottom for function ClearPiece
+[pdg] computing for function ClearPvTable
+[pdg] warning: unreachable entry point (sid:2386, function ClearPvTable)
+[pdg] Bottom for function ClearPvTable
+[pdg] computing for function CountBits
+[pdg] warning: unreachable entry point (sid:151, function CountBits)
+[pdg] Bottom for function CountBits
+[pdg] computing for function FD_CLR
+[from] Computing for function FD_CLR
+[from] Done for function FD_CLR
+[pdg] done for function FD_CLR
+[pdg] computing for function FD_ISSET
+[from] Computing for function FD_ISSET
+[from] Done for function FD_ISSET
+[pdg] done for function FD_ISSET
+[pdg] computing for function FD_SET
+[from] Computing for function FD_SET
+[from] Done for function FD_SET
+[pdg] done for function FD_SET
+[pdg] computing for function FD_ZERO
+[from] Computing for function FD_ZERO
+[from] Done for function FD_ZERO
+[pdg] done for function FD_ZERO
+[pdg] computing for function FileRankValid
+[pdg] warning: unreachable entry point (sid:2500, function FileRankValid)
+[pdg] Bottom for function FileRankValid
+[pdg] computing for function Frama_C_bzero
+[from] Computing for function Frama_C_bzero
+[from] Done for function Frama_C_bzero
+[pdg] done for function Frama_C_bzero
+[pdg] computing for function Frama_C_copy_block
+[from] Computing for function Frama_C_copy_block
+[from] Done for function Frama_C_copy_block
+[pdg] done for function Frama_C_copy_block
+[pdg] computing for function GenerateAllMoves
+[pdg] warning: unreachable entry point (sid:1937, function GenerateAllMoves)
+[pdg] Bottom for function GenerateAllMoves
+[pdg] computing for function GeneratePosKey
+[pdg] warning: unreachable entry point (sid:833, function GeneratePosKey)
+[pdg] Bottom for function GeneratePosKey
+[pdg] computing for function GetPvLine
+[pdg] warning: unreachable entry point (sid:2340, function GetPvLine)
+[pdg] Bottom for function GetPvLine
+[pdg] computing for function GetTimeMs
+[pdg] warning: unreachable entry point (sid:1762, function GetTimeMs)
+[pdg] Bottom for function GetTimeMs
+[pdg] computing for function InitBitMasks
+[pdg] done for function InitBitMasks
+[pdg] computing for function InitFilesRanksBrd
+[pdg] done for function InitFilesRanksBrd
+[pdg] computing for function InitHashKeys
+[pdg] done for function InitHashKeys
+[pdg] computing for function InitPvTable
+pvtable.c:56:[pdg] warning: no final state. Probably unreachable...
+[pdg] done for function InitPvTable
+[pdg] computing for function InitSq120To64
+[pdg] done for function InitSq120To64
+[pdg] computing for function IsRepetition
+[pdg] warning: unreachable entry point (sid:2454, function IsRepetition)
+[pdg] Bottom for function IsRepetition
+[pdg] computing for function MakeMove
+[pdg] warning: unreachable entry point (sid:1428, function MakeMove)
+[pdg] Bottom for function MakeMove
+[pdg] computing for function MoveExists
+[pdg] warning: unreachable entry point (sid:1766, function MoveExists)
+[pdg] Bottom for function MoveExists
+[pdg] computing for function MovePiece
+[pdg] warning: unreachable entry point (sid:1368, function MovePiece)
+[pdg] Bottom for function MovePiece
+[pdg] computing for function ParseFen
+board.c:223:[pdg] warning: no final state. Probably unreachable...
+[pdg] done for function ParseFen
+[pdg] computing for function ParseMove
+[pdg] warning: unreachable entry point (sid:1094, function ParseMove)
+[pdg] Bottom for function ParseMove
+[pdg] computing for function Perft
+[pdg] warning: unreachable entry point (sid:2262, function Perft)
+[pdg] Bottom for function Perft
+[pdg] computing for function PerftTest
+[pdg] warning: unreachable entry point (sid:2294, function PerftTest)
+[pdg] Bottom for function PerftTest
+[pdg] computing for function PieceValid
+[pdg] warning: unreachable entry point (sid:2518, function PieceValid)
+[pdg] Bottom for function PieceValid
+[pdg] computing for function PieceValidEmpty
+[pdg] warning: unreachable entry point (sid:2509, function PieceValidEmpty)
+[pdg] Bottom for function PieceValidEmpty
+[pdg] computing for function PopBit
+[pdg] warning: unreachable entry point (sid:144, function PopBit)
+[pdg] Bottom for function PopBit
+[pdg] computing for function PrMove
+[pdg] warning: unreachable entry point (sid:1063, function PrMove)
+[pdg] Bottom for function PrMove
+[pdg] computing for function PrSq
+[pdg] warning: unreachable entry point (sid:1056, function PrSq)
+[pdg] Bottom for function PrSq
+[pdg] computing for function PrintBitBoard
+[pdg] warning: unreachable entry point (sid:162, function PrintBitBoard)
+[pdg] Bottom for function PrintBitBoard
+[pdg] computing for function PrintBoard
+[pdg] warning: unreachable entry point (sid:776, function PrintBoard)
+[pdg] Bottom for function PrintBoard
+[pdg] computing for function PrintMoveList
+[pdg] warning: unreachable entry point (sid:1202, function PrintMoveList)
+[pdg] Bottom for function PrintMoveList
+[pdg] computing for function ProbePvTable
+[pdg] warning: unreachable entry point (sid:2432, function ProbePvTable)
+[pdg] Bottom for function ProbePvTable
+[pdg] computing for function ResetBoard
+board.c:268:[pdg] warning: no final state. Probably unreachable...
+[pdg] done for function ResetBoard
+[pdg] computing for function SearchPosition
+[pdg] warning: unreachable entry point (sid:2636, function SearchPosition)
+[pdg] Bottom for function SearchPosition
+[pdg] computing for function SideValid
+[pdg] warning: unreachable entry point (sid:2491, function SideValid)
+[pdg] Bottom for function SideValid
+[pdg] computing for function SqAttacked
+[pdg] warning: unreachable entry point (sid:1, function SqAttacked)
+[pdg] Bottom for function SqAttacked
+[pdg] computing for function SqOnBoard
+[pdg] warning: unreachable entry point (sid:2485, function SqOnBoard)
+[pdg] Bottom for function SqOnBoard
+[pdg] computing for function StorePvMove
+[pdg] warning: unreachable entry point (sid:2412, function StorePvMove)
+[pdg] Bottom for function StorePvMove
+[pdg] computing for function TakeMove
+[pdg] warning: unreachable entry point (sid:1621, function TakeMove)
+[pdg] Bottom for function TakeMove
+[pdg] computing for function UpdateListsMaterial
+[pdg] warning: unreachable entry point (sid:486, function UpdateListsMaterial)
+[pdg] Bottom for function UpdateListsMaterial
+[pdg] computing for function _Exit
+[from] Computing for function _Exit
+[from] Done for function _Exit
+[pdg] done for function _Exit
+[pdg] computing for function abort
+[from] Computing for function abort
+[from] Done for function abort
+[pdg] done for function abort
+[pdg] computing for function abs
+[from] Computing for function abs
+[from] Done for function abs
+[pdg] done for function abs
+[pdg] computing for function at_quick_exit
+[from] Computing for function at_quick_exit
+[from] Done for function at_quick_exit
+[pdg] done for function at_quick_exit
+[pdg] computing for function atexit
+[from] Computing for function atexit
+[from] Done for function atexit
+[pdg] done for function atexit
+[pdg] computing for function atof
+[from] Computing for function atof
+[from] Done for function atof
+[pdg] done for function atof
+[pdg] computing for function atoi
+[from] Computing for function atoi
+[from] Done for function atoi
+[pdg] done for function atoi
+[pdg] computing for function atol
+[from] Computing for function atol
+[from] Done for function atol
+[pdg] done for function atol
+[pdg] computing for function atoll
+[from] Computing for function atoll
+[from] Done for function atoll
+[pdg] done for function atoll
+[pdg] computing for function bsearch
+[from] Computing for function bsearch
+board.c:119:[from] Unable to extract assigns in bsearch
+[from] Done for function bsearch
+[pdg] done for function bsearch
+[pdg] computing for function clearerr
+[from] Computing for function clearerr
+[from] Done for function clearerr
+[pdg] done for function clearerr
+[pdg] computing for function clearerr_unlocked
+[from] Computing for function clearerr_unlocked
+[from] Done for function clearerr_unlocked
+[pdg] done for function clearerr_unlocked
+[pdg] computing for function div
+[from] Computing for function div
+[from] Done for function div
+[pdg] done for function div
+[pdg] computing for function exit
+[from] Computing for function exit
+[from] Done for function exit
+[pdg] done for function exit
+[pdg] computing for function fclose
+[from] Computing for function fclose
+[from] Done for function fclose
+[pdg] done for function fclose
+[pdg] computing for function fdopen
+[from] Computing for function fdopen
+[from] Done for function fdopen
+[pdg] done for function fdopen
+[pdg] computing for function feof
+[from] Computing for function feof
+[from] Done for function feof
+[pdg] done for function feof
+[pdg] computing for function feof_unlocked
+[from] Computing for function feof_unlocked
+[from] Done for function feof_unlocked
+[pdg] done for function feof_unlocked
+[pdg] computing for function ferror
+[from] Computing for function ferror
+[from] Done for function ferror
+[pdg] done for function ferror
+[pdg] computing for function ferror_unlocked
+[from] Computing for function ferror_unlocked
+[from] Done for function ferror_unlocked
+[pdg] done for function ferror_unlocked
+[pdg] computing for function fflush
+[from] Computing for function fflush
+[from] Done for function fflush
+[pdg] done for function fflush
+[pdg] computing for function fgetc
+[from] Computing for function fgetc
+[from] Done for function fgetc
+[pdg] done for function fgetc
+[pdg] computing for function fgetpos
+[from] Computing for function fgetpos
+[from] Done for function fgetpos
+[pdg] done for function fgetpos
+[pdg] computing for function fgets
+[from] Computing for function fgets
+[from] Done for function fgets
+[pdg] done for function fgets
+[pdg] computing for function fileno
+[from] Computing for function fileno
+[from] Done for function fileno
+[pdg] done for function fileno
+[pdg] computing for function fileno_unlocked
+[from] Computing for function fileno_unlocked
+[from] Done for function fileno_unlocked
+[pdg] done for function fileno_unlocked
+[pdg] computing for function flockfile
+[from] Computing for function flockfile
+[from] Done for function flockfile
+[pdg] done for function flockfile
+[pdg] computing for function foo
+[pdg] warning: unreachable entry point (sid:2258, function foo)
+[pdg] Bottom for function foo
+[pdg] computing for function fopen
+[from] Computing for function fopen
+[from] Done for function fopen
+[pdg] done for function fopen
+[pdg] computing for function fprintf
+[pdg] warning: not implemented by pdg yet: variadic function
+[pdg] Top for function fprintf
+[pdg] computing for function fputc
+[from] Computing for function fputc
+[from] Done for function fputc
+[pdg] done for function fputc
+[pdg] computing for function fputs
+[from] Computing for function fputs
+[from] Done for function fputs
+[pdg] done for function fputs
+[pdg] computing for function fread
+[from] Computing for function fread
+[from] Done for function fread
+[pdg] done for function fread
+[pdg] computing for function free
+[from] Computing for function free
+[from] Done for function free
+[pdg] done for function free
+[pdg] computing for function freopen
+[from] Computing for function freopen
+[from] Done for function freopen
+[pdg] done for function freopen
+[pdg] computing for function fscanf
+[pdg] warning: not implemented by pdg yet: variadic function
+[pdg] Top for function fscanf
+[pdg] computing for function fseek
+[from] Computing for function fseek
+[from] Done for function fseek
+[pdg] done for function fseek
+[pdg] computing for function fsetpos
+[from] Computing for function fsetpos
+[from] Done for function fsetpos
+[pdg] done for function fsetpos
+[pdg] computing for function ftell
+[from] Computing for function ftell
+[from] Done for function ftell
+[pdg] done for function ftell
+[pdg] computing for function ftrylockfile
+[from] Computing for function ftrylockfile
+[from] Done for function ftrylockfile
+[pdg] done for function ftrylockfile
+[pdg] computing for function funlockfile
+[from] Computing for function funlockfile
+[from] Done for function funlockfile
+[pdg] done for function funlockfile
+[pdg] computing for function fwrite
+[from] Computing for function fwrite
+[from] Done for function fwrite
+[pdg] done for function fwrite
+[pdg] computing for function getc
+[from] Computing for function getc
+[from] Done for function getc
+[pdg] done for function getc
+[pdg] computing for function getc_unlocked
+[from] Computing for function getc_unlocked
+[from] Done for function getc_unlocked
+[pdg] done for function getc_unlocked
+[pdg] computing for function getchar
+[from] Computing for function getchar
+[from] Done for function getchar
+[pdg] done for function getchar
+[pdg] computing for function getchar_unlocked
+[from] Computing for function getchar_unlocked
+[from] Done for function getchar_unlocked
+[pdg] done for function getchar_unlocked
+[pdg] computing for function getenv
+[from] Computing for function getenv
+[from] Done for function getenv
+[pdg] done for function getenv
+[pdg] computing for function gets
+[from] Computing for function gets
+[from] Done for function gets
+[pdg] done for function gets
+[pdg] computing for function gettimeofday
+[from] Computing for function gettimeofday
+new.c:14:[kernel] warning: No code nor explicit assigns clause for function gettimeofday, generating default assigns from the specification
+[from] Done for function gettimeofday
+[pdg] done for function gettimeofday
+[pdg] computing for function labs
+[from] Computing for function labs
+[from] Done for function labs
+[pdg] done for function labs
+[pdg] computing for function ldiv
+[from] Computing for function ldiv
+[from] Done for function ldiv
+[pdg] done for function ldiv
+[pdg] computing for function llabs
+[from] Computing for function llabs
+[from] Done for function llabs
+[pdg] done for function llabs
+[pdg] computing for function lldiv
+[from] Computing for function lldiv
+[from] Done for function lldiv
+[pdg] done for function lldiv
+[pdg] computing for function malloc
+[from] Computing for function malloc
+[from] Done for function malloc
+[pdg] done for function malloc
+[pdg] computing for function mblen
+[from] Computing for function mblen
+[from] Done for function mblen
+[pdg] done for function mblen
+[pdg] computing for function mbstowcs
+[from] Computing for function mbstowcs
+[from] Done for function mbstowcs
+[pdg] done for function mbstowcs
+[pdg] computing for function mbtowc
+[from] Computing for function mbtowc
+[from] Done for function mbtowc
+[pdg] done for function mbtowc
+[pdg] computing for function perror
+[from] Computing for function perror
+[from] Done for function perror
+[pdg] done for function perror
+[pdg] computing for function printf
+[pdg] warning: not implemented by pdg yet: variadic function
+[pdg] Top for function printf
+[pdg] computing for function putc
+[from] Computing for function putc
+[from] Done for function putc
+[pdg] done for function putc
+[pdg] computing for function putc_unlocked
+[from] Computing for function putc_unlocked
+[from] Done for function putc_unlocked
+[pdg] done for function putc_unlocked
+[pdg] computing for function putchar
+[from] Computing for function putchar
+[from] Done for function putchar
+[pdg] done for function putchar
+[pdg] computing for function putchar_unlocked
+[from] Computing for function putchar_unlocked
+[from] Done for function putchar_unlocked
+[pdg] done for function putchar_unlocked
+[pdg] computing for function puts
+[from] Computing for function puts
+[from] Done for function puts
+[pdg] done for function puts
+[pdg] computing for function qsort
+[from] Computing for function qsort
+[from] Done for function qsort
+[pdg] done for function qsort
+[pdg] computing for function quick_exit
+[from] Computing for function quick_exit
+[from] Done for function quick_exit
+[pdg] done for function quick_exit
+[pdg] computing for function rand
+[pdg] done for function rand
+[pdg] computing for function realloc
+[from] Computing for function realloc
+[from] Done for function realloc
+[pdg] done for function realloc
+[pdg] computing for function remove
+[from] Computing for function remove
+[from] Done for function remove
+[pdg] done for function remove
+[pdg] computing for function rename
+[from] Computing for function rename
+[from] Done for function rename
+[pdg] done for function rename
+[pdg] computing for function rewind
+[from] Computing for function rewind
+[from] Done for function rewind
+[pdg] done for function rewind
+[pdg] computing for function scanf
+[pdg] warning: not implemented by pdg yet: variadic function
+[pdg] Top for function scanf
+[pdg] computing for function setbuf
+[from] Computing for function setbuf
+[from] Done for function setbuf
+[pdg] done for function setbuf
+[pdg] computing for function settimeofday
+[from] Computing for function settimeofday
+[from] Done for function settimeofday
+[pdg] done for function settimeofday
+[pdg] computing for function setvbuf
+[from] Computing for function setvbuf
+[from] Done for function setvbuf
+[pdg] done for function setvbuf
+[pdg] computing for function snprintf
+[pdg] warning: not implemented by pdg yet: variadic function
+[pdg] Top for function snprintf
+[pdg] computing for function sprintf
+[pdg] warning: not implemented by pdg yet: variadic function
+[pdg] Top for function sprintf
+[pdg] computing for function srand
+[from] Computing for function srand
+[from] Done for function srand
+[pdg] done for function srand
+[pdg] computing for function strtod
+[from] Computing for function strtod
+[from] Done for function strtod
+[pdg] done for function strtod
+[pdg] computing for function strtof
+[from] Computing for function strtof
+[from] Done for function strtof
+[pdg] done for function strtof
+[pdg] computing for function strtol
+[from] Computing for function strtol
+[from] Done for function strtol
+[pdg] done for function strtol
+[pdg] computing for function strtold
+[from] Computing for function strtold
+[from] Done for function strtold
+[pdg] done for function strtold
+[pdg] computing for function strtoll
+[from] Computing for function strtoll
+[from] Done for function strtoll
+[pdg] done for function strtoll
+[pdg] computing for function strtoul
+[from] Computing for function strtoul
+[from] Done for function strtoul
+[pdg] done for function strtoul
+[pdg] computing for function strtoull
+[from] Computing for function strtoull
+[from] Done for function strtoull
+[pdg] done for function strtoull
+[pdg] computing for function system
+[from] Computing for function system
+[from] Done for function system
+[pdg] done for function system
+[pdg] computing for function tmpfile
+[from] Computing for function tmpfile
+[from] Done for function tmpfile
+[pdg] done for function tmpfile
+[pdg] computing for function tmpnam
+[from] Computing for function tmpnam
+[from] Done for function tmpnam
+[pdg] done for function tmpnam
+[pdg] computing for function ungetc
+[from] Computing for function ungetc
+[from] Done for function ungetc
+[pdg] done for function ungetc
+[pdg] computing for function utimes
+[from] Computing for function utimes
+[from] Done for function utimes
+[pdg] done for function utimes
+[pdg] computing for function vfprintf
+[from] Computing for function vfprintf
+[from] Done for function vfprintf
+[pdg] done for function vfprintf
+[pdg] computing for function vfscanf
+[from] Computing for function vfscanf
+[from] Done for function vfscanf
+[pdg] done for function vfscanf
+[pdg] computing for function vprintf
+[from] Computing for function vprintf
+[from] Done for function vprintf
+[pdg] done for function vprintf
+[pdg] computing for function vscanf
+[from] Computing for function vscanf
+[from] Done for function vscanf
+[pdg] done for function vscanf
+[pdg] computing for function vsnprintf
+[from] Computing for function vsnprintf
+[from] Done for function vsnprintf
+[pdg] done for function vsnprintf
+[pdg] computing for function vsprintf
+[from] Computing for function vsprintf
+[from] Done for function vsprintf
+[pdg] done for function vsprintf
+[pdg] computing for function wcstombs
+[from] Computing for function wcstombs
+[from] Done for function wcstombs
+[pdg] done for function wcstombs
+[pdg] computing for function wctomb
+[from] Computing for function wctomb
+[from] Done for function wctomb
+[pdg] done for function wctomb
+[sparecode] remove unused global declarations...
+[sparecode] result in new project 'default without sparecode'.
+/* Generated by Frama-C */
+typedef unsigned int size_t;
+enum __anonenum_1 {
+    EMPTY = 0,
+    wP = 1,
+    wN = 2,
+    wB = 3,
+    wR = 4,
+    wQ = 5,
+    wK = 6,
+    bP = 7,
+    bN = 8,
+    bB = 9,
+    bR = 10,
+    bQ = 11,
+    bK = 12
+};
+enum __anonenum_4 {
+    WHITE = 0,
+    BLACK = 1,
+    BOTH = 2
+};
+enum __anonenum_5 {
+    A1 = 21,
+    B1 = 22,
+    C1 = 23,
+    D1 = 24,
+    E1 = 25,
+    F1 = 26,
+    G1 = 27,
+    H1 = 28,
+    A2 = 31,
+    B2 = 32,
+    C2 = 33,
+    D2 = 34,
+    E2 = 35,
+    F2 = 36,
+    G2 = 37,
+    H2 = 38,
+    A3 = 41,
+    B3 = 42,
+    C3 = 43,
+    D3 = 44,
+    E3 = 45,
+    F3 = 46,
+    G3 = 47,
+    H3 = 48,
+    A4 = 51,
+    B4 = 52,
+    C4 = 53,
+    D4 = 54,
+    E4 = 55,
+    F4 = 56,
+    G4 = 57,
+    H4 = 58,
+    A5 = 61,
+    B5 = 62,
+    C5 = 63,
+    D5 = 64,
+    E5 = 65,
+    F5 = 66,
+    G5 = 67,
+    H5 = 68,
+    A6 = 71,
+    B6 = 72,
+    C6 = 73,
+    D6 = 74,
+    E6 = 75,
+    F6 = 76,
+    G6 = 77,
+    H6 = 78,
+    A7 = 81,
+    B7 = 82,
+    C7 = 83,
+    D7 = 84,
+    E7 = 85,
+    F7 = 86,
+    G7 = 87,
+    H7 = 88,
+    A8 = 91,
+    B8 = 92,
+    C8 = 93,
+    D8 = 94,
+    E8 = 95,
+    F8 = 96,
+    G8 = 97,
+    H8 = 98,
+    NO_SQ = 99,
+    OFFBOARD = 100
+};
+enum __anonenum_6 {
+    FALSE = 0,
+    TRUE = 1
+};
+enum __anonenum_2 {
+    FILE_A = 0,
+    FILE_B = 1,
+    FILE_C = 2,
+    FILE_D = 3,
+    FILE_E = 4,
+    FILE_F = 5,
+    FILE_G = 6,
+    FILE_H = 7,
+    FILE_NONE = 8
+};
+enum __anonenum_3 {
+    RANK_1 = 0,
+    RANK_2 = 1,
+    RANK_3 = 2,
+    RANK_4 = 3,
+    RANK_5 = 4,
+    RANK_6 = 5,
+    RANK_7 = 6,
+    RANK_8 = 7,
+    RANK_NONE = 8
+};
+enum __anonenum_7 {
+    WKCA = 1,
+    WQCA = 2,
+    BKCA = 4,
+    BQCA = 8
+};
+/*@ ghost extern int __fc_heap_status __attribute__((__FRAMA_C_MODEL__)); */
+
+/*@
+axiomatic dynamic_allocation {
+  predicate is_allocable{L}(size_t n) 
+    reads __fc_heap_status;
+  
+  }
+ */
+void main(void)
+{
+  return;
+}
+
+
