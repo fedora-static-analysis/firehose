@@ -293,7 +293,8 @@ class AnalysisTests(unittest.TestCase):
                              'register_all_py_protocols_func')
             self.assertEqual(w.location.line, 159)
             self.assertEqual(w.location.column, 42)
-            self.assert_(w.customfields['traceback'].startswith('wspy_register.c: In function \'register_all_py_protocols_func\':\n'))
+            self.assertTrue(w.customfields['traceback']
+                            .startswith('wspy_register.c: In function \'register_all_py_protocols_func\':\n'))
 
     def test_example_5(self):
         # Ensure that we can load range information from XML
