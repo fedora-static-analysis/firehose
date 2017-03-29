@@ -73,15 +73,15 @@ def parse_plist(pathOrFile, analyzerversion=None, sut=None, file_=None, stats=No
         message = Message(text=diagnostic['description'])
 
         loc = diagnostic['location']
-        location = Location(file=File(givenpath=files[loc.file],
+        location = Location(file=File(givenpath=files[loc['file']],
                                       abspath=None),
 
                             # FIXME: doesn't tell us function name
                             # TODO: can we patch this upstream?
                             function=None,
 
-                            point=Point(int(loc.line),
-                                        int(loc.col)))
+                            point=Point(int(loc['line']),
+                                        int(loc['col'])))
 
         notes = None
 
@@ -98,13 +98,13 @@ def parse_plist(pathOrFile, analyzerversion=None, sut=None, file_=None, stats=No
 def make_point_from_plist_point(loc):
     # point:
     #   e.g. {'col': 2, 'file': 0, 'line': 130}
-    return Point(int(loc.line),
-                 int(loc.col))
+    return Point(int(loc['line']),
+                 int(loc['col']))
 
 def make_location_from_point(files, loc):
     # loc:
     #   e.g. {'col': 2, 'file': 0, 'line': 130}
-    location = Location(file=File(givenpath=files[loc.file],
+    location = Location(file=File(givenpath=files[loc['file']],
                                   abspath=None),
 
                         # FIXME: doesn't tell us function name
@@ -186,8 +186,8 @@ def make_trace(files, path):
             #   'kind': 'control'}
             edges = node['edges']
             for edge in edges:
-                edge_start = edge.start
-                edge_end = edge.end
+                edge_start = edge['start']
+                edge_end = edge['end']
 
                 startloc = make_location_from_range(files, edge_start)
                 endloc = make_location_from_range(files, edge_end)

@@ -144,4 +144,4 @@ class TestParseFile(unittest.TestCase):
         answer = [
                 [77, None, "com/clearspring/ircbot/trac/TracRpc.java"],
                 ]
-        self.run_testdata("findbugs_no_method.xml", answer, isDebug=True)
+        self.run_testdata("findbugs_no_method.xml", answer)
