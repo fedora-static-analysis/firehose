@@ -52,8 +52,6 @@ class TestParseWarning(unittest.TestCase):
     def test_empty(self):
         mock_file = self.create_mock_file([""])
         ret = frama_c.parse_file(mock_file)
-        print(ret)
-        print(type(ret))
         self.assertEqual(len(ret.results), 0)
 
     def test_new_line(self):

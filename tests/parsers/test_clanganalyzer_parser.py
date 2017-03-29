@@ -83,7 +83,6 @@ class TestParsePlist(unittest.TestCase):
         self.assertEqual(w0.location.column, 3)
 
         w1 = a.results[1]
-        print(w1)
         self.assertEqual(w1.message.text,
                          "Value stored to 'pol_opt' is never read")
         self.assertEqual(w1.location.file.givenpath, 'search.c')
@@ -91,7 +90,6 @@ class TestParsePlist(unittest.TestCase):
         self.assertEqual(w1.location.column, 2)
 
         w2 = a.results[2]
-        print(w2)
         self.assertEqual(w2.message.text,
                          "Access to field 'ob_refcnt' results in a dereference of a null pointer (loaded from variable 'dict')")
         self.assertEqual(w2.location.file.givenpath, 'search.c')

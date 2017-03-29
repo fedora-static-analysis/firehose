@@ -419,10 +419,13 @@ class AnalysisTests(unittest.TestCase):
         self.assertEqual(a9, a10)
 
     def test_json_roundtrip(self):
+        verbose = False
+
         def roundtrip_through_json(a):
             jsondict = a.to_json()
-            from pprint import pprint
-            pprint(jsondict)
+            if verbose:
+                from pprint import pprint
+                pprint(jsondict)
             return Analysis.from_json(jsondict)
 
         a1, w = self.make_simple_analysis()
