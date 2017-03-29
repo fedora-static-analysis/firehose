@@ -211,7 +211,7 @@ class AnalysisTests(unittest.TestCase):
                 r = Analysis.from_xml(f)
                 num_analyses += 1
         # Ensure that all of the reports were indeed parsed:
-        self.assertEqual(num_analyses, 9)
+        self.assertEqual(num_analyses, 10)
 
     def test_example_2(self):
         # Verify that the parser works:

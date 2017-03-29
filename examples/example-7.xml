@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<analysis>
+   <metadata>
+      <generator name="frama-c" />
+   </metadata>
+   <results>
+      <issue>
+         <message>Body of function foo falls-through. Adding a return statement</message>
+         <location>
+            <file given-path="new.c" />
+            <point column="0" line="13" />
+         </location>
+      </issue>
+      <issue>
+         <message>def\'n of func main at new.c:3 (sum 1081) conflicts with the one at main.c:10 (sum 1879968716785197); keeping the one at main.c:10.</message>
+         <location>
+            <file given-path="new.c" />
+            <point column="0" line="3" />
+         </location>
+      </issue>
+      <issue>
+         <message>accessing out of bounds index [0..64]. assert sq64 &amp;lt; 64;</message>
+         <location>
+            <file given-path="init.c" />
+            <point column="0" line="96" />
+         </location>
+      </issue>
+      <issue>
+         <message>accessing out of bounds index [0..120]. assert Sq64ToSq120[index] &amp;lt; 120;</message>
+         <location>
+            <file given-path="board.c" />
+            <point column="0" line="235" />
+         </location>
+      </issue>
+      <issue>
+         <message>accessing uninitialized left-value: assert \\initialized(&amp;table-&amp;gt;pTable);</message>
+         <location>
+            <file given-path="pvtable.c" />
+            <point column="0" line="50" />
+         </location>
+      </issue>
+      <issue>
+         <message>completely indeterminate value in board with offsets {402400}.</message>
+         <location>
+            <file given-path="pvtable.c" />
+            <point column="0" line="50" />
+         </location>
+      </issue>
+      <issue>
+         <message>no final state. Probably unreachable...</message>
+         <location>
+            <file given-path="main.c" />
+            <point column="0" line="54" />
+         </location>
+      </issue>
+      <issue>
+         <message>no final state. Probably unreachable...</message>
+         <location>
+            <file given-path="pvtable.c" />
+            <point column="0" line="56" />
+         </location>
+      </issue>
+      <issue>
+         <message>no final state. Probably unreachable...</message>
+         <location>
+            <file given-path="board.c" />
+            <point column="0" line="223" />
+         </location>
+      </issue>
+      <issue>
+         <message>no final state. Probably unreachable...</message>
+         <location>
+            <file given-path="board.c" />
+            <point column="0" line="268" />
+         </location>
+      </issue>
+      <issue>
+         <message>No code nor explicit assigns clause for function gettimeofday, generating default assigns from the specification</message>
+         <location>
+            <file given-path="new.c" />
+            <point column="0" line="14" />
+         </location>
+      </issue>
+   </results>
+</analysis>
