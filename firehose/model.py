@@ -253,11 +253,13 @@ class Issue(Result):
                  trace,
                  severity=None,
                  customfields=None):
+        cwes = []
         if cwe is not None:
             if not isinstance(cwe, int):
                 cwes = cwe
-                for i in cwes:
-                    assert isinstance(i, int)
+                assert isinstance(cwes, list)
+                for cwe in cwes:
+                    assert isinstance(cwe, int)
             else:
                 assert isinstance(cwe, int)
         if testid is not None:
@@ -272,7 +274,7 @@ class Issue(Result):
             assert isinstance(severity, _string_type)
         if customfields is not None:
             assert isinstance(customfields, CustomFields)
-        self.cwe = cwe
+        self.cwe = cwes
         self.testid = testid
         self.location = location
         self.message = message
@@ -287,8 +289,8 @@ class Issue(Result):
         cwe_list = []
         if cwe is not None and cwe is not "":
             cwes = cwe.split(',')
-            for i in cwes:
-                cwe_list.append(int(i))
+            for cwe in cwes:
+                cwe_list.append(int(cwe))
         testid = node.get('test-id')
         location = Location.from_xml(node.find('location'))
         message = Message.from_xml(node.find('message'))
@@ -400,8 +402,8 @@ class Issue(Result):
         cwe_list_str = []
         if self.cwe is not None:
             if isinstance(self.cwe, list):
-                for i in self.cwe:
-                    cwe_list_str.append('CWE-%i' % int(i))
+                for cwe in self.cwe:
+                    cwe_list_str.append('CWE-%i' % int(cwe))
             else:
                 cwe_list_str.append('CWE-%i' % int(self.cwe))
         return cwe_list_str
@@ -411,8 +413,8 @@ class Issue(Result):
         cwe_list_str = []
         if self.cwe is not None:
             if isinstance(self.cwe, list):
-                for i in self.cwe:
-                    cwe_list_str.append('http://cwe.mitre.org/data/definitions/%i.html' % i)
+                for cwe in self.cwe:
+                    cwe_list_str.append('http://cwe.mitre.org/data/definitions/%i.html' % cwe)
                 return cwe_list_str
             else:
                 cwe_list_str.append('http://cwe.mitre.org/data/definitions/%i.html' % self.cwe)

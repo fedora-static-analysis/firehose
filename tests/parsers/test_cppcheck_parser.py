@@ -40,7 +40,7 @@ class TestParseXml(unittest.TestCase):
         self.assertEqual(len(a.results), 7)
         r0 = a.results[0]
         self.assertIsInstance(r0, Issue)
-        self.assertEqual(r0.cwe, None)
+        self.assertEqual(r0.cwe, [])
         self.assertEqual(r0.testid, 'uninitvar')
         self.assertEqual(r0.message.text, 'Uninitialized variable: ret')
         self.assertEqual(r0.notes, None)

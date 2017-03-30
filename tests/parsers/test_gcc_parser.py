@@ -63,7 +63,7 @@ class TestParseWarning(unittest.TestCase):
         issue = gcc.parse_warning(line, FUNC_NAME)
 
         # Verify the metadata:
-        self.assertEqual(issue.cwe, None)
+        self.assertEqual(issue.cwe, [])
         self.assertEqual(issue.testid, 'unused-result')
         self.assertIsInstance(issue.location, Location)
         self.assertIsInstance(issue.location.file, File)
