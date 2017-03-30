@@ -3,3 +3,6 @@
 
 # Python bytecode:
 *.pyc
+
+# Built documentation:
+docs/_build
