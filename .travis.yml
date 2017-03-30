@@ -8,3 +8,4 @@ script: make
 before_install:
  - sudo apt-get update -qq
  - sudo apt-get install -qq libxml2-utils
+ - sudo apt-get install -qq python-sphinx
