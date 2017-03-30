@@ -15,6 +15,9 @@ and via git from:
 
 The mailing list is:
   https://admin.fedoraproject.org/mailman/listinfo/firehose-devel
+  
+Documentation can be read here:
+  http://firehose.readthedocs.io/en/latest/
 
 Firehose is Free Software, licensed under the LGPLv2.1 or (at your
 option) any later version.
