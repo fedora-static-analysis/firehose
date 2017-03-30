@@ -16,7 +16,7 @@
 #   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301
 #   USA
 
-all: validate dump unittests executables
+all: validate dump unittests executables docs-html
 
 validate:
 	xmllint --relaxng firehose.rng --noout examples/example-*.xml
@@ -34,3 +34,6 @@ executables:
 	PYTHONPATH=. \
 	  python firehose/parsers/clanganalyzer.py \
 	    tests/parsers/example-output/clanganalyzer/report-001.plist
+
+docs-html:
+	cd docs && make html
