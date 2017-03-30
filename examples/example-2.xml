@@ -28,7 +28,7 @@
   </metadata>
 
   <results>
-    <issue cwe="401" test-id="refcount-too-high">
+    <issue cwe="401,200" test-id="refcount-too-high">
 
   <!-- Example of a report with a trace -->
 
