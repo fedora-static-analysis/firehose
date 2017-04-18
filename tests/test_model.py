@@ -37,7 +37,7 @@ class AnalysisTests(unittest.TestCase):
                                        sut=None,
                                        file_=None,
                                        stats=None),
-                     results=[Issue(cwe=None,
+                     results=[Issue(cwe=[],
                                     testid=None,
                                     location=Location(file=File('foo.c', None),
                                                       function=None,
@@ -60,7 +60,7 @@ class AnalysisTests(unittest.TestCase):
                                        file_=File(givenpath='foo.c',
                                                   abspath='/home/david/coding/foo.c'),
                                        stats=Stats(wallclocktime=0.4)),
-                     results=[Issue(cwe=681,
+                     results=[Issue(cwe=[681],
                                     testid='refcount-too-high',
                                     location=Location(file=File(givenpath='foo.c',
                                                                 abspath='/home/david/coding/foo.c'),
@@ -127,7 +127,7 @@ class AnalysisTests(unittest.TestCase):
         self.assertEqual(a.metadata.sut, None)
         self.assertEqual(a.metadata.file_, None)
         self.assertEqual(a.metadata.stats, None)
-        self.assertEqual(w.cwe, None)
+        self.assertEqual(w.cwe, [])
         self.assertEqual(w.testid, None)
         self.assertEqual(w.location.file.givenpath, 'foo.c')
         self.assertEqual(w.location.file.abspath, None)
@@ -150,7 +150,7 @@ class AnalysisTests(unittest.TestCase):
         self.assertEqual(a.metadata.file_.givenpath, 'foo.c')
         self.assertEqual(a.metadata.file_.abspath, '/home/david/coding/foo.c')
         self.assertEqual(a.metadata.stats.wallclocktime, 0.4)
-        self.assertEqual(w.cwe, 681)
+        self.assertEqual(w.cwe, [681])
         self.assertEqual(w.testid, 'refcount-too-high')
         self.assertEqual(w.location.file.givenpath, 'foo.c')
         self.assertEqual(w.location.file.abspath, '/home/david/coding/foo.c')
@@ -228,7 +228,7 @@ class AnalysisTests(unittest.TestCase):
             self.assertEqual(len(a.results), 1)
             w = a.results[0]
             self.assertIsInstance(w, Issue)
-            self.assertEqual(w.cwe, 401)
+            self.assertEqual(w.cwe, [401,200])
             self.assertEqual(w.testid, 'refcount-too-high')
             self.assertEqual(w.location.file.givenpath, 'examples/python-src-example.c')
             self.assertEqual(w.location.file.abspath, None)
@@ -491,16 +491,16 @@ class AnalysisTests(unittest.TestCase):
     def test_cwe(self):
         # Verify that the CWE methods are sane:
         a, w = self.make_complex_analysis()
-        self.assertIsInstance(w.cwe, int)
-        self.assertEqual(w.get_cwe_str(), 'CWE-681')
+        self.assertIsInstance(w.cwe, list)
+        self.assertEqual(w.get_cwe_str(), ['CWE-681'])
         self.assertEqual(w.get_cwe_url(),
-                         'http://cwe.mitre.org/data/definitions/681.html')
+                         ['http://cwe.mitre.org/data/definitions/681.html'])
 
         # Verify that they are sane for a warning without a CWE:
         a, w = self.make_simple_analysis()
-        self.assertEqual(w.cwe, None)
-        self.assertEqual(w.get_cwe_str(), None)
-        self.assertEqual(w.get_cwe_url(), None)
+        self.assertEqual(w.cwe, [])
+        self.assertEqual(w.get_cwe_str(), [])
+        self.assertEqual(w.get_cwe_url(), [])
 
     def test_fixup_paths(self):
         # Verify that Report.fixup_files() can make paths absolute:
@@ -535,7 +535,7 @@ class AnalysisTests(unittest.TestCase):
         w.write_as_gcc_output(output)
         self.assertMultiLineEqual(output.getvalue(),
             ("foo.c: In function 'bar':\n"
-             "foo.c:10:15: warning: something bad involving pointers [CWE-681]\n"
+             "foo.c:10:15: warning: something bad involving pointers['CWE-681']\n"
              "here is some explanatory text\n"
              "foo.c:7:12: note: first we do this\n"
              "foo.c:8:10: note: then we do that\n"

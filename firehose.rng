@@ -121,7 +121,7 @@
              http://cwe.mitre.org/data/definitions/131.html
         -->
         <attribute name="cwe">
-          <data type="integer"/>
+          <data type="string"/>
         </attribute>
       </optional>
 

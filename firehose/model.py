@@ -68,6 +68,8 @@ class Attribute(namedtuple('Attribute', ('name', 'type', 'nullable'))):
             return jsonobj
         if self.type == float:
             return jsonobj
+        if self.type == list:
+            return jsonobj
         return self.resolve_type().from_json(jsonobj)
 
 def to_json(obj):
@@ -233,7 +235,7 @@ class Result(JsonMixin):
         raise TypeError('unknown type: %r' % jsonobj['type'])
 
 class Issue(Result):
-    attrs = [Attribute('cwe', int, nullable=True),
+    attrs = [Attribute('cwe', list, nullable=True),
              Attribute('testid', _string_type, nullable=True),
              Attribute('location', 'Location'),
              Attribute('message', 'Message'),
@@ -251,8 +253,15 @@ class Issue(Result):
                  trace,
                  severity=None,
                  customfields=None):
+        cwes = []
         if cwe is not None:
-            assert isinstance(cwe, int)
+            if not isinstance(cwe, int):
+                cwes = cwe
+                assert isinstance(cwes, list)
+                for cwe in cwes:
+                    assert isinstance(cwe, int)
+            else:
+                assert isinstance(cwe, int)
         if testid is not None:
             assert isinstance(testid, _string_type)
         assert isinstance(location, Location)
@@ -265,7 +274,7 @@ class Issue(Result):
             assert isinstance(severity, _string_type)
         if customfields is not None:
             assert isinstance(customfields, CustomFields)
-        self.cwe = cwe
+        self.cwe = cwes
         self.testid = testid
         self.location = location
         self.message = message
@@ -277,8 +286,11 @@ class Issue(Result):
     @classmethod
     def from_xml(cls, node):
         cwe = node.get('cwe')
-        if cwe is not None:
-            cwe = int(cwe)
+        cwe_list = []
+        if cwe is not None and cwe is not "":
+            cwes = cwe.split(',')
+            for cwe in cwes:
+                cwe_list.append(int(cwe))
         testid = node.get('test-id')
         location = Location.from_xml(node.find('location'))
         message = Message.from_xml(node.find('message'))
@@ -298,12 +310,18 @@ class Issue(Result):
             customfields = CustomFields.from_xml(customfields_node)
         else:
             customfields = None
-        return Issue(cwe, testid, location, message, notes, trace, severity, customfields)
+        return Issue(cwe_list, testid, location, message, notes, trace, severity, customfields)
 
     def to_xml(self):
         node = ET.Element('issue')
         if self.cwe is not None:
-            node.set('cwe', str(self.cwe))
+            if isinstance(self.cwe, list):
+                cwe_list = ""
+                for cwe in self.cwe:
+                    cwe_list += ',' + str(cwe)
+                node.set('cwe', str(cwe_list[1::]))
+            else:
+                node.set('cwe', str(self.cwe))
         if self.testid is not None:
             node.set('test-id', str(self.testid))
         node.append(self.message.to_xml())
@@ -339,7 +357,9 @@ class Issue(Result):
                     % (self.location.file.givenpath,
                        self.location.function.name))
         if self.cwe:
-            cwetext = ' [%s]' % self.get_cwe_str()
+            if isinstance(self.cwe, list):
+                cwetext = []
+                cwetext = self.get_cwe_str()
         else:
             cwetext = ''
         diagnostic(filename=self.location.file.givenpath,
@@ -379,12 +399,27 @@ class Issue(Result):
             self.trace.accept(visitor)
 
     def get_cwe_str(self):
+        cwe_list_str = []
         if self.cwe is not None:
-            return 'CWE-%i' % self.cwe
+            if isinstance(self.cwe, list):
+                for cwe in self.cwe:
+                    cwe_list_str.append('CWE-%i' % int(cwe))
+            else:
+                cwe_list_str.append('CWE-%i' % int(self.cwe))
+        return cwe_list_str
+
 
     def get_cwe_url(self):
+        cwe_list_str = []
         if self.cwe is not None:
-            return 'http://cwe.mitre.org/data/definitions/%i.html' % self.cwe
+            if isinstance(self.cwe, list):
+                for cwe in self.cwe:
+                    cwe_list_str.append('http://cwe.mitre.org/data/definitions/%i.html' % cwe)
+                return cwe_list_str
+            else:
+                cwe_list_str.append('http://cwe.mitre.org/data/definitions/%i.html' % self.cwe)
+        return cwe_list_str
+
 
 class Failure(Result):
     attrs = [Attribute('failureid', _string_type, nullable=True),

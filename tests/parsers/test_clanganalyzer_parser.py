@@ -44,7 +44,7 @@ class TestParsePlist(unittest.TestCase):
         self.assertEqual(len(a.results), 2)
 
         w0 = a.results[0]
-        self.assertEqual(w0.cwe, None)
+        self.assertEqual(w0.cwe, [])
         self.assertEqual(w0.testid, None)
         self.assertEqual(w0.message.text,
                          "Value stored to 'ret' is never read")
