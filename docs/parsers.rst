@@ -48,3 +48,7 @@ turn them into :py:class:`firehose.model.Analysis` instances.
 * gcc.py
 
   Parser for warnings emitted by `GCC <https://gcc.gnu.org/>`_.
+
+* flawfinder.py
+
+  Parser for warnings emitted by `flawfinder <https://www.dwheeler.com/flawfinder/>`_.
