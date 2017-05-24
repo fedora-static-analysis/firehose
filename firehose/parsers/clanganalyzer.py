@@ -30,7 +30,7 @@ import sys
 
 from firehose.model import Message, Function, Point, Range, \
     File, Location, Generator, Metadata, Analysis, Issue, Sut, Trace, \
-    State, Notes
+    State, Notes, CustomFields
 
 def parse_scandir(resultdir, analyzerversion=None, sut=None):
     """
@@ -70,9 +70,10 @@ def parse_plist(pathOrFile, analyzerversion=None, sut=None, file_=None, stats=No
 
         cwe = None
 
-        # TODO: we're not yet handling the following:
-        #   diagnostic['category']
-        #   diagnostic['type']
+        customfields = CustomFields()
+        for key in ['category', 'issue_context', 'issue_context_kind']:
+            if key in diagnostic:
+                customfields[key] = diagnostic[key]
 
         message = Message(text=diagnostic['description'])
 
@@ -92,8 +93,10 @@ def parse_plist(pathOrFile, analyzerversion=None, sut=None, file_=None, stats=No
         trace = make_trace(files, diagnostic['path'])
 
         issue = Issue(cwe,
-                      None, # FIXME: can we get at the test id?
-                      location, message, notes, trace)
+                      # Use the 'type' field for the testid:
+                      diagnostic['type'],
+                      location, message, notes, trace,
+                      customfields=customfields)
 
         analysis.results.append(issue)
 
