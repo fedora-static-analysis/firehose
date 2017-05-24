@@ -42,6 +42,9 @@ class TestParseXml(unittest.TestCase):
         self.assertEqual(a.metadata.file_, None)
         self.assertEqual(a.metadata.stats, None)
         self.assertEqual(a.metadata.stats, None)
+
+        self.assertEqual(len(a.results), 1804)
+
         w0 = a.results[0]
         self.assertEqual(w0.cwe, 78)
         expected_message = 'This causes a new program to execute ' \
@@ -50,7 +53,10 @@ class TestParseXml(unittest.TestCase):
                            'the same functionality if available.'
         self.assertEqual(w0.message.text, expected_message)
         self.assertEqual(w0.testid, 'shell')
-        self.assertEqual(len(a.results), 1804)
+        self.assertEqual(w0.location.file.givenpath , "./docs/examples/asiohiper.cpp")
+        self.assertEqual(w0.location.point.line, 78)
+        self.assertEqual(w0.location.point.column, 0)
+
         w3 = a.results[4]
         self.assertEqual(w3.location.file.givenpath , "./docs/examples/cookie_interface.c")
         self.assertEqual(w3.testid, 'format')
@@ -59,3 +65,7 @@ class TestParseXml(unittest.TestCase):
         self.assertEqual(some_w.testid, 'buffer')
         other_w = a.results[1802]
         self.assertEqual(other_w.cwe, None)
+        self.assertEqual(other_w.location.file.givenpath,
+                         "./tests/unit/unit1604.c")
+        self.assertEqual(other_w.location.point.line, 49)
+        self.assertEqual(other_w.location.point.column, 0)
