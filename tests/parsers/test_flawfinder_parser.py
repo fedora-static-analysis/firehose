@@ -45,10 +45,10 @@ class TestParseXml(unittest.TestCase):
         w0 = a.results[0]
         self.assertEqual(w0.cwe, 78)
         expected_message = 'This causes a new program to execute ' \
-                           'and is difficult to use safely\n   (CWE-78). ' \
+                           'and is difficult to use safely (CWE-78). ' \
                            'try using a library call that implements ' \
-                           'the same functionality\n   if available.'
-        self.assertEqual(w0.message.text.strip(), expected_message)
+                           'the same functionality if available.'
+        self.assertEqual(w0.message.text, expected_message)
         self.assertEqual(w0.testid, 'shell')
         self.assertEqual(len(a.results), 1804)
         w3 = a.results[4]
