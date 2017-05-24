@@ -56,21 +56,29 @@ def parse_file(infile):
                           version=get_flawfinder_version(line))
     metadata = Metadata(generator, None, None, None)
     analysis = Analysis(metadata, [])
-    issue_line_pattern = "(\.?\/?([a-z0-9]+\_?\/?\.?)+)\:([0-9]+)\:"
-    issue_severity_pattern = "\[([0-9]+)\]"
-    issue_testid_pattern = "\(([a-z]+)\)"
-    whitespace = "\s+"
 
-    first_line_pattern = (issue_line_pattern + whitespace +
-                     issue_severity_pattern + whitespace +
-                     issue_testid_pattern)
-    prog = re.compile(first_line_pattern)
+    # A regex for "filename:linenum:"
+    ISSUE_LINE_PATTERN = r"(\S.*)\:([0-9]+)\:"
+
+    # A regex for the reported severity, e.g. "[2]"
+    ISSUE_SEVERITY_PATTERN = r"\[([0-9]+)\]"
+
+    # A regex for the reported testid, e.g. "(buffer)"
+    ISSUE_TESTID_PATTERN = r"\(([a-z]+)\)"
+
+    WHITESPACE = "\s+"
+
+    FIRST_LINE_PATTERN = (ISSUE_LINE_PATTERN + WHITESPACE +
+                     ISSUE_SEVERITY_PATTERN + WHITESPACE +
+                     ISSUE_TESTID_PATTERN)
+    prog = re.compile(FIRST_LINE_PATTERN)
     while line:
-        if prog.search(line) and line != "\n":
-            issue_path = prog.search(line).group(1)
-            issue_line = prog.search(line).group(3)
-            issue_severity = prog.search(line).group(4)
-            testid = prog.search(line).group(5)
+        m = prog.match(line)
+        if m:
+            issue_path = m.group(1)
+            issue_line = m.group(2)
+            issue_severity = m.group(3)
+            testid = m.group(4)
 
             location = Location(file=File(issue_path, None),
                                 function=None,
