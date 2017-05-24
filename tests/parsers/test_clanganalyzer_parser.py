@@ -45,7 +45,7 @@ class TestParsePlist(unittest.TestCase):
 
         w0 = a.results[0]
         self.assertEqual(w0.cwe, None)
-        self.assertEqual(w0.testid, None)
+        self.assertEqual(w0.testid, 'Dead assignment')
         self.assertEqual(w0.message.text,
                          "Value stored to 'ret' is never read")
         self.assertEqual(w0.notes, None)
@@ -76,6 +76,7 @@ class TestParsePlist(unittest.TestCase):
         self.assertEqual(len(a.results), 4)
 
         w0 = a.results[0]
+        self.assertEqual(w0.testid, 'Dead assignment')
         self.assertEqual(w0.message.text,
                          "Value stored to 'error' is never read")
         self.assertEqual(w0.location.file.givenpath, 'search.c')
@@ -83,6 +84,7 @@ class TestParsePlist(unittest.TestCase):
         self.assertEqual(w0.location.column, 3)
 
         w1 = a.results[1]
+        self.assertEqual(w1.testid, 'Dead increment')
         self.assertEqual(w1.message.text,
                          "Value stored to 'pol_opt' is never read")
         self.assertEqual(w1.location.file.givenpath, 'search.c')
@@ -90,6 +92,7 @@ class TestParsePlist(unittest.TestCase):
         self.assertEqual(w1.location.column, 2)
 
         w2 = a.results[2]
+        self.assertEqual(w2.testid, 'Dereference of null pointer')
         self.assertEqual(w2.message.text,
                          "Access to field 'ob_refcnt' results in a dereference of a null pointer (loaded from variable 'dict')")
         self.assertEqual(w2.location.file.givenpath, 'search.c')
@@ -216,12 +219,18 @@ class TestParsePlist(unittest.TestCase):
         self.assertEqual(len(a.results), 1)
 
         w0 = a.results[0]
+        self.assertEqual(w0.testid, 'Garbage return value')
         self.assertEqual(w0.message.text,
                          "Undefined or garbage value returned to caller")
         self.assertEqual(w0.location.file.givenpath,
                          '../../src/test-sources/out-of-bounds.c')
         self.assertEqual(w0.location.line, 5)
         self.assertEqual(w0.location.column, 3)
+
+        # Verify that we capture various clang-specific per-issue metadata
+        self.assertEqual(w0.customfields['category'], 'Logic error')
+        self.assertEqual(w0.customfields['issue_context'], 'out_of_bounds')
+        self.assertEqual(w0.customfields['issue_context_kind'], 'function')
 
 if __name__ == '__main__':
     unittest.main()
