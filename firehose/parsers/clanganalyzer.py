@@ -207,18 +207,16 @@ def make_trace(files, path):
             raise ValueError('unknown kind: %r' % kind)
     return trace
 
-analyzerversion = 'clang-3.0-14.fc17.x86_64' # FIXME
-
 if __name__ == '__main__':
     if len(sys.argv) != 2:
         print("provide either the path to scan-build results directory, or to that of a .plist file as the only argument")
     else:
         path = sys.argv[1]
         if path.endswith('.plist'):
-            analysis = parse_plist(path, analyzerversion)
+            analysis = parse_plist(path)
             sys.stdout.write(str(analysis.to_xml()))
             sys.stdout.write('\n')
         else:
-            for analysis in parse_scandir(path, analyzerversion):
+            for analysis in parse_scandir(path):
                 sys.stdout.write(str(analysis.to_xml()))
                 sys.stdout.write('\n')

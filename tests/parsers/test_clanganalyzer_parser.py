@@ -21,16 +21,11 @@ import unittest
 from firehose.parsers.clanganalyzer import parse_plist
 from firehose.model import Analysis, Issue, Sut, Trace
 
-FAKE_ANALYZER_VERSION = 'clang-3.0-14.fc17.x86_64'
-FAKE_SUT = Sut()
-
 class TestParsePlist(unittest.TestCase):
     def parse_example(self, filename):
         a = parse_plist(os.path.join(os.path.dirname(__file__),
                                      'example-output/clanganalyzer',
                                      filename),
-                        analyzerversion=FAKE_ANALYZER_VERSION,
-                        sut=FAKE_SUT,
                         file_=None,
                         stats=None)
         return a
@@ -38,8 +33,7 @@ class TestParsePlist(unittest.TestCase):
     def test_example_001(self):
         a = self.parse_example('report-001.plist')
         self.assertEqual(a.metadata.generator.name, 'clang-analyzer')
-        self.assertEqual(a.metadata.generator.version,
-                         FAKE_ANALYZER_VERSION)
+        self.assertEqual(a.metadata.generator.version, None)
 
         self.assertEqual(len(a.results), 2)
 
@@ -70,8 +64,7 @@ class TestParsePlist(unittest.TestCase):
     def test_example_002(self):
         a = self.parse_example('report-002.plist')
         self.assertEqual(a.metadata.generator.name, 'clang-analyzer')
-        self.assertEqual(a.metadata.generator.version,
-                         FAKE_ANALYZER_VERSION)
+        self.assertEqual(a.metadata.generator.version, None)
 
         self.assertEqual(len(a.results), 4)
 
