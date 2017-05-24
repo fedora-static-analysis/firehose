@@ -498,17 +498,18 @@ Describing the software under test
 
 .. py:class:: Notes
 
-   Additional descriptive details for a :py:class:`Result`.
+   Additional optional descriptive details for a :py:class:`Result` or
+   for a :py:class:`State`.
 
    It corresponds to the ``<notes>`` XML element within
    a Firehose XML document.
 
-.. This might support some simple markup at some point
-   (as might :py:class:`Message`).
+   .. py:attribute:: text
 
-      def __init__(self, text):
-          assert isinstance(text, ``str``)
-          self.text = text
+      ``str``
+
+   .. This might support some simple markup at some point
+      (as might :py:class:`Message`).
 
 Describing source code
 **********************
@@ -708,6 +709,8 @@ Capturing the circumstances leading up to a problem
       list of :py:class:`State`
 
 .. py:class:: State
+
+   A state within a :py:class:`Trace`.
 
    .. py:attribute:: location
 
