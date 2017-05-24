@@ -1,5 +1,5 @@
-#   Copyright 2013 David Malcolm <dmalcolm@redhat.com>
-#   Copyright 2013 Red Hat, Inc.
+#   Copyright 2013, 2017 David Malcolm <dmalcolm@redhat.com>
+#   Copyright 2013, 2017 Red Hat, Inc.
 #
 #   This library is free software; you can redistribute it and/or
 #   modify it under the terms of the GNU Lesser General Public
@@ -19,7 +19,8 @@
 # Parser for the .plist files emitted by the clang-static-analyzer,
 # when "-plist" is passed as an option to "scan-build" or "clang"
 
-# Developed against output from clang-3.0-14.fc17
+# Originally developed against output from clang-3.0-14.fc17;
+# updated against output from clang-3.4-12.fc20.x86_64
 
 import glob
 import os
@@ -59,6 +60,9 @@ def parse_plist(pathOrFile, analyzerversion=None, sut=None, file_=None, stats=No
                           version=analyzerversion)
     metadata = Metadata(generator, sut, file_, stats)
     analysis = Analysis(metadata, [])
+
+    if 'clang_version' in plist:
+        generator.version = plist['clang_version']
 
     for diagnostic in plist['diagnostics']:
         if 0:
