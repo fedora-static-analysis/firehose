@@ -1,4 +1,4 @@
-#   Copyright 2013 Red Hat, Inc.
+#   Copyright 2013, 2017 Red Hat, Inc.
 #
 #   This library is free software; you can redistribute it and/or
 #   modify it under the terms of the GNU Lesser General Public
@@ -204,6 +204,24 @@ class TestParsePlist(unittest.TestCase):
         self.assertEqual(s5.location.range_, None)
 
         # etc
+
+    def test_example_003(self):
+        a = self.parse_example('report-003.plist')
+        self.assertEqual(a.metadata.generator.name, 'clang-analyzer')
+
+        # This example has a version
+        self.assertEqual(a.metadata.generator.version,
+                         'clang version 3.4.2 (tags/RELEASE_34/dot2-final)')
+
+        self.assertEqual(len(a.results), 1)
+
+        w0 = a.results[0]
+        self.assertEqual(w0.message.text,
+                         "Undefined or garbage value returned to caller")
+        self.assertEqual(w0.location.file.givenpath,
+                         '../../src/test-sources/out-of-bounds.c')
+        self.assertEqual(w0.location.line, 5)
+        self.assertEqual(w0.location.column, 3)
 
 if __name__ == '__main__':
     unittest.main()
