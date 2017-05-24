@@ -88,7 +88,12 @@ def parse_file(infile):
             issue_message = ""
             cwes = []
             while not prog.search(message_line) and message_line != "\n":
-                issue_message += " " + message_line
+                # Build up issue_message as one line, stripping out
+                # extraneous whitespace.
+                if issue_message:
+                    issue_message += " " + message_line.strip()
+                else:
+                    issue_message = message_line.strip()
                 cwes.extend([int(cwe) for cwe in re.findall("CWE-([0-9]+)", issue_message)])
                 message_line = infile.readline()
 
