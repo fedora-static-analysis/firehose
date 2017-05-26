@@ -1,0 +1,5 @@
+Splint 3.1.2 --- 04 Aug 2013
+
+Specified CSV output file already exists (use +csvoverwrite to automatically
+overwrite): unconditional-file-leak.csv
+Finished checking --- 8 code warnings
