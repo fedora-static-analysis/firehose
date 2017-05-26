@@ -670,11 +670,29 @@ Describing source code
 
    .. py:attribute:: line
 
-      (``int``)
+      ``int``: the 1-based number of the line containing the point
 
    .. py:attribute:: column
 
-      (``int``)
+      ``int``: 1-based number of the column
+
+      .. note::
+
+         GCC uses a 1-based convention for source columns,
+         whereas Emacs's M-x column-number-mode uses a 0-based convention.
+
+         For example, an error in the initial, left-hand
+         column of source line 3 is reported by GCC as::
+
+           some-file.c:3:1: error: ...etc...
+
+         On navigating to the location of that error in Emacs
+         (e.g. via ``next-error``), the locus is reported in the Mode Line
+         (assuming ``M-x column-number-mode``) as::
+
+           some-file.c   10%   (3, 0)
+
+         i.e. ``3:1:`` in GCC corresponds to ``(3, 0)`` in Emacs.
 
 .. py:class:: Range
 
