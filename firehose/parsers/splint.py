@@ -79,7 +79,7 @@ def parse_splint_csv(path):
     generator = Generator(name='splint')
     metadata = Metadata(generator, None, None, None)
     analysis = Analysis(metadata, [])
-    with open(path, 'rb') as f:
+    with open(path, 'r') as f:
         reader = csv.reader(f)
         for raw_row in reader:
             # Skip the initial title row
