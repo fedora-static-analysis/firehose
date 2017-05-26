@@ -679,7 +679,7 @@ Describing source code
       .. note::
 
          GCC uses a 1-based convention for source columns,
-         whereas Emacs's M-x column-number-mode uses a 0-based convention.
+         whereas Emacs's ``M-x column-number-mode`` uses a 0-based convention.
 
          For example, an error in the initial, left-hand
          column of source line 3 is reported by GCC as::
