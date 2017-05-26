@@ -1,0 +1,39 @@
+examples/unconditional-file-leak.c: (in function test)
+examples/unconditional-file-leak.c:7:7:
+    Called procedure fopen may access file system state, but globals list does
+    not include globals fileSystem
+  A called function uses internal state, but the globals list for the function
+  being checked does not include internalState (Use -internalglobs to inhibit
+  warning)
+examples/unconditional-file-leak.c:7:7:
+    Undocumented modification of file system state possible from call to fopen:
+    fopen(filename, "w")
+  report undocumented file system modifications (applies to unspecified
+  functions if modnomods is set) (Use -modfilesys to inhibit warning)
+examples/unconditional-file-leak.c:9:5:
+    Called procedure fprintf may access file system state, but globals list
+    does not include globals fileSystem
+examples/unconditional-file-leak.c:9:5:
+    Undocumented modification of file system state possible from call to
+    fprintf: fprintf(f, "%i: %i", i, i * i)
+examples/unconditional-file-leak.c:9:14:
+    Possibly null storage f passed as non-null param: fprintf (f, ...)
+  A possibly null pointer is passed as a parameter corresponding to a formal
+  parameter with no /*@null@*/ annotation.  If NULL may be used for this
+  parameter, add a /*@null@*/ annotation to the function parameter declaration.
+  (Use -nullpass to inhibit warning)
+   examples/unconditional-file-leak.c:7:7: Storage f may become null
+examples/unconditional-file-leak.c:9:5: Body of for statement is not a block:
+                                           fprintf(f, "%i: %i", i, i * i);
+  Loop body is a single statement, not a compound block. (Use -forblock to
+  inhibit warning)
+examples/unconditional-file-leak.c:3:6: Function test declared but not used
+  A function is declared but not used. Use /*@unused@*/ in front of function
+  header to suppress message. (Use -fcnuse to inhibit warning)
+   examples/unconditional-file-leak.c:10:1: Definition of test
+examples/unconditional-file-leak.c:3:6:
+    Function test exported but not declared in header file
+  A declaration is exported, but does not appear in a header file. (Use
+  -exportheader to inhibit warning)
+   examples/unconditional-file-leak.c:10:1: Definition of test
+

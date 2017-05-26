@@ -52,3 +52,7 @@ turn them into :py:class:`firehose.model.Analysis` instances.
 * flawfinder.py
 
   Parser for warnings emitted by `flawfinder <https://www.dwheeler.com/flawfinder/>`_.
+
+* splint.py
+
+  Parser for the :option:`-csv` output format from `splint <http://splint.org/>`_.
