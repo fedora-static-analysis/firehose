@@ -40,12 +40,13 @@ def parse_scandir(resultdir, analyzerversion=None, sut=None):
     for filename in glob.glob(os.path.join(resultdir, 'report-*.plist')):
         yield parse_plist(filename, analyzerversion, sut)
 
-def parse_plist(pathOrFile, analyzerversion=None, sut=None, file_=None, stats=None):
+def parse_plist(file_path, analyzerversion=None, sut=None, file_=None, stats=None):
     """
     Given a .plist file emitted by clang-static-analyzer (e.g. via
     scan-build), parse it and return an Analysis instance
     """
-    plist = plistlib.readPlist(pathOrFile)
+    with open(file_path, 'rb') as f:
+        plist = plistlib.load(f)
     # We now have the .plist file as a hierarchy of dicts, lists, etc
 
     # Handy debug dump:
