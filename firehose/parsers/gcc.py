@@ -110,7 +110,7 @@ def parse_warning(line, func_name):
     match = GCC_PATTERN.match(line)
     if match:
         text = match.group('message')
-        # GCC 11 onwards can (optionally) append a CWE id to the message.
+        # GCC 10 onwards can (optionally) append a CWE id to the message.
         # Extract it if it is present.
         cwe_match = CWE_SUB_PATTERN.match(text)
         if cwe_match:
