@@ -118,6 +118,16 @@ class TestParseWarning(unittest.TestCase):
         issue = gcc.parse_warning(line, FUNC_NAME)
         self.assertIsInstance(issue, Issue)
 
+    def test_cwe(self):
+        line = "CWE415_Double_Free__malloc_free_long_16.c:40:9: warning: double-'free' of 'data' [CWE-415] [-Wanalyzer-double-free]"
+        issue = gcc.parse_warning(line, FUNC_NAME)
+        self.assertIsInstance(issue, Issue)
+        self.assertEqual(issue.testid, 'analyzer-double-free')
+        self.assertEqual(issue.location.file.givenpath, 'CWE415_Double_Free__malloc_free_long_16.c')
+        self.assertEqual(issue.location.point.line, 40)
+        self.assertEqual(issue.location.point.column, 9)
+        self.assertEqual(issue.message.text, "double-'free' of 'data'")
+        self.assertEqual(issue.cwe, 415)
 
 class TestParseFile(unittest.TestCase):
     @staticmethod

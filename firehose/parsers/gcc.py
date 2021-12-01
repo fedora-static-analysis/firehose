@@ -40,6 +40,8 @@ GCC_PATTERN = re.compile("^(?P<path>\S.*?):(?P<line>\d+):(?P<column>\d*):? (?P<t
 
 SWITCH_SUB_PATTERN = re.compile("^ \[\-W(?P<name>.*)\]$")
 
+CWE_SUB_PATTERN = re.compile("^(?P<message>.*) \[CWE-(?P<cwe>[0-9]+)\]$")
+
 # single quotes may not match locales that are not C
 FUNCTION_PATTERN = re.compile(".*: In (?:member )?function '(?P<func>.*)':")
 
@@ -107,7 +109,17 @@ def parse_warning(line, func_name):
     """
     match = GCC_PATTERN.match(line)
     if match:
-        message = Message(match.group('message'))
+        text = match.group('message')
+        # GCC 11 onwards can (optionally) append a CWE id to the message.
+        # Extract it if it is present.
+        cwe_match = CWE_SUB_PATTERN.match(text)
+        if cwe_match:
+            message = Message(cwe_match.group('message'))
+            cwe = int(cwe_match.group('cwe'))
+        else:
+            message = Message(text)
+            cwe = None
+
         func = Function(func_name)
         try:
             column = int(match.group('column'))
@@ -128,7 +140,7 @@ def parse_warning(line, func_name):
         path = File(match.group('path'), None)
         location = Location(path, func, point)
 
-        return Issue(None, switch, location, message, None, None)
+        return Issue(cwe, switch, location, message, None, None)
 
 
 if __name__ == '__main__':
